@@ -3,7 +3,7 @@ matplotlib.use('Agg')
 from mpl_toolkits.mplot3d import Axes3D
 import mpl_toolkits.mplot3d.art3d as art3d
 import matplotlib.pyplot as plt
-import numpy as np
+from numpy import linspace, meshgrid, sqrt, outer, sin, cos, ones, zeros, pi
 from matplotlib.patches import Circle
 
 
@@ -23,11 +23,11 @@ def prepare_plot_space(x_lim,y_lim,z_lim):
 
 
 def plot_3D_cylinder(ax,radius, height, elevation=0, resolution=100, color='r', x_center = 0, y_center = 0):
-    x = np.linspace(x_center-radius, x_center+radius, resolution)
-    z = np.linspace(elevation, elevation+height, resolution)
-    X, Z = np.meshgrid(x, z)
+    x =  linspace(x_center-radius, x_center+radius, resolution)
+    z =  linspace(elevation, elevation+height, resolution)
+    X, Z =  meshgrid(x, z)
 
-    Y = np.sqrt(radius**2 - (X - x_center)**2) + y_center # Pythagorean theorem
+    Y =  sqrt(radius**2 - (X - x_center)**2) + y_center # Pythagorean theorem
 
     ax.plot_surface(X, Y, Z, linewidth=0, color=color)
     ax.plot_surface(X, (2*y_center-Y), Z, linewidth=0, color=color)
@@ -42,11 +42,11 @@ def plot_3D_cylinder(ax,radius, height, elevation=0, resolution=100, color='r', 
 
 def plot_sphere(ax,radius,elevation,color):
 
-    u = np.linspace(0, 2 * np.pi, 100)
-    v = np.linspace(0, np.pi, 100)
-    x = radius * np.outer(np.cos(u), np.sin(v))
-    y = radius * np.outer(np.sin(u), np.sin(v))+elevation
-    z = radius * np.outer(np.ones(np.size(u)), np.cos(v))
+    u =  linspace(0, 2 *  pi, 100)
+    v =  linspace(0,  pi, 100)
+    x = radius *  outer( cos(u),  sin(v))
+    y = radius *  outer( sin(u),  sin(v))+elevation
+    z = radius *  outer( ones( size(u)),  cos(v))
 
     # Plot the surface
     ax.plot_surface(x, y, z, color=color)
@@ -78,8 +78,8 @@ def plot_NEE(s):
     ax1.plot(range(len(s)),s,'-',label="NEE")
     ax1.plot([],[],linewidth=5,label="sink",color="b",alpha=0.5)
     ax1.plot([],[],linewidth=5,label="source",color="r",alpha=0.5)
-    ax1.fill_between(range(len(s)),s,0,where=(s>np.zeros(len(s))),facecolor="b",alpha=0.5)
-    ax1.fill_between(range(len(s)),s,0,where=(s<np.zeros(len(s))),facecolor="r",alpha=0.5)
+    ax1.fill_between(range(len(s)),s,0,where=(s> zeros(len(s))),facecolor="b",alpha=0.5)
+    ax1.fill_between(range(len(s)),s,0,where=(s< zeros(len(s))),facecolor="r",alpha=0.5)
     plt.title("Net Ecosystem Exchange")
     plt.xlabel("Time[yrs]")
     plt.ylabel("[to/ha/yr]")
