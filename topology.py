@@ -40,9 +40,10 @@ class Tree_Grid(Rectangular_Grid):
         self.LAIs={}
         self.CCAs={}
         self.total_area=self.x_max * self.y_max *self.patch_area/10000
-        #self.seedbanks={}
+        #s={}
         self.trees_per_patch={(x,y):[] for x in range(0,self.x_max) for y in range(0,self.y_max)}
-        self.FTs=["FT1","FT2","FT3","FT4","FT5","FT6"]
+        #self.FTs=["FT1","FT2","FT3","FT4","FT5","FT6"]
+        self.FTs=[k for k in Tree.DERIVED_TREES.keys()]
         self.seedbank={k:[] for k in self.FTs}
 
 
@@ -68,7 +69,7 @@ class Tree_Grid(Rectangular_Grid):
         self.ground_level_light()
         self.surface[self.dim_names["LianaCoverage"]]=self.calculate_liana_coverage()
 
-    def seed_establishment(self,seedbank,lmin,h0,h1):
+    def seed_establishment(self,seedbank):
         """Check if the seeds in the seedbank have the light and space conditions to germinate.
 
             Note: All seeds in the given seedbank are assumed to have the same conditions. Multiple calls to this method passing different seedbanks allow the representation of different requirements.
@@ -77,7 +78,7 @@ class Tree_Grid(Rectangular_Grid):
 
         Args:
 
-            seedbank (dict): dictionary with patches ('(x,y)') and number of seed as values.
+            seedbank (dict): dictionary with Functional Type (FT) and list of seed positions as values.
             lmin (float): minimum light intensity at ground level for seed to germinate.
             h0 (float): allometric paramenter used to calculate initial height
             h1 (float): allometric paramenter used to calculate initial height
@@ -86,30 +87,36 @@ class Tree_Grid(Rectangular_Grid):
             est_seeds: a dictionary with patches as keys ('(x,y)') and number of established seeds as values.
         """
         est_seeds={}
-        for patch in seedbank.keys():
-            light=self.check_light(lmin,patch)
-            space=self.check_CCA(h0,h1,patch)
-            if light and space:
-                est_seeds[patch]=seedbank[patch]
-            else:
-                est_seeds[patch]=0
-        return est_seeds
+
+        for ft in seedbank.keys():
+            h0=Tree.DERIVED_TREES[ft].h0
+            h1=Tree.DERIVED_TREES[ft].h1
+            min_light=Tree.DERIVED_TREES[ft].Iseed
+            for i,seed in enumerate(seedbank[ft]):
+                patch=(int(np.floor(seed[0])),int(np.floor(seed[1])))
+                if not self.check_light(min_light,patch):
+                    seedbank[ft].pop(i)
+                    break
+                if not self.check_CCA(h0,h1,patch):
+                    seedbank[ft].pop(i)
+
+        return seedbank
 
 
 
-    def check_light(self,lmin, patch):
+    def check_light(self,min_light, patch):
         """ Check if the light intensity at ground level meets the needs for seed germination.
 
             Note: Ligth intensity is homogeneized at the patch level.
 
         Args:
-            lmin (float): minimum light intensity at ground for seeds to germinate.
+            min_light (float): minimum light intensity at ground for seeds to germinate.
             patch (tuple): (x,y), patch  that will have the light conditions assessed.
 
         Returns:
             Bool. True if light level is above minimum.
         """
-        return self.surface[self.dim_names["GroundLight"]][patch]>lmin
+        return self.surface[self.dim_names["GroundLight"]][patch]>min_light
 
     def check_CCA(self,h0,h1,patch):
         """ Check if the there is enough space forthe new plants to be established

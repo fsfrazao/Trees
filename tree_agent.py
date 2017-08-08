@@ -101,6 +101,108 @@ class Tree(Agent):
     ID=0
     Instances={}
     DeadTrees={"FT1":0,"FT2":0,"FT3":0,"FT4":0,"FT5":0,"FT6":0}
+    DERIVED_TREES={}
+
+    @classmethod
+    def TreeFactory(cls,new_cls_name,new_parameters):
+
+        def new_init(self,position,world,dbh,age=0,id=None, **kwargs):
+
+            self.DBH=dbh
+            self.age=age
+
+            super().__init__(position,world,id=id)
+
+            self.patch=(int(np.floor(self.position[0])),int(np.floor(self.position[1])))
+            self.h0=new_parameters['h0']
+            self.h1=new_parameters['h1']
+            self.cl0=new_parameters['cl0']
+            self.cd0=new_parameters['cd0']
+            self.cd1=new_parameters['cd1']
+            self.cd2=new_parameters['cd2']
+            self.rho=new_parameters['rho']
+            self.sigma=new_parameters['sigma']
+            self.f0=new_parameters['f0']
+            self.f1=new_parameters['f1']
+            self.f=self.calculate_f()
+            self.l0=new_parameters['l0']
+            self.l1=new_parameters['l1']
+            self.k=0.7
+            self.lday=12
+            self.phi_act=30
+            self.m=new_parameters['m']
+            self.alpha=new_parameters['alpha']
+            self.pmax=new_parameters['pmax']
+            self.Dmax=new_parameters['max_dbh']/100.
+            self.deltaDmax=new_parameters['deltaDmax']
+            self.DdeltaDmax=new_parameters['DdeltaDmax']
+            self.Dmort=new_parameters['Dmort']
+            self.Dfall=new_parameters['Dfall']
+            self.pfall=new_parameters['pfall']
+            self.alpha0=self.calculate_alpha0()
+            self.alpha1=self.calculate_alpha1()
+            self.rg=new_parameters['rg']
+            self.Ftype=new_cls_name
+            self.m_max=new_parameters['m_max']
+
+            self.H=0
+            self.CL=0
+            self.CD=0
+            self.CA=0
+            self.AGB=0
+            self.LAI=0
+            self.lmax=0
+            self.lmin=0
+            self.L_mean=0
+            self.Li=0
+            self.Mc=0
+            self.basic_m=new_parameters['Mb']
+            self.Mb=0
+            self.Md=0
+            self.GPP=0 #Gpp in this time step
+            self.Rm=0 #Rm in this timestep
+            self.available_fruits=0
+            #self.update()
+            self.world.topology.trees_per_patch[self.patch].append(self.id)
+
+            if id == None:
+                #self.id=Tree.ID
+                self.Indices.append(self.id)
+                Tree.Instances[self.id]=self
+                Tree.IncrementID()
+            else:
+                self.id=id
+                self.Indices.append(self.id)
+                Tree.Instances[self.id]=self
+
+
+
+
+
+
+        new_attr_met={'Nseed':new_parameters['Nseed'],
+                    'Indices':[],
+                    'Ftype':new_cls_name,
+                    'Iseed':new_parameters['Iseed'],
+                    'h0':new_parameters['h0'],
+                    'h1':new_parameters['h1'],
+                    '__init__':new_init}
+
+
+        new_cls=type(new_cls_name, (cls,), new_attr_met)
+
+        cls.DERIVED_TREES[new_cls_name]=new_cls
+
+        return new_cls
+
+    @classmethod
+    def FTPopulation(cls,ft):
+        pass
+
+    @classmethod
+    def DisperseSeeds(cls):
+        for t in cls.Instances.values():
+            t.disperse_seeds(a=0.1,fraction=0.5)
 
     @classmethod
     def TreesAboveDBH(self,dbh):
@@ -155,7 +257,8 @@ class Tree(Agent):
         trees=[k for k in self.Instances.keys()]
         for i in trees:
             t=Tree.Instances.get(i)
-            Cr+=(t.Rm+t.rg*(t.GPP-t.Rm))
+            #Cr+=(t.Rm+t.rg*(t.GPP-t.Rm))
+            Cr+=(t.Rm)
         return 0.44*Cr
 
     @classmethod
@@ -314,6 +417,7 @@ class Tree(Agent):
         self.Mc=self.calculate_Rc()
         self.Mb=max(0,self.basic_m+self.calculate_Ms())
         self.Md=0
+        self.available_fruits=self.fruits_from_DBH()
 
 
         attributes={"DBH":self.DBH,
@@ -329,7 +433,8 @@ class Tree(Agent):
                 "Li":self.Li,
                 "Mc":self.Mc,
                 "Mb":self.Mb,
-                "age":self.age,}
+                "age":self.age,
+                "available_fruits":self.available_fruits,}
 
         return (attributes)
 
@@ -349,11 +454,13 @@ class Tree(Agent):
         self.Mb=attributes["Mb"]
         self.age=attributes["age"]
         self.Md=0
+        self.available_fruits=attributes["available_fruits"]
         #self.age+=1
 
 
 
-
+    def fruits_from_DBH(self):
+        return 30
 
     def H_from_DBH(self):
         """Calculate tree height calculated according to eq.1 in SI-Fisher et al.(2015).
@@ -425,6 +532,33 @@ class Tree(Agent):
 
         return self.l0*self.DBH**self.l1
 
+    def decrement_fruit_stock(self,n=1):
+        self.available_fruits-=n
+
+    def disperse_seeds(self,fraction=0.5,a=0.3):
+        n_seeds=int(round(self.available_fruits*fraction))
+        self.decrement_fruit_stock(n=n_seeds)
+        seed_distances=np.random.power(a=a,size=n_seeds)
+        for d in seed_distances:
+            seed_position=self.random_seed_position(distance=d)
+            self.deposit_seed(seed_position)
+
+    def random_seed_position(self, distance):
+        x0,y0=self.position
+        angle=np.random.randint(360)
+        new_position=((x0+cos(radians(angle))*distance,y0+sin(radians(angle))*distance))
+        verified_position=self.world.topology.in_bounds(new_position)
+        return verified_position
+
+    def deposit_seed(self,seed_position):
+        self.world.topology.seedbank[self.Ftype].append(seed_position)
+        self.world.add_seed_entry(tree_id=self.id,initial_x=self.position[0],
+            initial_y=self.position[1],final_x=seed_position[0],final_y=seed_position[1],dispersal_type="non-zoochoric")
+
+
+
+
+
     def Lind(self):
         """Calculate the incoming radiation on top of lmax layer the tree is reaching according to eq.36 in SI-Fisher et al.(2015).
 
@@ -442,20 +576,6 @@ class Tree(Agent):
         return self.world.topology.I0*np.exp(-self.k*sum(patch_LI))
 
 
-#    def Lleaf(self,L):
-#        """
-#        Return the incoming radiation on top of leaves in layerL, according to eq.38 in SI-Fisher et al.(2015)
-#        """
-
-#        return (self.k/(1-self.m))*self.Li*np.exp(-self.k*L)
-
-#    def Pleaf(self,L):
-#        """
-#        Return the gross photosynthetic rate on top of leaves in layer L, according to eq.37 in SI-Fisher et al.(2015)
-#        """
-#        lleaf=self.Lleaf(L)
-
-#        return (self.alpha*lleaf*self.pmax)/(self.alpha*lleaf+pmax)
 
     def Pind(self,Li):
         """ Calculate the interim gross photosynthetic rate of one tree per year, according to eq.40 in SI-Fisher et al.(2015)
@@ -471,7 +591,7 @@ class Tree(Agent):
         pind=pmk*np.log((aki+pm)/(aki*np.exp(-self.k*self.LAI)+pm))
 
         #Tons of organic dry meter per year (todm.y-1)
-        return pind*self.CA*60*60*self.lday*self.phi_act*np.power(10.0,-12)*2.27*44
+        return pind*self.CA*60*60*self.lday*self.phi_act*np.power(10.0,-12)*0.63*44
 
 
     def calculate_rm(self):
@@ -531,9 +651,11 @@ class Tree(Agent):
         """
 
         self.GPP=self.Pind(self.Li)
-        self.Rm=self.calculate_rm()*self.AGB
+        self.Rm=0.47*self.GPP
+        #self.Rm=self.calculate_rm()*self.AGB
         #self.Rm=self.r0*self.AGB+self.r1*self.AGB**2+self.r2*self.AGB**3
         gain=(1-self.rg)*(self.GPP-self.Rm)
+        gain=self.GPP-self.Rm
         self.AGB+=gain
         return gain
 
@@ -684,8 +806,9 @@ class Tree(Agent):
         """
         Kill this tree.
         """
-        subclass="Tree_"+self.Ftype
-        globals()[subclass].Indices.remove(self.id)
+        # subclass="Tree_"+self.Ftype
+        # globals()[subclass].Indices.remove(self.id)
+        Tree.DERIVED_TREES[self.Ftype].Indices.remove(self.id)
         if self.DBH>self.Dfall and np.random.random()<=self.pfall:
             self.fall()
         self.world.topology.trees_per_patch[self.patch].remove(self.id)

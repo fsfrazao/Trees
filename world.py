@@ -4,6 +4,7 @@ import pdb
 from tables import *
 import json
 
+
 class Tree_World(World):
     """ Provide observer methods and control the schedule and execution of simulations.
 
@@ -58,16 +59,16 @@ class Tree_World(World):
                     "Sfast":[0,],
                     "Dwood":[0,],
                     "AGB":[0,],}
-        self.tree_subclasses={"FT1":Tree_FT1,
-                        "FT2":Tree_FT2,
-                        "FT3":Tree_FT3,
-                        "FT4":Tree_FT4,
-                        "FT5":Tree_FT5,
-                        "FT6":Tree_FT6}
+        # self.tree_subclasses={"FT1":Tree_FT1,
+        #                 "FT2":Tree_FT2,
+        #                 "FT3":Tree_FT3,
+        #                 "FT4":Tree_FT4,
+        #                 "FT5":Tree_FT5,
+        #                 "FT6":Tree_FT6}
 
 
 
-    def run_simulation(self,n,logging_years,min_dbh,max_dbh,vol,h5file=None,plot_func=None,**kwargs):
+    def run_simulation(self,n,logging_years,min_dbh,max_dbh,vol,recruitment_month=12,h5file=None,plot_func=None,**kwargs):
         """Run the code in run_schedule() 'n' times.
 
         Args:
@@ -98,21 +99,22 @@ class Tree_World(World):
             nee_r=NEE_table.row
             #emissions_r=Emissions_table.row
 
+
         self.topology.update()
         for t in Tree.Instances.values():
             t.update()
-        self.stablish_new_trees()
+
+        # if self.step in recruitment_steps:
+        #     ext=self.external_seed_rain()
+        #     self.incorporate_new_seedbank(ext)
+        #     self.stablish_new_trees()
 
         for i in range(n):
 
             print("step=",i,"N=",len(Tree.Instances),"DBH>10",Tree.TreesAboveDBH(10.0), "DTrees", sum(Tree.DeadTrees.values()))
             if h5file:
-               pop_r['FT1']=len(Tree_FT1.Indices)
-               pop_r['FT2']=len(Tree_FT2.Indices)
-               pop_r['FT3']=len(Tree_FT3.Indices)
-               pop_r['FT4']=len(Tree_FT4.Indices)
-               pop_r['FT5']=len(Tree_FT5.Indices)
-               pop_r['FT6']=len(Tree_FT6.Indices)
+               for ft in Tree.DERIVED_TREES.keys():
+                   pop_r[ft]=len(Tree.DERIVED_TREES[ft].Indices)
                pop_r.append()
 
                stocks_r['agb']=Tree.Total_AGB()*.44
@@ -168,9 +170,21 @@ class Tree_World(World):
                 st=self.suitable_trees(ps,min_dbh,max_dbh)
                 self.log_trees(st,vol)
 
+            # if self.month == recruitment_month:
+            #     ext=self.external_seed_rain()
+            #     self.incorporate_new_seedbank(ext)
+            #     self.stablish_new_trees()
 
+
+            ext=self.external_seed_rain()
+            self.incorporate_new_seedbank(ext)
             self.stablish_new_trees()
+
+            self.increment_time()
+            #self.stablish_new_trees()
         if h5file: database.close()
+
+
 
     def run_schedule(self,step,n, h5_database=None):
         """Schedule of actions to be run in every time step
@@ -278,6 +292,65 @@ class Tree_World(World):
                 FT(position=pos[i],dbh=DBHs[i], id=ids[i],age=ages[i],**kwargs)
 
 
+    def create_HDF_database(self,database_name):
+
+
+
+        class NEE(IsDescription):
+            dead_wood=Float32Col()
+            soil_slow=Float32Col()
+            soil_fast=Float32Col()
+            living_trees=Float32Col()
+            smort=Float32Col()
+            t_deadwood_sslow=Float32Col()
+            t_sslow_sfast=Float32Col()
+            total_emissions=Float32Col()
+            gpp=Float32Col()
+            nee=Float32Col()
+
+
+        FTs={ft:Int32Col() for ft in Tree.DERIVED_TREES.keys()}
+        Populations=type("Populations",(IsDescription,),FTs)
+
+
+        class CarbonStocks(IsDescription):
+            agb=Float32Col()
+            dead_wood=Float32Col()
+            soil_slow=Float32Col()
+            soil_fast=Float32Col()
+
+        class Individuals(IsDescription):
+            step=Int32Col()
+            ind_id=Int32Col()
+            age=Float32Col()
+            pos_x=Float32Col()
+            pos_y=Float32Col()
+            dbh=Float32Col()
+            agb=Float32Col()
+            height=Float32Col()
+            crown_area=Float32Col()
+            FT=StringCol(4)
+
+        h5file=open_file(database_name,mode="w",title="Tree Model outputs")
+
+        sim=h5file.create_group("/","sim_1","Simulation 1")
+        sys_lvl=h5file.create_group("/sim_1","sys_lvl","System Level Observations for simulation 1")
+
+        NEE_table=h5file.create_table(sys_lvl,"NEE",NEE,"Net Ecosystem Exchange")
+        Pop_table=h5file.create_table(sys_lvl,"Pop",Populations,"Population Sizes")
+        Stocks_table=h5file.create_table(sys_lvl,"Stocks",CarbonStocks,"Carbon Stocks")
+        #Emissions_table=h5file.create_table(sys_lvl,"Emissions",CarbonEmissions,"Emissions from soil stocks, living trees and dead wood")
+
+        ind_lvl=h5file.create_group("/sim_1","ind_lvl","Individual Level Observations for Simulation 1")
+
+        Ind_table=h5file.create_table(ind_lvl,"Ind",Individuals,"Individual Level Data")
+
+        h5file.close()
+
+
+
+
+
     def seedbank_from_file(self, input_file):
         with open(input_file,'r') as json_file:
             self.topology.seedbank=json.load(json_file)
@@ -293,7 +366,7 @@ class Tree_World(World):
         with open(input_file,'r') as json_file:
             trees=json.load(json_file)
 
-        for ft in self.tree_subclasses.keys():
+        for ft in Tree.DERIVED_TREES.keys():
             ages=[]
             positions=[]
             ids=[]
@@ -304,7 +377,7 @@ class Tree_World(World):
                 DBHs.append(tree['DBH'])
                 ages.append(tree['age'])
 
-            self.create_agents(self.tree_subclasses[ft],len(trees[ft]),pos=positions,DBHs=DBHs,ids=ids, ages=ages, world=self)
+            self.create_agents(Tree.DERIVED_TREES[ft],len(trees[ft]),pos=positions,DBHs=DBHs,ids=ids, ages=ages, world=self)
 
         self.topology.update()
         for t in Tree.Instances.values():
@@ -314,7 +387,7 @@ class Tree_World(World):
 
 
     def model_status_to_file(self,output_file):
-        trees_per_type={k:[] for k in self.tree_subclasses.keys()}
+        trees_per_type={k:[] for k in Tree.DERIVED_TREES.keys()}
         for t_id,t in Tree.Instances.items():
             trees_per_type[t.Ftype].append({"id":t_id, "position":t.position,"DBH":t.DBH,"age":t.age})
 
@@ -406,9 +479,29 @@ class Tree_World(World):
 
 
 
-    def germinate_suitable_seeds(self,FT,pos):
-        self.create_agents(self.tree_subclasses[FT],len(pos),pos=pos, world=self, dbh=2)
+    def external_seed_rain(self):
+        external_seedbank={}
+        for ft in Tree.DERIVED_TREES.values():
+            seedbank_ft=self.define_seedbank(Nseed=int(ft.Nseed*self.topology.total_area))
+            pos=self.seeds_pos(seedbank_ft)
+            external_seedbank[ft.Ftype]=pos
+        return external_seedbank
 
+
+    def germinate_suitable_seeds(self,seedbank):
+        for ft in Tree.DERIVED_TREES.keys():
+            pos=self.topology.seedbank[ft]
+            self.create_agents(Tree.DERIVED_TREES[ft],len(pos),pos=pos, world=self, dbh=2)
+
+    def incorporate_new_seedbank(self,new_seedbank,clear=True):
+        if clear==True:
+            self.clear_seedbank()
+
+        for ft in new_seedbank.keys():
+            self.topology.seedbank[ft]+=new_seedbank[ft]
+
+    def clear_seedbank(self):
+        self.topology.seedbank={k:[] for k in self.topology.seedbank.keys()}
 
     def stablish_new_trees(self):
         """Create new tree individuals. Use 'define_seedbank()', 'topology.seed_establishment' and 'seeds_pos'.
@@ -419,45 +512,9 @@ class Tree_World(World):
             None.
         """
 
-
-        seedbank_1=self.define_seedbank(Nseed=int(Tree_FT1.Nseed*self.topology.total_area))
-        est_seeds_1=self.topology.seed_establishment(seedbank_1,lmin=Tree_FT1.Iseed,h0=Tree_FT1.h0,h1=Tree_FT1.h1)
-        pos=self.seeds_pos(est_seeds_1)
-        self.topology.seedbank["FT1"]=pos
-        self.germinate_suitable_seeds(FT="FT1",pos=pos)
-        #self.create_agents(Tree_FT1,n,pos=pos, world=self,dbh=2)
-
-        seedbank_1=self.define_seedbank(Nseed=int(Tree_FT2.Nseed*self.topology.total_area))
-        est_seeds_1=self.topology.seed_establishment(seedbank_1,lmin=Tree_FT2.Iseed,h0=Tree_FT2.h0,h1=Tree_FT2.h1)
-        pos=self.seeds_pos(est_seeds_1)
-        self.topology.seedbank["FT2"]=pos
-        self.germinate_suitable_seeds(FT="FT2",pos=pos)
-
-        seedbank_1=self.define_seedbank(Nseed=int(Tree_FT3.Nseed*self.topology.total_area))
-        est_seeds_1=self.topology.seed_establishment(seedbank_1,lmin=Tree_FT3.Iseed,h0=Tree_FT3.h0,h1=Tree_FT3.h1)
-        pos=self.seeds_pos(est_seeds_1)
-        self.topology.seedbank["FT3"]=pos
-        self.germinate_suitable_seeds(FT="FT3",pos=pos)
-
-        seedbank_1=self.define_seedbank(Nseed=int(Tree_FT4.Nseed*self.topology.total_area))
-        est_seeds_1=self.topology.seed_establishment(seedbank_1,lmin=Tree_FT4.Iseed,h0=Tree_FT4.h0,h1=Tree_FT4.h1)
-        pos=self.seeds_pos(est_seeds_1)
-        self.topology.seedbank["FT4"]=pos
-        self.germinate_suitable_seeds(FT="FT4",pos=pos)
-
-        seedbank_1=self.define_seedbank(Nseed=int(Tree_FT5.Nseed*self.topology.total_area))
-        est_seeds_1=self.topology.seed_establishment(seedbank_1,lmin=Tree_FT5.Iseed,h0=Tree_FT5.h0,h1=Tree_FT5.h1)
-        pos=self.seeds_pos(est_seeds_1)
-        self.topology.seedbank["FT5"]=pos
-        self.germinate_suitable_seeds(FT="FT5",pos=pos)
-
-        seedbank_1=self.define_seedbank(Nseed=int(Tree_FT6.Nseed*self.topology.total_area))
-        est_seeds_1=self.topology.seed_establishment(seedbank_1,lmin=Tree_FT6.Iseed,h0=Tree_FT6.h0,h1=Tree_FT6.h1)
-        pos=self.seeds_pos(est_seeds_1)
-        self.topology.seedbank["FT6"]=pos
-        self.germinate_suitable_seeds(FT="FT6",pos=pos)
-
-
+        self.topology.seedbank=self.topology.seed_establishment(seedbank=self.topology.seedbank)
+        self.germinate_suitable_seeds(seedbank=self.topology.seedbank)
+        self.clear_seedbank()
 
 
 
