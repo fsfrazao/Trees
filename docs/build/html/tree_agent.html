@@ -1,0 +1,520 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Tree Agent Module &#8212; trees_ibm 0.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tree-agent-module">
+<h1>Tree Agent Module<a class="headerlink" href="#tree-agent-module" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-tree_agent"></span><dl class="class">
+<dt id="tree_agent.Tree">
+<em class="property">class </em><code class="descclassname">tree_agent.</code><code class="descname">Tree</code><span class="sig-paren">(</span><em>position</em>, <em>world</em>, <em>dbh</em>, <em>wood_density</em>, <em>h0</em>, <em>h1</em>, <em>cl0</em>, <em>cd0</em>, <em>cd1</em>, <em>cd2</em>, <em>rho</em>, <em>sigma</em>, <em>f0</em>, <em>f1</em>, <em>l0</em>, <em>l1</em>, <em>m</em>, <em>alpha</em>, <em>pmax</em>, <em>max_agb</em>, <em>rg</em>, <em>deltaDmax</em>, <em>DdeltaDmax</em>, <em>age</em>, <em>Ftype</em>, <em>Mb</em>, <em>Dfall=45</em>, <em>pfall=0.3</em>, <em>m_max=0.12</em>, <em>Dmort=10</em>, <em>max_dbh=None</em>, <em>id=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represent individual trees.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Args:</dt>
+<dd>position (tuple): (x,y) coordinates of where tree will be stablished.
+world (world object): world where tree will live.
+dbh (float): Diameter at Breast Height (in cm).
+h0 (float): Height-stem diameter relationship parameter.
+h1 (float): Height-stem diameter relationship parameter.
+cl0 (float): Crown Length-Height relationship parameter.
+cd0 (float): Crown Diameter-Stem Diameter relationship parameter.
+cd1 (float): Crown Diameter-Stem Diameter relationship parameter.
+cd2 (float): Crown Diameter-Stem Diameter relationship parameter.
+rho (float): wood density in t of Organic Dry Matter/cubic meter.
+sigma (float): ratio of total aboveground biomass to stem biomass.
+f0 (float): form factor-stem diameter relationship parameter.
+f1 (float): form factor-stem diameter relationship parameter.
+l0 (float): Leaf Area Index (LAI)-Stem relationship parameter.
+l1 (float): Leaf Area Index (LAI)-Stem relationship parameter.
+m (float): Light trasnmission coefficient.
+alpha (float): quantum eciency; initial slope of the type speci</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>c light response curve.</dt>
+<dd><blockquote class="first">
+<div>pmax (float): maximum leaf gross photosynthetic rate.
+rg (float): fraction of gross primary production available for growth that is attributed to growth respiration.
+deltaDmax (float): maximum diameter increment.
+DdeltaDmax (float): % of Dmax that reaches deltaDmax.
+age (int): age (years).
+Ftype (str): functional type.
+Mb (float): backgroung mortality probability.
+Dfall (float): mimimum dbh for a tree to fall.
+pfall (float): probabbility that a tree with dbh&gt;Dfall will fall.
+m_max (float): maximum size-dependent mortality for small trees.
+Dmort (float): DBH up to which mortality is increased (for small trees).</div></blockquote>
+<p>Attributes:</p>
+<blockquote class="last">
+<div><p>ID (int):
+Instances (dict):
+DeadTrees (dict):</p>
+<p>patch (tuple): (x,y) patch in which tree is located.
+f (float):
+k (float):
+lday (float):
+phi_act (float):</p>
+<p>H (float): Height (m).
+CL (float): Crown length (m).
+CD (float): Crown diameter (m)
+CA (float): Crown area (sq. m)
+AGB (float): Above ground biomass (tODM)
+LAI (float): Leaf area index.
+lmax (float):
+lmin (float):
+L_mean (float):
+Li (float):
+Mc (float):
+basic_m (float):
+Mb (float):
+Md (float):
+GPP (float): Gross primary production in this time step.
+Rm (float): Respiration maintenance in this timestep.
+position (tuple): (x,y) coordinates of where tree is located.
+world (world object): world where tree lives.
+dbh (float): Diameter at Breast Height (in cm).
+h0 (float): Height-stem diameter relationship parameter.
+h1 (float): Height-stem diameter relationship parameter.
+cl0 (float): Crown Length-Height relationship parameter.
+cd0 (float): Crown Diameter-Stem Diameter relationship parameter.
+cd1 (float): Crown Diameter-Stem Diameter relationship parameter.
+cd2 (float): Crown Diameter-Stem Diameter relationship parameter.
+rho (float): wood density in t of Organic Dry Matter/cubic meter.
+sigma (float): ratio of total aboveground biomass to stem biomass.
+f0 (float): form factor-stem diameter relationship parameter.
+f1 (float): form factor-stem diameter relationship parameter.
+l0 (float): Leaf Area Index (LAI)-Stem relationship parameter.
+l1 (float): Leaf Area Index (LAI)-Stem relationship parameter.
+m (float): Light trasnmission coefficient.
+alpha (float): quantum eciency; initial slope of the type-speci</p>
+</div></blockquote>
+</dd>
+<dt>c light response curve.</dt>
+<dd>pmax (float): maximum leaf gross photosynthetic rate.
+rg (float): fraction of gross primary production available for growth that is attributed to growth respiration.
+deltaDmax (float): maximum diameter increment.
+DdeltaDmax (float): % of Dmax that reaches deltaDmax.
+age (int): age (years).
+Ftype (str): functional type.
+Mb (float): backgroung mortality probability.
+max_height (float): maximum height this tree can reach.
+Dfall (float): mimimum dbh for a tree to fall.
+pfall (float): probabbility that a tree with dbh&gt;Dfall will fall.
+m_max (float): maximum size-dependent mortality for small trees.
+Dmort (float): DBH up to which mortality is increased (for small trees).</dd>
+</dl>
+<dl class="method">
+<dt id="tree_agent.Tree.AGB_from_DBH">
+<code class="descname">AGB_from_DBH</code><span class="sig-paren">(</span><em>D</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.AGB_from_DBH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.AGB_from_DBH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate tree aboveground biomass (AGB) calculated according to eq.5 in SI-Fisher et al.(2015)</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): AGB.</dd>
+</dl>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="tree_agent.Tree.BackgroundMortality">
+<em class="property">classmethod </em><code class="descname">BackgroundMortality</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.BackgroundMortality"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.BackgroundMortality" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kill trees by calling their stochastic_Bm() method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.Biomass_gain">
+<code class="descname">Biomass_gain</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.Biomass_gain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.Biomass_gain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate Aboveground Biomass (AGB) gain according to eq.43 in SI-Fisher et al.(2015).</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): AGB.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.CA_from_CD">
+<code class="descname">CA_from_CD</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.CA_from_CD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.CA_from_CD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate tree crown area (CA) calculated according to eq.4 in SI-Fisher et al.(2015)</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): CA.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.CD_from_DBH">
+<code class="descname">CD_from_DBH</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.CD_from_DBH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.CD_from_DBH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate tree crown diameter (CD) calculated according to eq.3 in SI-Fisher et al.(2015).</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): CD.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.CL_from_H">
+<code class="descname">CL_from_H</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.CL_from_H"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.CL_from_H" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate tree crown_length (CL) calculated according to eq.2 in SI-Fisher et al.(2015)</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): CL.</dd>
+</dl>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="tree_agent.Tree.Cgpp">
+<em class="property">classmethod </em><code class="descname">Cgpp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.Cgpp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.Cgpp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the total Carbon absorbed as Gross Primary Production.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): Total Carbon absorbed.</dd>
+</dl>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="tree_agent.Tree.Cr">
+<em class="property">classmethod </em><code class="descname">Cr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.Cr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.Cr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the total Carbon released through respiration.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): Total Carbon released by all living trees.</dd>
+</dl>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="tree_agent.Tree.CrowdingMortality">
+<em class="property">classmethod </em><code class="descname">CrowdingMortality</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.CrowdingMortality"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.CrowdingMortality" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kill trees by calling their stochastic_Cm() method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.DBH_from_Biomass">
+<code class="descname">DBH_from_Biomass</code><span class="sig-paren">(</span><em>B</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.DBH_from_Biomass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.DBH_from_Biomass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate diameter at breast height from above ground biomass.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): the DBH calculated from AGB.</dd>
+</dl>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="tree_agent.Tree.DamageMortality">
+<em class="property">classmethod </em><code class="descname">DamageMortality</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.DamageMortality"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.DamageMortality" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kill trees by calling their stochastic_Dm() method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.H_from_DBH">
+<code class="descname">H_from_DBH</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.H_from_DBH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.H_from_DBH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate tree height calculated according to eq.1 in SI-Fisher et al.(2015).</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): H.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.LAI_from_DBH">
+<code class="descname">LAI_from_DBH</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.LAI_from_DBH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.LAI_from_DBH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the leaf area index (LAI) calculated according to eq.7 in SI-Fisher et al.(2015)</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): LAI.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.Lind">
+<code class="descname">Lind</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.Lind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.Lind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the incoming radiation on top of lmax layer the tree is reaching according to eq.36 in SI-Fisher et al.(2015).</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): Incoming radiation on top of this tree.</dd>
+</dl>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="tree_agent.Tree.MaxHeight">
+<em class="property">classmethod </em><code class="descname">MaxHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.MaxHeight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.MaxHeight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the height of the tallest tree in the current time step.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): height of the tallest tree.</dd>
+</dl>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="tree_agent.Tree.Mortality">
+<em class="property">classmethod </em><code class="descname">Mortality</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.Mortality"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.Mortality" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kill trees by calling their stochastic_M() method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.Pind">
+<code class="descname">Pind</code><span class="sig-paren">(</span><em>Li</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.Pind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.Pind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the interim gross photosynthetic rate of one tree per year, according to eq.40 in SI-Fisher et al.(2015)</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float) Gross photosynthetic rate.</dd>
+</dl>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="tree_agent.Tree.Total_AGB">
+<em class="property">classmethod </em><code class="descname">Total_AGB</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.Total_AGB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.Total_AGB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the total Above Ground Biomass for all living trees.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): total AGB in t of Organic Dry matter (tODM).</dd>
+</dl>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="tree_agent.Tree.TreesAboveDBH">
+<em class="property">classmethod </em><code class="descname">TreesAboveDBH</code><span class="sig-paren">(</span><em>dbh</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.TreesAboveDBH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.TreesAboveDBH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the total number of trees with DBH above the speciefied threshold.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(int): Number of trees.</dd>
+</dl>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="tree_agent.Tree.TreesPerPatch">
+<em class="property">classmethod </em><code class="descname">TreesPerPatch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.TreesPerPatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.TreesPerPatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identify which trees are in each patch.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(dict): keys are patch coordinates ‘(x,y)’ and values are lists of trees ids in that patch.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.calculate_Ms">
+<code class="descname">calculate_Ms</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.calculate_Ms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.calculate_Ms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the size-dependent mortality for small trees according to model description in Ruger et al. 2007. (SI, page 4).</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): Ms.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.calculate_alpha0">
+<code class="descname">calculate_alpha0</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.calculate_alpha0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.calculate_alpha0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the alpha0 growth paramenter, according equations described in sctions F-5 (page 24) of SI-Fisher et al.(2015).</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): alpha 0.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.calculate_alpha1">
+<code class="descname">calculate_alpha1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.calculate_alpha1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.calculate_alpha1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate alpha1 growth paramenter, according equations described in sctions F-5 (page 24) of SI-Fisher et al.(2015).</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): alpha1.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.calculate_f">
+<code class="descname">calculate_f</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.calculate_f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.calculate_f" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the form factor (f) calculated according to eq.6 in SI-Fisher et al.(2015)</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): f.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.calculate_rm">
+<code class="descname">calculate_rm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.calculate_rm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.calculate_rm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the maintenance respiration rate(rm) according to eq.46 in SI-Fisher et al.(2015).</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): rm.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.calculate_volume">
+<code class="descname">calculate_volume</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.calculate_volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.calculate_volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the volume of the stem based on DBH.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float): volume.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.fall">
+<code class="descname">fall</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.fall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.fall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inflict damage on other trees affected by the falling one.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.growth">
+<code class="descname">growth</code><span class="sig-paren">(</span><em>D</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.growth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.growth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the yearly diameter growth according to eq.48 in SI-Fisher et al.(2015). Assumes full availabilty of resources</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(float):diameter growth.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.increase_DBH">
+<code class="descname">increase_DBH</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.increase_DBH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.increase_DBH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Increase tree DBH according to gain in biomass.</p>
+<p>Note: If DBH decreases to zero, remove tree.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>None.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.log_me">
+<code class="descname">log_me</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.log_me"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.log_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cut down this tree.</p>
+<p>Randomly determines where tree is going to fall and inflict damage in the the trees hit by the crown. Only trees with DBH&lt; 50 cm are damaged.</p>
+<p>The carbon of this trees is not added to any Stock.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.remove_me">
+<code class="descname">remove_me</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.remove_me"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.remove_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kill this tree.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.stochastic_Bm">
+<code class="descname">stochastic_Bm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.stochastic_Bm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.stochastic_Bm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stochastic Background mortality.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(bool): True if tree dies from background mortality.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.stochastic_Cm">
+<code class="descname">stochastic_Cm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.stochastic_Cm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.stochastic_Cm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stochastic crownding mortality.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(bool): True if tree dies from crowding.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.stochastic_Dm">
+<code class="descname">stochastic_Dm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.stochastic_Dm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.stochastic_Dm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stochastic damage mortality.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(bool): True if tree dies from damage.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.stochastic_M">
+<code class="descname">stochastic_M</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.stochastic_M"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.stochastic_M" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stochastic mortality.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>(bools): True if tree should be removed.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tree_agent.Tree.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tree_agent.html#Tree.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tree_agent.Tree.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates geometry related parameters and mortality probabilities.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Fabio Frazao.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/tree_agent.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

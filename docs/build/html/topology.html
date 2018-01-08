@@ -1,0 +1,278 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Topology Module &#8212; trees_ibm 0.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="topology-module">
+<h1>Topology Module<a class="headerlink" href="#topology-module" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-topology"></span><dl class="class">
+<dt id="topology.Tree_Grid">
+<em class="property">class </em><code class="descclassname">topology.</code><code class="descname">Tree_Grid</code><span class="sig-paren">(</span><em>x_max, y_max, patch_area, I0, k, delta_h, phi_act, lday, ndim=5, dim_names=['GroundLight', 'LianaCoverage', 'Temperature', 'WindSpeed', 'Humidity']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topology.html#Tree_Grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.Tree_Grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represent space as a grid.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>x_max (int): number of horizontal cells
+y_max (int): number of vertical cells
+patch_area (float): are of each patch (cells) in squared meters
+I0 (float): Incoming irradiance on top of canopy [umol photon / m^2s]
+k (float): Light extinction coefficient.
+delta_h (float): height of each vertical layer.
+phi_act (float):photosynthetic active period.
+lday (int):mean day length during the vegetation period phi_act.
+ndim (int): number of dimensions. One per environmental variable.
+dim_names (list): a list of ‘ndim’ strings representing the names of dimensions.</dd>
+<dt>Attributes:</dt>
+<dd>LAIs (dict): dictionary with patches as keys and a list of averaged Leaf Area Indexes (one for each vertical layer) as values.
+CCAs (dict):dictionary with patches as keys a a list of Cummulative Crown Areas (one for each vertical layer) as values.
+trees_per_patch (list): dictionary with patches (‘(x,y)’) as keys and a list of tree ids as values
+total_area(float): area of all simulated patches in ha</dd>
+</dl>
+<dl class="method">
+<dt id="topology.Tree_Grid.calculate_liana_biomass">
+<code class="descname">calculate_liana_biomass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/topology.html#Tree_Grid.calculate_liana_biomass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.Tree_Grid.calculate_liana_biomass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the biomass of lianas in one patch based on the coverage.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="topology.Tree_Grid.calculate_liana_coverage">
+<code class="descname">calculate_liana_coverage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/topology.html#Tree_Grid.calculate_liana_coverage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.Tree_Grid.calculate_liana_coverage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the coverage(%) os lianas in on patch based on the previous coverage, temperature, humidity and wind speed</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="topology.Tree_Grid.check_CCA">
+<code class="descname">check_CCA</code><span class="sig-paren">(</span><em>h0</em>, <em>h1</em>, <em>patch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topology.html#Tree_Grid.check_CCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.Tree_Grid.check_CCA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the there is enough space forthe new plants to be established</p>
+<blockquote>
+<div>Note: Cummulative Crown Area is homogeneized at the patch level</div></blockquote>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>h0 (float): allometric paramenter used to calculate initial height
+h1 (float): allometric paramenter used to calculate initial height
+patch (tuple): (x,y), patch  that will have the light conditions assessed.</dd>
+<dt>Returns:</dt>
+<dd>Bool. True if there is enough space.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="topology.Tree_Grid.check_light">
+<code class="descname">check_light</code><span class="sig-paren">(</span><em>min_light</em>, <em>patch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topology.html#Tree_Grid.check_light"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.Tree_Grid.check_light" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the light intensity at ground level meets the needs for seed germination.</p>
+<blockquote>
+<div>Note: Ligth intensity is homogeneized at the patch level.</div></blockquote>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>min_light (float): minimum light intensity at ground for seeds to germinate.
+patch (tuple): (x,y), patch  that will have the light conditions assessed.</dd>
+<dt>Returns:</dt>
+<dd>Bool. True if light level is above minimum.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="topology.Tree_Grid.cohorts">
+<code class="descname">cohorts</code><span class="sig-paren">(</span><em>patches</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topology.html#Tree_Grid.cohorts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.Tree_Grid.cohorts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assemble cohorts based on tree type and age.</p>
+<blockquote>
+<div>Uses the trees_per_type() and trees_by_age_groups() methods to
+organize a dictionary of dictionaries containing the indices of
+trees in each age group within each type</div></blockquote>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>Patches (list): a list of tuples representing patch coordinatas
+[(x1,y1),(x2,y2)…]</dd>
+<dt>Returns:</dt>
+<dd><dl class="first last docutils">
+<dt>cohorsts(dict): a dictionary with trees organized by type and age:</dt>
+<dd>{FunctionalType1:{AgeGroup1:[tree1,tree2,tree3…]}}</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="topology.Tree_Grid.ground_level_light">
+<code class="descname">ground_level_light</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/topology.html#Tree_Grid.ground_level_light"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.Tree_Grid.ground_level_light" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the amount of light that reaches the ground.</p>
+<p>The value per patch is stored in the “GroundLight” dimension.
+Values are homogeneized at the patch level.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>None.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="topology.Tree_Grid.patch_based_CCA">
+<code class="descname">patch_based_CCA</code><span class="sig-paren">(</span><em>trees_per_patch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topology.html#Tree_Grid.patch_based_CCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.Tree_Grid.patch_based_CCA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Leaf Area Index for each patch in the grid.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>trees_per_patch (dict): dictionary in which keys are patches (‘(x,y)’)’ and values are lists of the trees ids in that patch.</dd>
+<dt>Returns:</dt>
+<dd>L_per_layer(dict): dictionary in which the keys are the same as the ones in trees_per_patch and values are a list of the CCA per vertical layer</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="topology.Tree_Grid.patch_based_LAI">
+<code class="descname">patch_based_LAI</code><span class="sig-paren">(</span><em>trees_per_patch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topology.html#Tree_Grid.patch_based_LAI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.Tree_Grid.patch_based_LAI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Leaf Area Index for each patch in the grid.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>trees_per_patch (dict): dictionary in which keys are patch coordinates (x,y) and values are  a list of the tree ids in that patch.</dd>
+<dt>Returns:</dt>
+<dd>L_per_layer(dict): dictionary in which the keys are patch coordinates(‘(x,y)’)-the same as the ones in trees_per_patch- and values are a list of the LAI per vertical layer</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="topology.Tree_Grid.seed_establishment">
+<code class="descname">seed_establishment</code><span class="sig-paren">(</span><em>seedbank</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topology.html#Tree_Grid.seed_establishment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.Tree_Grid.seed_establishment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the seeds in the seedbank have the light and space conditions to germinate.</p>
+<blockquote>
+<div><p>Note: All seeds in the given seedbank are assumed to have the same conditions. Multiple calls to this method passing different seedbanks allow the representation of different requirements.</p>
+<p>All established individuals are initiated with a predefined DBH (the same for all individuals), but initial height is calculated based on functional relationships and only if there is enough space in that layer a new individual will be stablished.</p>
+</div></blockquote>
+<p>Args:</p>
+<blockquote>
+<div>seedbank (dict): dictionary with Functional Type (FT) and list of seed positions as values.
+lmin (float): minimum light intensity at ground level for seed to germinate.
+h0 (float): allometric paramenter used to calculate initial height
+h1 (float): allometric paramenter used to calculate initial height</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>est_seeds: a dictionary with patches as keys (‘(x,y)’) and number of established seeds as values.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="topology.Tree_Grid.trees_in_patches">
+<code class="descname">trees_in_patches</code><span class="sig-paren">(</span><em>patches</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topology.html#Tree_Grid.trees_in_patches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.Tree_Grid.trees_in_patches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a list of tree ids and their respective positions.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>patch (list): a list of tuples representing the patch coordinates ‘(x,y)’.</dd>
+<dt>Returns:</dt>
+<dd>id_pos (list):a list tuples with tree ids and positions ‘(id,(x_pos,y_pos))’</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="topology.Tree_Grid.trees_per_age_groups">
+<code class="descname">trees_per_age_groups</code><span class="sig-paren">(</span><em>list_of_trees</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topology.html#Tree_Grid.trees_per_age_groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.Tree_Grid.trees_per_age_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary in which keys are a age group and values are lists containing the id of the respective trees.</p>
+<p>list_of_trees is a list with the id of trees.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="topology.Tree_Grid.trees_per_type">
+<code class="descname">trees_per_type</code><span class="sig-paren">(</span><em>list_of_trees</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topology.html#Tree_Grid.trees_per_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.Tree_Grid.trees_per_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Organize trees by functional type.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>list_of_trees (list): a list of tree ids.</dd>
+<dt>Returns:</dt>
+<dd>type_groups(dict): a dictionary in which keys are a Functional
+Types and values are lists containing the id of the respective trees.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="topology.Tree_Grid.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/topology.html#Tree_Grid.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topology.Tree_Grid.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the methods that calculate values for each dimension of the grid.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>None.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Fabio Frazao.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/topology.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

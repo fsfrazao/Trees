@@ -1,0 +1,318 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>visualization &#8212; trees_ibm 0.2.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for visualization</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;Agg&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="k">import</span> <span class="n">Axes3D</span>
+<span class="kn">import</span> <span class="nn">mpl_toolkits.mplot3d.art3d</span> <span class="k">as</span> <span class="nn">art3d</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">meshgrid</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">outer</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">pi</span>
+<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="k">import</span> <span class="n">Circle</span>
+
+
+<span class="k">def</span> <span class="nf">prepare_plot_space</span><span class="p">(</span><span class="n">x_lim</span><span class="p">,</span> <span class="n">y_lim</span><span class="p">,</span> <span class="n">z_lim</span><span class="p">):</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">Axes3D</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x-axis&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">x_lim</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y-axis&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">y_lim</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;z-axis&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">(</span><span class="n">z_lim</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">plot_3D_cylinder</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">elevation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">x_center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y_center</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="n">x_center</span> <span class="o">-</span> <span class="n">radius</span><span class="p">,</span> <span class="n">x_center</span> <span class="o">+</span> <span class="n">radius</span><span class="p">,</span> <span class="n">resolution</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="n">elevation</span><span class="p">,</span> <span class="n">elevation</span> <span class="o">+</span> <span class="n">height</span><span class="p">,</span> <span class="n">resolution</span><span class="p">)</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Z</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">radius</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">x_center</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">y_center</span>  <span class="c1"># Pythagorean theorem</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">y_center</span> <span class="o">-</span> <span class="n">Y</span><span class="p">),</span> <span class="n">Z</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+
+    <span class="n">floor</span> <span class="o">=</span> <span class="n">Circle</span><span class="p">((</span><span class="n">x_center</span><span class="p">,</span> <span class="n">y_center</span><span class="p">),</span> <span class="n">radius</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">floor</span><span class="p">)</span>
+    <span class="n">art3d</span><span class="o">.</span><span class="n">pathpatch_2d_to_3d</span><span class="p">(</span><span class="n">floor</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">elevation</span><span class="p">,</span> <span class="n">zdir</span><span class="o">=</span><span class="s2">&quot;z&quot;</span><span class="p">)</span>
+
+    <span class="n">ceiling</span> <span class="o">=</span> <span class="n">Circle</span><span class="p">((</span><span class="n">x_center</span><span class="p">,</span> <span class="n">y_center</span><span class="p">),</span> <span class="n">radius</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">ceiling</span><span class="p">)</span>
+    <span class="n">art3d</span><span class="o">.</span><span class="n">pathpatch_2d_to_3d</span><span class="p">(</span><span class="n">ceiling</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">elevation</span> <span class="o">+</span> <span class="n">height</span><span class="p">,</span> <span class="n">zdir</span><span class="o">=</span><span class="s2">&quot;z&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">plot_sphere</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+
+    <span class="n">u</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>  <span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">outer</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">u</span><span class="p">),</span>  <span class="n">sin</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">outer</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">u</span><span class="p">),</span>  <span class="n">sin</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="o">+</span> <span class="n">elevation</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">outer</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">u</span><span class="p">)),</span>  <span class="n">cos</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+
+    <span class="c1"># Plot the surface</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="c1"># plt.close()</span>
+
+
+<span class="k">def</span> <span class="nf">plot_tree</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">DBH</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Crown_Length</span><span class="p">,</span> <span class="n">Crown_Diameter</span><span class="p">):</span>
+    <span class="c1"># plot stem</span>
+    <span class="n">plot_3D_cylinder</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">DBH</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">H</span> <span class="o">-</span> <span class="n">Crown_Length</span><span class="p">,</span>
+                     <span class="n">elevation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">,</span> <span class="n">x_center</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y_center</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+    <span class="c1"># plot crown</span>
+    <span class="n">plot_3D_cylinder</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">Crown_Diameter</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">Crown_Length</span><span class="p">,</span> <span class="n">elevation</span><span class="o">=</span><span class="n">H</span> <span class="o">-</span>
+                     <span class="n">Crown_Length</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">x_center</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y_center</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">plot_tree(ax=ax,x=30,y=20, DBH=1.5, H=15,Crown_Length=8,Crown_Diameter=5)</span>
+<span class="sd">plot_tree(ax=ax,x=50,y=30, DBH=3, H=30,Crown_Length=12,Crown_Diameter=12)</span>
+<span class="sd">plot_tree(ax=ax,x=80,y=80, DBH=1, H=10,Crown_Length=4,Crown_Diameter=5)</span>
+<span class="sd">plt.show()</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">plot_NEE</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="c1"># s=s*(-1)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)),</span> <span class="n">s</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;NEE&quot;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;sink&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)),</span> <span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="p">(</span>
+        <span class="n">s</span> <span class="o">&gt;</span> <span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))),</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)),</span> <span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="p">(</span>
+        <span class="n">s</span> <span class="o">&lt;</span> <span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))),</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Net Ecosystem Exchange&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time[yrs]&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;[to/ha/yr]&quot;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">fig</span>
+    <span class="c1"># plt.savefig(&quot;NEE.png&quot;)</span>
+    <span class="c1"># plt.close(fig)</span>
+    <span class="c1"># plt.show()</span>
+
+
+<span class="k">def</span> <span class="nf">plot_emissions</span><span class="p">(</span><span class="n">dic</span><span class="p">):</span>
+    <span class="n">FastSoil</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;soil_fast&#39;</span><span class="p">]</span>
+    <span class="n">SlowSoil</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="o">+</span> <span class="n">s</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">FastSoil</span><span class="p">,</span> <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;soil_slow&#39;</span><span class="p">])]</span>
+    <span class="n">DeadWood</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="o">+</span> <span class="n">w</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">SlowSoil</span><span class="p">,</span> <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;dead_wood&#39;</span><span class="p">])]</span>
+    <span class="n">LivingTrees</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="o">+</span> <span class="n">l</span> <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">DeadWood</span><span class="p">,</span> <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;living_trees&#39;</span><span class="p">])]</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="c1"># ax1.plot(range(len(s)),s,&#39;-&#39;,label=&quot;NEE&quot;)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Living Trees&quot;</span><span class="p">,</span>
+             <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Dead Wood&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Slow Soil&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Fast Soil&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;yellow&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s1">&#39;living_trees&#39;</span><span class="p">])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">),</span> <span class="n">LivingTrees</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+                     <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">),</span> <span class="n">DeadWood</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">),</span> <span class="n">SlowSoil</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">),</span> <span class="n">FastSoil</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;yellow&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Carbon Emmissions&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time[yrs]&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Carbon [t]&quot;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper center&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05</span><span class="p">),</span>
+               <span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">shadow</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span>
+
+
+<span class="k">def</span> <span class="nf">plot_respiration</span><span class="p">(</span><span class="n">dic</span><span class="p">):</span>
+    <span class="n">Ft_col</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Cgpp&quot;</span><span class="p">:</span> <span class="s2">&quot;forestgreen&quot;</span><span class="p">,</span> <span class="s2">&quot;Cr&quot;</span><span class="p">:</span> <span class="s2">&quot;orange&quot;</span><span class="p">}</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s2">&quot;Cgpp&quot;</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Cgpp&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">Ft_col</span><span class="p">[</span><span class="s2">&quot;Cgpp&quot;</span><span class="p">])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s2">&quot;Cr&quot;</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Cr&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">Ft_col</span><span class="p">[</span><span class="s2">&quot;Cr&quot;</span><span class="p">])</span>
+    <span class="c1"># plt.ylim(ymin=-10)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Respiration and Primary Production&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time[yrs]&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Carbon&quot;</span><span class="p">)</span>
+    <span class="c1"># plt.axhline(y=0)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span>
+
+
+<span class="k">def</span> <span class="nf">plot_populations</span><span class="p">(</span><span class="n">Pop</span><span class="p">):</span>
+    <span class="n">Ft_col</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;FT1&quot;</span><span class="p">:</span> <span class="s2">&quot;forestgreen&quot;</span><span class="p">,</span> <span class="s2">&quot;FT2&quot;</span><span class="p">:</span> <span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="s2">&quot;FT3&quot;</span><span class="p">:</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;FT4&quot;</span><span class="p">:</span> <span class="s2">&quot;mediumorchid&quot;</span><span class="p">,</span> <span class="s2">&quot;FT5&quot;</span><span class="p">:</span> <span class="s2">&quot;crimson&quot;</span><span class="p">,</span> <span class="s2">&quot;FT6&quot;</span><span class="p">:</span> <span class="s2">&quot;steelblue&quot;</span><span class="p">}</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Pop</span><span class="p">[</span><span class="s2">&quot;FT1&quot;</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;FT1&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">Ft_col</span><span class="p">[</span><span class="s2">&quot;FT1&quot;</span><span class="p">])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Pop</span><span class="p">[</span><span class="s2">&quot;FT2&quot;</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;FT2&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">Ft_col</span><span class="p">[</span><span class="s2">&quot;FT2&quot;</span><span class="p">])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Pop</span><span class="p">[</span><span class="s2">&quot;FT3&quot;</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;FT3&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">Ft_col</span><span class="p">[</span><span class="s2">&quot;FT3&quot;</span><span class="p">])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Pop</span><span class="p">[</span><span class="s2">&quot;FT4&quot;</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;FT4&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">Ft_col</span><span class="p">[</span><span class="s2">&quot;FT4&quot;</span><span class="p">])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Pop</span><span class="p">[</span><span class="s2">&quot;FT5&quot;</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;FT5&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">Ft_col</span><span class="p">[</span><span class="s2">&quot;FT5&quot;</span><span class="p">])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Pop</span><span class="p">[</span><span class="s2">&quot;FT6&quot;</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;FT6&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">Ft_col</span><span class="p">[</span><span class="s2">&quot;FT6&quot;</span><span class="p">])</span>
+    <span class="c1"># plt.ylim(ymin=-10)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Functional Type Population&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time[yrs]&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Population Size&quot;</span><span class="p">)</span>
+    <span class="c1"># plt.axhline(y=0)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper center&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05</span><span class="p">),</span>
+               <span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">shadow</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span>
+    <span class="c1"># plt.show()</span>
+    <span class="c1"># plt.close(fig)</span>
+
+
+<span class="k">def</span> <span class="nf">plot_stocks</span><span class="p">(</span><span class="n">Stocks</span><span class="p">):</span>
+    <span class="n">Soil</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="o">+</span> <span class="n">f</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Stocks</span><span class="p">[</span><span class="s2">&quot;Sslow&quot;</span><span class="p">],</span> <span class="n">Stocks</span><span class="p">[</span><span class="s2">&quot;Sfast&quot;</span><span class="p">])]</span>
+    <span class="n">DeadWood</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="o">+</span> <span class="n">w</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Soil</span><span class="p">,</span> <span class="n">Stocks</span><span class="p">[</span><span class="s2">&quot;Dwood&quot;</span><span class="p">])]</span>
+    <span class="n">AGB</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="o">+</span> <span class="n">a</span> <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">DeadWood</span><span class="p">,</span> <span class="n">Stocks</span><span class="p">[</span><span class="s2">&quot;AGB&quot;</span><span class="p">])]</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="c1"># ax1.plot(range(len(s)),s,&#39;-&#39;,label=&quot;NEE&quot;)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;AGB&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Dead Wood&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Soil&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">AGB</span><span class="p">)),</span> <span class="n">AGB</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">DeadWood</span><span class="p">)),</span> <span class="n">DeadWood</span><span class="p">,</span>
+                     <span class="mi">0</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Soil</span><span class="p">)),</span> <span class="n">Soil</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Carbon Stocks&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time[yrs]&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Carbon [t]&quot;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper center&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05</span><span class="p">),</span>
+               <span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">shadow</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span>
+    <span class="c1"># plt.show()</span>
+    <span class="c1"># plt.close(fig)</span>
+
+
+<span class="k">def</span> <span class="nf">plot_ground_light</span><span class="p">(</span><span class="n">topology</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">topology</span><span class="o">.</span><span class="n">surface</span><span class="p">[</span><span class="n">topology</span><span class="o">.</span><span class="n">dim_names</span><span class="p">[</span><span class="s2">&quot;GroundLight&quot;</span><span class="p">]],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span>
+        <span class="s2">&quot;gray&quot;</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">860</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">plot_tree_pos</span><span class="p">(</span><span class="n">Tree</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">xlim</span><span class="p">,</span> <span class="n">ylim</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">tp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">Ft_col</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;FT1&quot;</span><span class="p">:</span> <span class="s2">&quot;forestgreen&quot;</span><span class="p">,</span> <span class="s2">&quot;FT2&quot;</span><span class="p">:</span> <span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="s2">&quot;FT3&quot;</span><span class="p">:</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;FT4&quot;</span><span class="p">:</span> <span class="s2">&quot;mediumorchid&quot;</span><span class="p">,</span> <span class="s2">&quot;FT5&quot;</span><span class="p">:</span> <span class="s2">&quot;crimson&quot;</span><span class="p">,</span> <span class="s2">&quot;FT6&quot;</span><span class="p">:</span> <span class="s2">&quot;steelblue&quot;</span><span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">CA</span><span class="p">)</span>
+        <span class="n">tp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Ft_col</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">Ftype</span><span class="p">])</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+    <span class="c1"># ax.autoscale(False)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">xlim</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ylim</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">get_width_height</span><span class="p">()</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">length</span> <span class="o">/</span> <span class="n">width</span>
+
+    <span class="n">areas</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">/</span> <span class="n">p</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">s</span><span class="p">]</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">areas</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">tp</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Simulation Year:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">step</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;step: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="add_time_guide"><a class="viewcode-back" href="../visualization.html#visualization.add_time_guide">[docs]</a><span class="k">def</span> <span class="nf">add_time_guide</span><span class="p">(</span><span class="n">figname</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">plot_func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot the result of [plot_func] [length] times, with a vetical line moving along the x (time) axis.</span>
+
+<span class="sd">    plot_func() must return a pylab fig.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plot_func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figname</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Fabio Frazao.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

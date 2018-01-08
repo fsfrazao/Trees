@@ -1,0 +1,681 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>world &#8212; trees_ibm 0.2.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for world</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">py_ibm</span> <span class="k">import</span> <span class="o">*</span>
+<span class="c1">#from plot_trees import plot_tree_pos</span>
+<span class="kn">from</span> <span class="nn">trees_ibm.tree_agent</span> <span class="k">import</span> <span class="n">Tree</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+<span class="kn">from</span> <span class="nn">tables</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="Tree_World"><a class="viewcode-back" href="../world.html#world.Tree_World">[docs]</a><span class="k">class</span> <span class="nc">Tree_World</span><span class="p">(</span><span class="n">World</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Provide observer methods and control the schedule and execution of simulations.</span>
+
+
+<span class="sd">    Args:</span>
+<span class="sd">        topology (Tree_Grid instance): grid object on which agents will live.</span>
+<span class="sd">        AET (int): actual evapotranspiration in the previous year in mm.</span>
+<span class="sd">        Assumed to be constant every year.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        Smort (float): Carbon of all trees that died in one year [tC]</span>
+<span class="sd">        Sdead (float): Dead wood carbon stock [tC]</span>
+<span class="sd">        tsdead (float): Anual decomposition rate</span>
+<span class="sd">        tsdead_A (float): Proportion of decomposed dead wood that is released to the atmosphere.</span>
+<span class="sd">        Sslow (float): Slow decomposition portion of soil stock [tC]</span>
+<span class="sd">        tsdead_Sslow (float): Proportion of decomposed dead wood that is tranferred to the slow decomposition Soil stock</span>
+<span class="sd">        self.tsslow_A (float):Proportion of slow decomposition soil stock that is released to the atmosphere.</span>
+<span class="sd">        Sfast (float):Fast decomposition portion of soil stock [tC]</span>
+<span class="sd">        tsfast_A (float):Proportion of fast decomposition soil stock that is released to the atmosphere.</span>
+<span class="sd">        tsdead_Sfast (float): Proportion of decomposed dead wood that is tranferred to the fast decomposition Soil stock.</span>
+<span class="sd">        Cgpp (float): Carbon captured in the gross primary productivity of the living forest</span>
+<span class="sd">        Cr (float):Carbon released by the total respiration of the living forest (i.e. for maintenance and growth)</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">        &gt;&gt;&gt;grid01=Tree_Grid(x_max=5,y_max=5,delta_h=0.5,patch_area=400,I0=860,lday=12,phi_act=360,k=0.7)</span>
+<span class="sd">        &gt;&gt;&gt;world01=Tree_World(topology=grid01)</span>
+<span class="sd">        &gt;&gt;&gt; print(world01)</span>
+<span class="sd">        World object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topology</span><span class="p">,</span> <span class="n">AET</span><span class="o">=</span><span class="mi">1300</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">topology</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mortality_factor</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">AET</span> <span class="o">=</span> <span class="n">AET</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Smort</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sdead</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;current&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;previous&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tsdead</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span>
+            <span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.4553</span> <span class="o">+</span> <span class="mf">0.0014175</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">AET</span><span class="p">))</span> <span class="o">/</span> <span class="mi">12</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recruit_factor</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dwood_emission_p</span> <span class="o">=</span> <span class="mf">0.7</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tsdead_A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwood_emission_p</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsdead</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sslow</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;current&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;previous&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tsdead_Sslow</span> <span class="o">=</span> <span class="mf">0.015</span> <span class="o">*</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsdead</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tsslow_A</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">750</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sfast</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;current&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;previous&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tsfast_A</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">15</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tsdead_Sfast</span> <span class="o">=</span> <span class="mf">0.985</span> <span class="o">*</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsdead</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">smort_log</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cgpp</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cr</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sim_number</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NEE</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Stocks</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Sslow&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">],</span>
+                       <span class="s2">&quot;Sfast&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">],</span>
+                       <span class="s2">&quot;Dwood&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">],</span>
+                       <span class="s2">&quot;AGB&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">],</span> <span class="p">}</span>
+        <span class="c1"># self.tree_subclasses={&quot;FT1&quot;:Tree_FT1,</span>
+        <span class="c1">#                 &quot;FT2&quot;:Tree_FT2,</span>
+        <span class="c1">#                 &quot;FT3&quot;:Tree_FT3,</span>
+        <span class="c1">#                 &quot;FT4&quot;:Tree_FT4,</span>
+        <span class="c1">#                 &quot;FT5&quot;:Tree_FT5,</span>
+        <span class="c1">#                 &quot;FT6&quot;:Tree_FT6}</span>
+
+    <span class="k">def</span> <span class="nf">initial_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="n">Tree</span><span class="o">.</span><span class="n">UpdateTrees</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Tree_World.run_simulation"><a class="viewcode-back" href="../world.html#world.Tree_World.run_simulation">[docs]</a>    <span class="k">def</span> <span class="nf">run_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">logging_settings</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dispersal_settings</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="s1">&#39;external&#39;</span><span class="p">,</span> <span class="s1">&#39;clear&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span> <span class="n">produce_fruits</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">increment_time</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">h5file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run the code in run_schedule() &#39;n&#39; times.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            n (int): Number of simulations to be run.</span>
+<span class="sd">            logging_years (range): The years in which selective logging occurs.</span>
+<span class="sd">            min_dbh (float): minimum dbh for a tree to be considered suitable for logging.</span>
+<span class="sd">            max_dbh (float): maximum dbh for a tree to be considered suitable for logging.</span>
+<span class="sd">            vol (float): total volume of timber to be extracted by logging event.</span>
+<span class="sd">            h5file (str): path to the HDF5 file in which model outputs will be saved</span>
+<span class="sd">            plot_func (function): a function that will be run every step. Usually a plotting function that saves a image file to the disk. Must accept a &#39;step&#39; argument,which will receive the step number and can be used to generate the file name.</span>
+<span class="sd">            **kwargs: List of keyword arguments to be passed to plot_func in addition to &#39;step&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">h5file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">open_file</span><span class="p">(</span><span class="n">h5file</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span><span class="p">)</span>
+
+        <span class="n">repr_steps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;step=&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s2">&quot;N=&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="p">),</span> <span class="s2">&quot;DBH&gt;10&quot;</span><span class="p">,</span> <span class="n">Tree</span><span class="o">.</span><span class="n">TreesAboveDBH</span><span class="p">(</span>
+                <span class="mf">10.0</span><span class="p">),</span> <span class="s2">&quot;DTrees&quot;</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">DeadTrees</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+            <span class="k">if</span> <span class="n">h5file</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pop_data_to_db</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stocks_data_to_db</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">t</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">h5file</span><span class="p">:</span>
+
+                <span class="n">nee</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_schedule</span><span class="p">(</span>
+                    <span class="n">step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">h5_database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">NEE_data_to_db</span><span class="p">(</span><span class="n">nee</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">produce_fruits</span><span class="p">:</span>
+                    <span class="n">Tree</span><span class="o">.</span><span class="n">ProduceFruits</span><span class="p">()</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;================================&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NEE&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;================================&quot;</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">NEE</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_schedule</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Stocks</span><span class="p">[</span><span class="s2">&quot;Sslow&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Sslow</span><span class="p">[</span><span class="s2">&quot;current&quot;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Stocks</span><span class="p">[</span><span class="s2">&quot;Sfast&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Sfast</span><span class="p">[</span><span class="s2">&quot;current&quot;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Stocks</span><span class="p">[</span><span class="s2">&quot;Dwood&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Sdead</span><span class="p">[</span><span class="s2">&quot;current&quot;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Stocks</span><span class="p">[</span><span class="s2">&quot;AGB&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">Total_AGB</span><span class="p">()</span> <span class="o">*</span> <span class="o">.</span><span class="mi">44</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">plot_func</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">plot_func</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">logging_settings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">logging_settings</span><span class="p">[</span><span class="s1">&#39;logging_years&#39;</span><span class="p">]:</span>
+                    <span class="n">ps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">trees_per_patch</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                    <span class="n">st</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">suitable_trees</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span>
+                                             <span class="n">logging_settings</span><span class="p">[</span><span class="s1">&#39;min_dbh&#39;</span><span class="p">],</span>
+                                             <span class="n">logging_settings</span><span class="p">[</span><span class="s1">&#39;max_dbh&#39;</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log_trees</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">logging_settings</span><span class="p">[</span><span class="s1">&#39;vol&#39;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">dispersal_settings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">dispersal_settings</span><span class="p">[</span><span class="s1">&#39;mode&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;external&#39;</span><span class="p">:</span>
+                    <span class="n">ext</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_seed_rain</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">incorporate_new_seedbank</span><span class="p">(</span>
+                        <span class="n">ext</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="n">dispersal_settings</span><span class="p">[</span><span class="s1">&#39;clear&#39;</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">stablish_new_trees</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="n">dispersal_settings</span><span class="p">[</span><span class="s1">&#39;clear&#39;</span><span class="p">])</span>
+
+                <span class="k">elif</span> <span class="n">dispersal_settings</span><span class="p">[</span><span class="s1">&#39;mode&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;individual&#39;</span><span class="p">:</span>
+                    <span class="n">Tree</span><span class="o">.</span><span class="n">DisperseSeeds</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">stablish_new_trees</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="n">dispersal_settings</span><span class="p">[</span><span class="s1">&#39;clear&#39;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">increment_time</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">increment_time</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Tree_World.run_schedule"><a class="viewcode-back" href="../world.html#world.Tree_World.run_schedule">[docs]</a>    <span class="k">def</span> <span class="nf">run_schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">h5_database</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Schedule of actions to be run in every time step</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            step (int): The current step. Received from run_simulation().</span>
+<span class="sd">            h5_database (str): path to the HDF5 file in which model outputs will be saved</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (float) the Net Ecosystem Exchange (as calculater by &#39;calculate_NEE&#39;) for thar step.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">list_of_patches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">trees_per_patch</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="n">cohorts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">cohorts</span><span class="p">(</span><span class="n">list_of_patches</span><span class="p">)</span>
+        <span class="n">FTs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cohorts</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="k">for</span> <span class="n">ft</span> <span class="ow">in</span> <span class="n">FTs</span><span class="p">:</span>
+            <span class="n">ages</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cohorts</span><span class="p">[</span><span class="n">ft</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">age</span> <span class="ow">in</span> <span class="n">ages</span><span class="p">:</span>
+                <span class="n">base_tree_index</span> <span class="o">=</span> <span class="n">cohorts</span><span class="p">[</span><span class="n">ft</span><span class="p">][</span><span class="n">age</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">base_tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">base_tree_index</span><span class="p">)</span>
+                <span class="n">base_tree</span><span class="o">.</span><span class="n">increase_DBH</span><span class="p">()</span>
+                <span class="n">base_tree</span><span class="o">.</span><span class="n">age</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">attributes</span> <span class="o">=</span> <span class="n">base_tree</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+                <span class="k">for</span> <span class="n">tree_index</span> <span class="ow">in</span> <span class="n">cohorts</span><span class="p">[</span><span class="n">ft</span><span class="p">][</span><span class="n">age</span><span class="p">][</span><span class="mi">1</span><span class="p">:]:</span>
+                    <span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tree_index</span><span class="p">)</span>
+                    <span class="n">tree</span><span class="o">.</span><span class="n">import_attributes</span><span class="p">(</span><span class="n">attributes</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">h5_database</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ind_data_to_db</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cgpp</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Cgpp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cr</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Cr</span><span class="p">()</span>
+        <span class="n">Tree</span><span class="o">.</span><span class="n">Mortality</span><span class="p">()</span>
+        <span class="c1"># Tree.BackgroundMortality()</span>
+        <span class="c1"># Tree.CrowdingMortality()</span>
+        <span class="c1"># Tree.DamageMortality()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_NEE</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Tree_World.create_agents"><a class="viewcode-back" href="../world.html#world.Tree_World.create_agents">[docs]</a>    <span class="k">def</span> <span class="nf">create_agents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">FT</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">DBHs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ages</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Creates &#39;n&#39; trees of type &#39;FT&#39;. A list of positions, ids and DBHs can be provided (Useful to recreate trees from a previous model run, for example).</span>
+
+<span class="sd">        Note: overwrites methods create_agents from class Agent.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            agent_type (class): the type (class) of agents to be created</span>
+<span class="sd">            n (int): number of agents to be created</span>
+<span class="sd">            pos (list,None): a list of &#39;n&#39; tuples &#39;(x,y)&#39; with the coordinates in which agents will be created. If set to None, agents are created in random positions.</span>
+<span class="sd">            ids (list): a list of &#39;n&#39; ints to be used as tree ids.</span>
+<span class="sd">            DBHs: a list of &#39;n&#39; floats to be used as tree DBHs.</span>
+<span class="sd">            kwargs: the arguments to be passed to the &#39;agent_type&#39; class. All agents will be created with this same set of arguments.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">pos</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">x_max</span><span class="p">,</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">y_max</span><span class="p">)</span>
+                   <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">ids</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">FT</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">FT</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dbh</span><span class="o">=</span><span class="n">DBHs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                   <span class="nb">id</span><span class="o">=</span><span class="n">ids</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">age</span><span class="o">=</span><span class="n">ages</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">NEE_data_to_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nee</span><span class="p">):</span>
+
+        <span class="c1"># NEE_table=self.db.root.sim_1.sys_lvl.NEE</span>
+        <span class="n">NEE_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span>
+            <span class="s2">&quot;/sim_</span><span class="si">{0}</span><span class="s2">/trees/sys_lvl/NEE&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_number</span><span class="p">))</span>
+        <span class="n">nee_r</span> <span class="o">=</span> <span class="n">NEE_table</span><span class="o">.</span><span class="n">row</span>
+
+        <span class="n">nee_r</span><span class="p">[</span><span class="s1">&#39;dead_wood&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsdead_A</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sdead</span><span class="p">[</span><span class="s2">&quot;current&quot;</span><span class="p">]</span>
+        <span class="n">nee_r</span><span class="p">[</span><span class="s1">&#39;soil_slow&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsslow_A</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sslow</span><span class="p">[</span><span class="s2">&quot;current&quot;</span><span class="p">]</span>
+        <span class="n">nee_r</span><span class="p">[</span><span class="s1">&#39;soil_fast&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsfast_A</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sfast</span><span class="p">[</span><span class="s2">&quot;current&quot;</span><span class="p">]</span>
+        <span class="n">nee_r</span><span class="p">[</span><span class="s1">&#39;gpp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cgpp</span>
+        <span class="n">nee_r</span><span class="p">[</span><span class="s1">&#39;living_trees&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cr</span>
+        <span class="n">nee_r</span><span class="p">[</span><span class="s1">&#39;smort&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Smort</span>
+        <span class="n">nee_r</span><span class="p">[</span><span class="s1">&#39;t_deadwood_sslow&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsdead_Sslow</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sdead</span><span class="p">[</span><span class="s2">&quot;previous&quot;</span><span class="p">]</span>
+        <span class="n">nee_r</span><span class="p">[</span><span class="s1">&#39;t_sslow_sfast&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsdead_Sfast</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sdead</span><span class="p">[</span><span class="s2">&quot;previous&quot;</span><span class="p">]</span>
+
+        <span class="n">nee</span> <span class="o">=</span> <span class="n">nee</span>
+
+        <span class="n">nee_r</span><span class="p">[</span><span class="s1">&#39;total_emissions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">nee</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cgpp</span>
+
+        <span class="n">nee_r</span><span class="p">[</span><span class="s1">&#39;nee&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nee</span>
+        <span class="n">nee_r</span><span class="o">.</span><span class="n">append</span><span class="p">()</span>
+        <span class="n">NEE_table</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">stocks_data_to_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Stocks_table=self.db.root.sim_1.sys_lvl.Stocks</span>
+        <span class="n">Stocks_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span>
+            <span class="s2">&quot;/sim_</span><span class="si">{0}</span><span class="s2">/trees/sys_lvl/Stocks&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_number</span><span class="p">))</span>
+        <span class="n">stocks_r</span> <span class="o">=</span> <span class="n">Stocks_table</span><span class="o">.</span><span class="n">row</span>
+
+        <span class="n">stocks_r</span><span class="p">[</span><span class="s1">&#39;agb&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Total_AGB</span><span class="p">()</span> <span class="o">*</span> <span class="o">.</span><span class="mi">44</span>
+        <span class="n">stocks_r</span><span class="p">[</span><span class="s1">&#39;dead_wood&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sdead</span><span class="p">[</span><span class="s2">&quot;current&quot;</span><span class="p">]</span>
+        <span class="n">stocks_r</span><span class="p">[</span><span class="s1">&#39;soil_slow&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sslow</span><span class="p">[</span><span class="s2">&quot;current&quot;</span><span class="p">]</span>
+        <span class="n">stocks_r</span><span class="p">[</span><span class="s1">&#39;soil_fast&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sfast</span><span class="p">[</span><span class="s2">&quot;current&quot;</span><span class="p">]</span>
+        <span class="n">stocks_r</span><span class="o">.</span><span class="n">append</span><span class="p">()</span>
+
+        <span class="n">Stocks_table</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">pop_data_to_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Pop_table=self.db.root.sim_1.sys_lvl.Pop</span>
+        <span class="n">Pop_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span>
+            <span class="s2">&quot;/sim_</span><span class="si">{0}</span><span class="s2">/trees/sys_lvl/Pop&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_number</span><span class="p">))</span>
+        <span class="n">pop_r</span> <span class="o">=</span> <span class="n">Pop_table</span><span class="o">.</span><span class="n">row</span>
+
+        <span class="k">for</span> <span class="n">ft</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">pop_r</span><span class="p">[</span><span class="n">ft</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="p">[</span><span class="n">ft</span><span class="p">]</span><span class="o">.</span><span class="n">Indices</span><span class="p">)</span>
+        <span class="n">pop_r</span><span class="o">.</span><span class="n">append</span><span class="p">()</span>
+
+        <span class="n">Pop_table</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">ind_data_to_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+        <span class="c1"># Ind_table=self.db.root.sim_1.ind_lvl.Ind</span>
+        <span class="n">Ind_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span>
+            <span class="s2">&quot;/sim_</span><span class="si">{0}</span><span class="s2">/trees/ind_lvl/Ind&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_number</span><span class="p">))</span>
+        <span class="n">ind_r</span> <span class="o">=</span> <span class="n">Ind_table</span><span class="o">.</span><span class="n">row</span>
+        <span class="n">trees</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">trees</span><span class="p">:</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="c1">#    #print(&quot;up:&quot;,t.id)</span>
+        <span class="c1">#    t.update()</span>
+        <span class="c1">#    t.age+=1</span>
+
+            <span class="n">ind_r</span><span class="p">[</span><span class="s2">&quot;step&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">step</span>
+            <span class="n">ind_r</span><span class="p">[</span><span class="s2">&quot;ind_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">id</span>
+            <span class="n">ind_r</span><span class="p">[</span><span class="s2">&quot;pos_x&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">ind_r</span><span class="p">[</span><span class="s2">&quot;pos_y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">ind_r</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">age</span>
+            <span class="n">ind_r</span><span class="p">[</span><span class="s2">&quot;dbh&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">DBH</span>
+            <span class="n">ind_r</span><span class="p">[</span><span class="s2">&quot;agb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">AGB</span>
+            <span class="n">ind_r</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">H</span>
+            <span class="n">ind_r</span><span class="p">[</span><span class="s2">&quot;crown_area&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">CA</span>
+            <span class="n">ind_r</span><span class="p">[</span><span class="s2">&quot;FT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">Ftype</span>
+            <span class="n">ind_r</span><span class="o">.</span><span class="n">append</span><span class="p">()</span>
+
+        <span class="n">Ind_table</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">create_HDF_database</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_name</span><span class="p">):</span>
+
+        <span class="k">class</span> <span class="nc">NEE</span><span class="p">(</span><span class="n">IsDescription</span><span class="p">):</span>
+            <span class="n">dead_wood</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">soil_slow</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">soil_fast</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">living_trees</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">smort</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">t_deadwood_sslow</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">t_sslow_sfast</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">total_emissions</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">gpp</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">nee</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+
+        <span class="n">FTs</span> <span class="o">=</span> <span class="p">{</span><span class="n">ft</span><span class="p">:</span> <span class="n">Int32Col</span><span class="p">()</span> <span class="k">for</span> <span class="n">ft</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+        <span class="n">Populations</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="s2">&quot;Populations&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">IsDescription</span><span class="p">,),</span> <span class="n">FTs</span><span class="p">)</span>
+
+        <span class="k">class</span> <span class="nc">CarbonStocks</span><span class="p">(</span><span class="n">IsDescription</span><span class="p">):</span>
+            <span class="n">agb</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">dead_wood</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">soil_slow</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">soil_fast</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+
+        <span class="k">class</span> <span class="nc">Individuals</span><span class="p">(</span><span class="n">IsDescription</span><span class="p">):</span>
+            <span class="n">step</span> <span class="o">=</span> <span class="n">Int32Col</span><span class="p">()</span>
+            <span class="n">ind_id</span> <span class="o">=</span> <span class="n">Int32Col</span><span class="p">()</span>
+            <span class="n">age</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">pos_x</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">pos_y</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">dbh</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">agb</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">height</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">crown_area</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
+            <span class="n">FT</span> <span class="o">=</span> <span class="n">StringCol</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+        <span class="n">h5file</span> <span class="o">=</span> <span class="n">open_file</span><span class="p">(</span><span class="n">database_name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Tree Model outputs&quot;</span><span class="p">)</span>
+
+        <span class="n">sim_node</span> <span class="o">=</span> <span class="s2">&quot;/sim_</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_number</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">h5file</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">sim_node</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">NoSuchNodeError</span><span class="p">:</span>
+            <span class="n">sim</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span>
+                <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;sim_</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_number</span><span class="p">),</span> <span class="s2">&quot;Simulation </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_number</span><span class="p">))</span>
+
+        <span class="n">h5file</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span>
+            <span class="s2">&quot;/sim_</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_number</span><span class="p">),</span> <span class="s2">&quot;trees&quot;</span><span class="p">,</span> <span class="s2">&quot;Trees subgroup&quot;</span><span class="p">)</span>
+        <span class="n">sys_lvl</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;/sim_</span><span class="si">{0}</span><span class="s2">/trees&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_number</span><span class="p">),</span> <span class="s2">&quot;sys_lvl&quot;</span><span class="p">,</span>
+                                      <span class="s2">&quot;System Level Observations for simulation </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_number</span><span class="p">))</span>
+
+        <span class="n">NEE_table</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span>
+            <span class="n">sys_lvl</span><span class="p">,</span> <span class="s2">&quot;NEE&quot;</span><span class="p">,</span> <span class="n">NEE</span><span class="p">,</span> <span class="s2">&quot;Net Ecosystem Exchange&quot;</span><span class="p">)</span>
+        <span class="n">Pop_table</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span>
+            <span class="n">sys_lvl</span><span class="p">,</span> <span class="s2">&quot;Pop&quot;</span><span class="p">,</span> <span class="n">Populations</span><span class="p">,</span> <span class="s2">&quot;Population Sizes&quot;</span><span class="p">)</span>
+        <span class="n">Stocks_table</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span>
+            <span class="n">sys_lvl</span><span class="p">,</span> <span class="s2">&quot;Stocks&quot;</span><span class="p">,</span> <span class="n">CarbonStocks</span><span class="p">,</span> <span class="s2">&quot;Carbon Stocks&quot;</span><span class="p">)</span>
+        <span class="c1">#Emissions_table=h5file.create_table(sys_lvl,&quot;Emissions&quot;,CarbonEmissions,&quot;Emissions from soil stocks, living trees and dead wood&quot;)</span>
+
+        <span class="n">ind_lvl</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;/sim_</span><span class="si">{0}</span><span class="s2">/trees&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_number</span><span class="p">),</span> <span class="s2">&quot;ind_lvl&quot;</span><span class="p">,</span>
+                                      <span class="s2">&quot;Individual Level Observations for Simulation </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_number</span><span class="p">))</span>
+
+        <span class="n">Ind_table</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span>
+            <span class="n">ind_lvl</span><span class="p">,</span> <span class="s2">&quot;Ind&quot;</span><span class="p">,</span> <span class="n">Individuals</span><span class="p">,</span> <span class="s2">&quot;Individual Level Data&quot;</span><span class="p">)</span>
+
+        <span class="n">h5file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">seedbank_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_file</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">seedbank_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span><span class="p">,</span> <span class="n">json_file</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">model_status_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_file</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="n">trees</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ft</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">ages</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">positions</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">ids</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">DBHs</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">tree</span> <span class="ow">in</span> <span class="n">trees</span><span class="p">[</span><span class="n">ft</span><span class="p">]:</span>
+                <span class="n">positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">tree</span><span class="p">[</span><span class="s1">&#39;position&#39;</span><span class="p">]))</span>
+                <span class="n">ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tree</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
+                <span class="n">DBHs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tree</span><span class="p">[</span><span class="s1">&#39;DBH&#39;</span><span class="p">])</span>
+                <span class="n">ages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tree</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_agents</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="p">[</span><span class="n">ft</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span>
+                <span class="n">trees</span><span class="p">[</span><span class="n">ft</span><span class="p">]),</span> <span class="n">pos</span><span class="o">=</span><span class="n">positions</span><span class="p">,</span> <span class="n">DBHs</span><span class="o">=</span><span class="n">DBHs</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="n">ids</span><span class="p">,</span> <span class="n">ages</span><span class="o">=</span><span class="n">ages</span><span class="p">,</span> <span class="n">world</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">AGB</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">AGB_from_DBH</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">DBH</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">Tree</span><span class="o">.</span><span class="n">ID</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">model_status_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
+        <span class="n">trees_per_type</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+        <span class="k">for</span> <span class="n">t_id</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">trees_per_type</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">Ftype</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">t_id</span><span class="p">,</span> <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="s2">&quot;DBH&quot;</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">DBH</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">age</span><span class="p">})</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">trees_per_type</span><span class="p">,</span> <span class="n">json_file</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Tree_World.suitable_trees"><a class="viewcode-back" href="../world.html#world.Tree_World.suitable_trees">[docs]</a>    <span class="k">def</span> <span class="nf">suitable_trees</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patches</span><span class="p">,</span> <span class="n">min_dbh</span><span class="p">,</span> <span class="n">max_dbh</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Search for suitable trees for logging in the given patches.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            patches (list): A list of patches (tuples in the format (x,y))</span>
+<span class="sd">            min_dbh (float): minimum dbh for a tree to be considered suitable for logging.</span>
+<span class="sd">            max_dbh (float): max dbh for a tree to be considered suitable for logging.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A dictionary with patches as keys ((x,y)) and lists of suitable tree ids as values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">suitables_per_patch</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">patches</span><span class="p">:</span>
+            <span class="n">suitables_per_patch</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">trees_per_patch</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+                                      <span class="k">if</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">DBH</span> <span class="o">&gt;=</span> <span class="n">min_dbh</span> <span class="ow">and</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">DBH</span> <span class="o">&lt;=</span> <span class="n">max_dbh</span><span class="p">]</span>
+
+        <span class="n">suitables_per_patch</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span>
+                               <span class="n">v</span> <span class="ow">in</span> <span class="n">suitables_per_patch</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">suitables_per_patch</span></div>
+
+<div class="viewcode-block" id="Tree_World.log_trees"><a class="viewcode-back" href="../world.html#world.Tree_World.log_trees">[docs]</a>    <span class="k">def</span> <span class="nf">log_trees</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suitable_trees</span><span class="p">,</span> <span class="n">total_vol</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Randomly log &#39;suitable_trees&#39; until the &#39;total_vol&#39; is reached.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            suitable_trees (dict): A dictionary with patches as keys ((x,y)) and lists of suitable tree ids as values (resulting from suitable_trees())</span>
+<span class="sd">            total_vol (float): the total vol of timber to be logged</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">total_logged</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">total_logged</span> <span class="o">&lt;</span> <span class="n">total_vol</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">suitable_trees</span><span class="p">):</span>
+            <span class="n">ps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">suitable_trees</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">ps</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ps</span><span class="p">))]</span>
+            <span class="n">vols</span> <span class="o">=</span> <span class="p">{</span><span class="n">t</span><span class="p">:</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">calculate_volume</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">suitable_trees</span><span class="p">[</span><span class="n">p</span><span class="p">]}</span>
+            <span class="c1"># pdb.set_trace()</span>
+            <span class="n">biggest_tree</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">vols</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">vols</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+            <span class="n">total_logged</span> <span class="o">+=</span> <span class="n">vols</span><span class="p">[</span><span class="n">biggest_tree</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Logged tree: </span><span class="si">{0}</span><span class="s2"> Volume: </span><span class="si">{1}</span><span class="s2"> AGB: </span><span class="si">{2}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">biggest_tree</span><span class="p">,</span> <span class="n">vols</span><span class="p">[</span><span class="n">biggest_tree</span><span class="p">],</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="p">[</span><span class="n">biggest_tree</span><span class="p">]</span><span class="o">.</span><span class="n">AGB</span><span class="p">))</span>
+            <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="p">[</span><span class="n">biggest_tree</span><span class="p">]</span><span class="o">.</span><span class="n">log_me</span><span class="p">()</span>
+            <span class="n">suitable_trees</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">biggest_tree</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">suitable_trees</span><span class="p">[</span><span class="n">p</span><span class="p">]:</span>
+                <span class="k">del</span> <span class="n">suitable_trees</span><span class="p">[</span><span class="n">p</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Tree_World.define_seedbank"><a class="viewcode-back" href="../world.html#world.Tree_World.define_seedbank">[docs]</a>    <span class="k">def</span> <span class="nf">define_seedbank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nseed</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Randomly determines how many seed each patch will receive.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            Nseed (int):The total number of seed to be distributed among all patches.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A dictionary in which keys are patches (&#39;(x,y)&#39;) and values are the number of seeds</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">seedbank</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nseed</span><span class="p">):</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">x_max</span><span class="p">),</span>
+                 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">y_max</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">seedbank</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">seedbank</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">seedbank</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">seedbank</span></div>
+
+<div class="viewcode-block" id="Tree_World.seeds_pos"><a class="viewcode-back" href="../world.html#world.Tree_World.seeds_pos">[docs]</a>    <span class="k">def</span> <span class="nf">seeds_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">est_seeds</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set a random position within the patch for each seed in est_seeds.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            est_seed (dict):A dictionary with patches as keys (&#39;(x,y)&#39;) and the number of established seeds as values.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A list of seed positions within patches.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">est_seeds</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">seed_pos</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">in_bounds</span><span class="p">(</span><span class="n">seed_pos</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">pos</span></div>
+
+    <span class="k">def</span> <span class="nf">external_seed_rain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">external_seedbank</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">ft</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">seedbank_ft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">define_seedbank</span><span class="p">(</span>
+                <span class="n">Nseed</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">ft</span><span class="o">.</span><span class="n">Nseed</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">total_area</span><span class="p">))</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seeds_pos</span><span class="p">(</span><span class="n">seedbank_ft</span><span class="p">)</span>
+            <span class="n">external_seedbank</span><span class="p">[</span><span class="n">ft</span><span class="o">.</span><span class="n">Ftype</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span>
+        <span class="k">return</span> <span class="n">external_seedbank</span>
+
+    <span class="k">def</span> <span class="nf">germinate_suitable_seeds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seedbank</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">ft</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span><span class="p">[</span><span class="n">ft</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_agents</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="p">[</span><span class="n">ft</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span>
+                <span class="n">pos</span><span class="p">),</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">world</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbh</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">incorporate_new_seedbank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_seedbank</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">clear</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clear_seedbank</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">ft</span> <span class="ow">in</span> <span class="n">new_seedbank</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span><span class="p">[</span><span class="n">ft</span><span class="p">]</span> <span class="o">+=</span> <span class="n">new_seedbank</span><span class="p">[</span><span class="n">ft</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">clear_seedbank</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+
+<div class="viewcode-block" id="Tree_World.stablish_new_trees"><a class="viewcode-back" href="../world.html#world.Tree_World.stablish_new_trees">[docs]</a>    <span class="k">def</span> <span class="nf">stablish_new_trees</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create new tree individuals. Use &#39;define_seedbank()&#39;, &#39;topology.seed_establishment&#39; and &#39;seeds_pos&#39;.</span>
+
+<span class="sd">            Note: This method can be substitued by an equivalent in order to incorporate more realistic representations of seed dispersal.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seed_establishment</span><span class="p">(</span>
+            <span class="n">seedbank</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">germinate_suitable_seeds</span><span class="p">(</span><span class="n">seedbank</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">clear</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clear_seedbank</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Tree_World.calculate_Sdead"><a class="viewcode-back" href="../world.html#world.Tree_World.calculate_Sdead">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_Sdead</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculate the amount of carbon (tC) in the dead wood stock based</span>
+<span class="sd">            on the trees that died in the previous year (Smort).</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                None.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># if self.Smort&gt;=10:self.Smort=10#(Tree.Total_AGB()*0.2): self.Smort=(Tree.Total_AGB()*0.2)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sdead</span><span class="p">[</span><span class="s2">&quot;current&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sdead</span><span class="p">[</span><span class="s2">&quot;previous&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Smort</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsdead</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sdead</span><span class="p">[</span><span class="s2">&quot;previous&quot;</span><span class="p">])</span>
+        <span class="c1">#if self.Sdead[&quot;current&quot;]&gt;=(Tree.Total_AGB()*0.2): self.Sdead[&quot;current&quot;]=(Tree.Total_AGB()*0.2)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Smort</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="Tree_World.calculate_Sslow"><a class="viewcode-back" href="../world.html#world.Tree_World.calculate_Sslow">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_Sslow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculate the amount of carbon (tC) in the slow decomposition soil</span>
+<span class="sd">            stock.</span>
+
+<span class="sd">            Calculation is based on decomposition rates for the dead wood (tsdead_Sslow) and the rate with which carbon is transferred from this stock to the atmosphere (tsslow_A).</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sslow</span><span class="p">[</span><span class="s2">&quot;current&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sslow</span><span class="p">[</span><span class="s2">&quot;previous&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsdead_Sslow</span> <span class="o">*</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">Sdead</span><span class="p">[</span><span class="s2">&quot;previous&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsslow_A</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sslow</span><span class="p">[</span><span class="s2">&quot;previous&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Tree_World.calculate_Sfast"><a class="viewcode-back" href="../world.html#world.Tree_World.calculate_Sfast">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_Sfast</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculate the amount of carbon (tC) in the fast decomposition soil</span>
+<span class="sd">            stock.</span>
+
+<span class="sd">            Calculation is based on decomposition rates for the dead wood (tsdead_Sfast) and the rate with which carbon is transferred from this stock to the atmosphere (tsfast_A).</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sfast</span><span class="p">[</span><span class="s2">&quot;current&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sfast</span><span class="p">[</span><span class="s2">&quot;previous&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsdead_Sfast</span> <span class="o">*</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">Sdead</span><span class="p">[</span><span class="s2">&quot;previous&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsfast_A</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sfast</span><span class="p">[</span><span class="s2">&quot;previous&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Tree_World.calculate_NEE"><a class="viewcode-back" href="../world.html#world.Tree_World.calculate_NEE">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_NEE</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the Net Ecosystem Exchange (NEE) for the previous timestep.</span>
+
+<span class="sd">        This is all the carbon that was absorbed by living trees (Cgpp) minus</span>
+<span class="sd">        what was emitted to the atmosphere by the living trees (Cr) and</span>
+<span class="sd">        the decomposition of the dead wood and soil stocks (tsdead_A+tsslow_A+tsfast_A).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># self.smort_log.append(self.Smort)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculate_Sdead</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculate_Sslow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculate_Sfast</span><span class="p">()</span>
+
+        <span class="n">NEE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cgpp</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cr</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tsdead_A</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sdead</span><span class="p">[</span><span class="s2">&quot;previous&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tsslow_A</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sslow</span><span class="p">[</span><span class="s2">&quot;previous&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tsfast_A</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sfast</span><span class="p">[</span><span class="s2">&quot;previous&quot;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sdead</span><span class="p">[</span><span class="s2">&quot;previous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sdead</span><span class="p">[</span><span class="s2">&quot;current&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sslow</span><span class="p">[</span><span class="s2">&quot;previous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sslow</span><span class="p">[</span><span class="s2">&quot;current&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sfast</span><span class="p">[</span><span class="s2">&quot;previous&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sfast</span><span class="p">[</span><span class="s2">&quot;current&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">NEE</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Fabio Frazao.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,281 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>World Module &#8212; trees_ibm 0.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to trees_ibm’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-world">
+<span id="world-module"></span><h1>World Module<a class="headerlink" href="#module-world" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="world.Tree_World">
+<em class="property">class </em><code class="descclassname">world.</code><code class="descname">Tree_World</code><span class="sig-paren">(</span><em>topology</em>, <em>AET=1300</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide observer methods and control the schedule and execution of simulations.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>topology (Tree_Grid instance): grid object on which agents will live.
+AET (int): actual evapotranspiration in the previous year in mm.
+Assumed to be constant every year.</dd>
+<dt>Attributes:</dt>
+<dd>Smort (float): Carbon of all trees that died in one year [tC]
+Sdead (float): Dead wood carbon stock [tC]
+tsdead (float): Anual decomposition rate
+tsdead_A (float): Proportion of decomposed dead wood that is released to the atmosphere.
+Sslow (float): Slow decomposition portion of soil stock [tC]
+tsdead_Sslow (float): Proportion of decomposed dead wood that is tranferred to the slow decomposition Soil stock
+self.tsslow_A (float):Proportion of slow decomposition soil stock that is released to the atmosphere.
+Sfast (float):Fast decomposition portion of soil stock [tC]
+tsfast_A (float):Proportion of fast decomposition soil stock that is released to the atmosphere.
+tsdead_Sfast (float): Proportion of decomposed dead wood that is tranferred to the fast decomposition Soil stock.
+Cgpp (float): Carbon captured in the gross primary productivity of the living forest
+Cr (float):Carbon released by the total respiration of the living forest (i.e. for maintenance and growth)</dd>
+<dt>Usage:</dt>
+<dd>&gt;&gt;&gt;grid01=Tree_Grid(x_max=5,y_max=5,delta_h=0.5,patch_area=400,I0=860,lday=12,phi_act=360,k=0.7)
+&gt;&gt;&gt;world01=Tree_World(topology=grid01)
+&gt;&gt;&gt; print(world01)
+World object</dd>
+</dl>
+<dl class="method">
+<dt id="world.Tree_World.calculate_NEE">
+<code class="descname">calculate_NEE</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.calculate_NEE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.calculate_NEE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Net Ecosystem Exchange (NEE) for the previous timestep.</p>
+<p>This is all the carbon that was absorbed by living trees (Cgpp) minus
+what was emitted to the atmosphere by the living trees (Cr) and
+the decomposition of the dead wood and soil stocks (tsdead_A+tsslow_A+tsfast_A).</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>None.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.calculate_Sdead">
+<code class="descname">calculate_Sdead</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.calculate_Sdead"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.calculate_Sdead" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the amount of carbon (tC) in the dead wood stock based
+on the trees that died in the previous year (Smort).</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>None.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.calculate_Sfast">
+<code class="descname">calculate_Sfast</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.calculate_Sfast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.calculate_Sfast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the amount of carbon (tC) in the fast decomposition soil
+stock.</p>
+<p>Calculation is based on decomposition rates for the dead wood (tsdead_Sfast) and the rate with which carbon is transferred from this stock to the atmosphere (tsfast_A).</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>None.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.calculate_Sslow">
+<code class="descname">calculate_Sslow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.calculate_Sslow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.calculate_Sslow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the amount of carbon (tC) in the slow decomposition soil
+stock.</p>
+<p>Calculation is based on decomposition rates for the dead wood (tsdead_Sslow) and the rate with which carbon is transferred from this stock to the atmosphere (tsslow_A).</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>None.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.create_agents">
+<code class="descname">create_agents</code><span class="sig-paren">(</span><em>FT</em>, <em>n</em>, <em>pos=None</em>, <em>ids=None</em>, <em>DBHs=None</em>, <em>ages=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.create_agents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.create_agents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates ‘n’ trees of type ‘FT’. A list of positions, ids and DBHs can be provided (Useful to recreate trees from a previous model run, for example).</p>
+<p>Note: overwrites methods create_agents from class Agent.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>agent_type (class): the type (class) of agents to be created
+n (int): number of agents to be created
+pos (list,None): a list of ‘n’ tuples ‘(x,y)’ with the coordinates in which agents will be created. If set to None, agents are created in random positions.
+ids (list): a list of ‘n’ ints to be used as tree ids.
+DBHs: a list of ‘n’ floats to be used as tree DBHs.
+kwargs: the arguments to be passed to the ‘agent_type’ class. All agents will be created with this same set of arguments.</dd>
+<dt>Returns:</dt>
+<dd>None.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.define_seedbank">
+<code class="descname">define_seedbank</code><span class="sig-paren">(</span><em>Nseed</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.define_seedbank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.define_seedbank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly determines how many seed each patch will receive.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>Nseed (int):The total number of seed to be distributed among all patches.</dd>
+<dt>Returns:</dt>
+<dd>A dictionary in which keys are patches (‘(x,y)’) and values are the number of seeds</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.log_trees">
+<code class="descname">log_trees</code><span class="sig-paren">(</span><em>suitable_trees</em>, <em>total_vol</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.log_trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.log_trees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly log ‘suitable_trees’ until the ‘total_vol’ is reached.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>suitable_trees (dict): A dictionary with patches as keys ((x,y)) and lists of suitable tree ids as values (resulting from suitable_trees())
+total_vol (float): the total vol of timber to be logged</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.run_schedule">
+<code class="descname">run_schedule</code><span class="sig-paren">(</span><em>step</em>, <em>n</em>, <em>h5_database=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.run_schedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.run_schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Schedule of actions to be run in every time step</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>step (int): The current step. Received from run_simulation().
+h5_database (str): path to the HDF5 file in which model outputs will be saved</dd>
+<dt>Returns:</dt>
+<dd>(float) the Net Ecosystem Exchange (as calculater by ‘calculate_NEE’) for thar step.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.run_simulation">
+<code class="descname">run_simulation</code><span class="sig-paren">(</span><em>n</em>, <em>logging_settings=None</em>, <em>dispersal_settings={'clear': True</em>, <em>'mode': 'external'}</em>, <em>produce_fruits=True</em>, <em>increment_time=True</em>, <em>h5file=None</em>, <em>plot_func=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.run_simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.run_simulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the code in run_schedule() ‘n’ times.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>n (int): Number of simulations to be run.
+logging_years (range): The years in which selective logging occurs.
+min_dbh (float): minimum dbh for a tree to be considered suitable for logging.
+max_dbh (float): maximum dbh for a tree to be considered suitable for logging.
+vol (float): total volume of timber to be extracted by logging event.
+h5file (str): path to the HDF5 file in which model outputs will be saved
+plot_func (function): a function that will be run every step. Usually a plotting function that saves a image file to the disk. Must accept a ‘step’ argument,which will receive the step number and can be used to generate the file name.
+<a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs: List of keyword arguments to be passed to plot_func in addition to ‘step’.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.seeds_pos">
+<code class="descname">seeds_pos</code><span class="sig-paren">(</span><em>est_seeds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.seeds_pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.seeds_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a random position within the patch for each seed in est_seeds.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>est_seed (dict):A dictionary with patches as keys (‘(x,y)’) and the number of established seeds as values.</dd>
+<dt>Returns:</dt>
+<dd>A list of seed positions within patches.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.stablish_new_trees">
+<code class="descname">stablish_new_trees</code><span class="sig-paren">(</span><em>clear=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.stablish_new_trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.stablish_new_trees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create new tree individuals. Use ‘define_seedbank()’, ‘topology.seed_establishment’ and ‘seeds_pos’.</p>
+<blockquote>
+<div>Note: This method can be substitued by an equivalent in order to incorporate more realistic representations of seed dispersal.</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>None.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.suitable_trees">
+<code class="descname">suitable_trees</code><span class="sig-paren">(</span><em>patches</em>, <em>min_dbh</em>, <em>max_dbh</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.suitable_trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.suitable_trees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for suitable trees for logging in the given patches.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>patches (list): A list of patches (tuples in the format (x,y))
+min_dbh (float): minimum dbh for a tree to be considered suitable for logging.
+max_dbh (float): max dbh for a tree to be considered suitable for logging.</dd>
+<dt>Returns:</dt>
+<dd>A dictionary with patches as keys ((x,y)) and lists of suitable tree ids as values</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to trees_ibm’s documentation!</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Fabio Frazao.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/world.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
