@@ -167,27 +167,50 @@
 <dd><p>Provide observer methods and control the schedule and execution of simulations.</p>
 <dl class="docutils">
 <dt>Args:</dt>
-<dd>topology (Tree_Grid instance): grid object on which agents will live.
-AET (int): actual evapotranspiration in the previous year in mm.
+<dd><dl class="first last docutils">
+<dt>topology <span class="classifier-delimiter">:</span> <span class="classifier">Tree_Grid instance</span></dt>
+<dd>Grid object on which agents will live.</dd>
+<dt>AET <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Actual evapotranspiration in the previous year in mm.
 Assumed to be constant every year.</dd>
+</dl>
+</dd>
 <dt>Attributes:</dt>
-<dd>Smort (float): Carbon of all trees that died in one year [tC]
-Sdead (float): Dead wood carbon stock [tC]
-tsdead (float): Anual decomposition rate
-tsdead_A (float): Proportion of decomposed dead wood that is released to the atmosphere.
-Sslow (float): Slow decomposition portion of soil stock [tC]
-tsdead_Sslow (float): Proportion of decomposed dead wood that is tranferred to the slow decomposition Soil stock
-self.tsslow_A (float):Proportion of slow decomposition soil stock that is released to the atmosphere.
-Sfast (float):Fast decomposition portion of soil stock [tC]
-tsfast_A (float):Proportion of fast decomposition soil stock that is released to the atmosphere.
-tsdead_Sfast (float): Proportion of decomposed dead wood that is tranferred to the fast decomposition Soil stock.
-Cgpp (float): Carbon captured in the gross primary productivity of the living forest
-Cr (float):Carbon released by the total respiration of the living forest (i.e. for maintenance and growth)</dd>
+<dd><dl class="first last docutils">
+<dt>Smort <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Carbon of all trees that died in one year [tC].</dd>
+<dt>Sdead :float)</dt>
+<dd>Dead wood carbon stock [tC].</dd>
+<dt>tsdead <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Anual decomposition rate.</dd>
+<dt>tsdead_A <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Proportion of decomposed dead wood that is released to the atmosphere.</dd>
+<dt>Sslow <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Slow decomposition portion of soil stock [tC].</dd>
+<dt>tsdead_Sslow :float</dt>
+<dd>Proportion of decomposed dead wood that is tranferred to the slow decomposition Soil stock.</dd>
+<dt>tsslow_A <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Proportion of slow decomposition soil stock that is released to the atmosphere.</dd>
+<dt>Sfast <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Fast decomposition portion of soil stock [tC].</dd>
+<dt>tsfast_A <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Proportion of fast decomposition soil stock that is released to the atmosphere.</dd>
+<dt>tsdead_Sfast <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Proportion of decomposed dead wood that is tranferred to the fast decomposition Soil stock.</dd>
+<dt>Cgpp <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Carbon captured in the gross primary productivity of the living forest.</dd>
+<dt>Cr <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Carbon released by the total respiration of the living forest (i.e. for maintenance and growth)</dd>
+</dl>
+</dd>
 <dt>Usage:</dt>
-<dd>&gt;&gt;&gt;grid01=Tree_Grid(x_max=5,y_max=5,delta_h=0.5,patch_area=400,I0=860,lday=12,phi_act=360,k=0.7)
-&gt;&gt;&gt;world01=Tree_World(topology=grid01)
-&gt;&gt;&gt; print(world01)
-World object</dd>
+<dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">grid01</span><span class="o">=</span><span class="n">Tree_Grid</span><span class="p">(</span><span class="n">x_max</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">y_max</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">delta_h</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">patch_area</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span><span class="n">I0</span><span class="o">=</span><span class="mi">860</span><span class="p">,</span><span class="n">lday</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span><span class="n">phi_act</span><span class="o">=</span><span class="mi">360</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">world01</span><span class="o">=</span><span class="n">Tree_World</span><span class="p">(</span><span class="n">topology</span><span class="o">=</span><span class="n">grid01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">world01</span><span class="p">)</span>
+<span class="go">World object</span>
+</pre></div>
+</div>
+</dd>
 </dl>
 <dl class="method">
 <dt id="world.Tree_World.calculate_NEE">
@@ -195,11 +218,9 @@ World object</dd>
 <dd><p>Return the Net Ecosystem Exchange (NEE) for the previous timestep.</p>
 <p>This is all the carbon that was absorbed by living trees (Cgpp) minus
 what was emitted to the atmosphere by the living trees (Cr) and
-the decomposition of the dead wood and soil stocks (tsdead_A+tsslow_A+tsfast_A).</p>
-<dl class="docutils">
-<dt>Returns:</dt>
-<dd>None.</dd>
-</dl>
+the decomposition of the dead wood and soil stocks
+(tsdead_A+tsslow_A+tsfast_A).</p>
+<p>Returns : None</p>
 </dd></dl>
 
 <dl class="method">
@@ -207,10 +228,7 @@ the decomposition of the dead wood and soil stocks (tsdead_A+tsslow_A+tsfast_A).
 <code class="descname">calculate_Sdead</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.calculate_Sdead"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.calculate_Sdead" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the amount of carbon (tC) in the dead wood stock based
 on the trees that died in the previous year (Smort).</p>
-<dl class="docutils">
-<dt>Returns:</dt>
-<dd>None.</dd>
-</dl>
+<p>Returns : None</p>
 </dd></dl>
 
 <dl class="method">
@@ -219,10 +237,7 @@ on the trees that died in the previous year (Smort).</p>
 <dd><p>Calculate the amount of carbon (tC) in the fast decomposition soil
 stock.</p>
 <p>Calculation is based on decomposition rates for the dead wood (tsdead_Sfast) and the rate with which carbon is transferred from this stock to the atmosphere (tsfast_A).</p>
-<dl class="docutils">
-<dt>Returns:</dt>
-<dd>None.</dd>
-</dl>
+<p>Returns : None</p>
 </dd></dl>
 
 <dl class="method">
@@ -231,28 +246,40 @@ stock.</p>
 <dd><p>Calculate the amount of carbon (tC) in the slow decomposition soil
 stock.</p>
 <p>Calculation is based on decomposition rates for the dead wood (tsdead_Sslow) and the rate with which carbon is transferred from this stock to the atmosphere (tsslow_A).</p>
-<dl class="docutils">
-<dt>Returns:</dt>
-<dd>None.</dd>
-</dl>
+<p>Returns : None</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="world.Tree_World.create_agents">
 <code class="descname">create_agents</code><span class="sig-paren">(</span><em>FT</em>, <em>n</em>, <em>pos=None</em>, <em>ids=None</em>, <em>DBHs=None</em>, <em>ages=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.create_agents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.create_agents" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates ‘n’ trees of type ‘FT’. A list of positions, ids and DBHs can be provided (Useful to recreate trees from a previous model run, for example).</p>
+<dd><dl class="docutils">
+<dt>Creates ‘n’ trees of type ‘FT’. A list of positions, ids and DBHs</dt>
+<dd>can be provided (Useful to recreate trees from a previous model
+run, for example).</dd>
+</dl>
 <p>Note: overwrites methods create_agents from class Agent.</p>
 <dl class="docutils">
 <dt>Args:</dt>
-<dd>agent_type (class): the type (class) of agents to be created
-n (int): number of agents to be created
-pos (list,None): a list of ‘n’ tuples ‘(x,y)’ with the coordinates in which agents will be created. If set to None, agents are created in random positions.
-ids (list): a list of ‘n’ ints to be used as tree ids.
-DBHs: a list of ‘n’ floats to be used as tree DBHs.
-kwargs: the arguments to be passed to the ‘agent_type’ class. All agents will be created with this same set of arguments.</dd>
-<dt>Returns:</dt>
-<dd>None.</dd>
+<dd><dl class="first last docutils">
+<dt>agent_type <span class="classifier-delimiter">:</span> <span class="classifier">class</span></dt>
+<dd>The type (class) of agents to be created</dd>
+<dt>n <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of agents to be created</dd>
+<dt>pos <span class="classifier-delimiter">:</span> <span class="classifier">list :None</span></dt>
+<dd>A list of ‘n’ tuples ‘(x,y)’ with the coordinates in which
+agents will be created. If set to None, agents are created
+in random positions.</dd>
+<dt>ids <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd>A list of ‘n’ ints to be used as tree ids.</dd>
+<dt>DBHs <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd>A list of ‘n’ floats to be used as tree DBHs.</dd>
+<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs</dt>
+<dd>The arguments to be passed to the ‘agent_type’ class.
+All agents will be created with this same set of arguments.</dd>
 </dl>
+</dd>
+</dl>
+<p>Returns : None</p>
 </dd></dl>
 
 <dl class="method">
@@ -261,9 +288,14 @@ kwargs: the arguments to be passed to the ‘agent_type’ class. All agents wil
 <dd><p>Randomly determines how many seed each patch will receive.</p>
 <dl class="docutils">
 <dt>Args:</dt>
-<dd>Nseed (int):The total number of seed to be distributed among all patches.</dd>
-<dt>Returns:</dt>
-<dd>A dictionary in which keys are patches (‘(x,y)’) and values are the number of seeds</dd>
+<dd><dl class="first last docutils">
+<dt>Nseed :int</dt>
+<dd>The total number of seed to be distributed among all patches.</dd>
+</dl>
+</dd>
+<dt>Returns <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd>A dictionary in which keys are patches (‘(x,y)’) and values are
+the number of seeds.</dd>
 </dl>
 </dd></dl>
 
@@ -273,11 +305,16 @@ kwargs: the arguments to be passed to the ‘agent_type’ class. All agents wil
 <dd><p>Randomly log ‘suitable_trees’ until the ‘total_vol’ is reached.</p>
 <dl class="docutils">
 <dt>Args:</dt>
-<dd>suitable_trees (dict): A dictionary with patches as keys ((x,y)) and lists of suitable tree ids as values (resulting from suitable_trees())
-total_vol (float): the total vol of timber to be logged</dd>
-<dt>Returns:</dt>
-<dd>None</dd>
+<dd><dl class="first last docutils">
+<dt>suitable_trees <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd>A dictionary with patches as keys ((x,y)) and lists of
+suitable tree ids as values (resulting from suitable_trees())</dd>
+<dt>total_vol: float</dt>
+<dd>The total vol of timber to be logged</dd>
 </dl>
+</dd>
+</dl>
+<p>Returns : None</p>
 </dd></dl>
 
 <dl class="method">
@@ -286,30 +323,50 @@ total_vol (float): the total vol of timber to be logged</dd>
 <dd><p>Schedule of actions to be run in every time step</p>
 <dl class="docutils">
 <dt>Args:</dt>
-<dd>step (int): The current step. Received from run_simulation().
-h5_database (str): path to the HDF5 file in which model outputs will be saved</dd>
+<dd><dl class="first last docutils">
+<dt>step <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>The current step. Received from run_simulation().</dd>
+<dt>h5_database <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>Path to the HDF5 file in which model outputs will be saved.</dd>
+</dl>
+</dd>
 <dt>Returns:</dt>
-<dd>(float) the Net Ecosystem Exchange (as calculater by ‘calculate_NEE’) for thar step.</dd>
+<dd>(float) the Net Ecosystem Exchange (as calculated by  ‘calculate_NEE’) for thar step.</dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="world.Tree_World.run_simulation">
 <code class="descname">run_simulation</code><span class="sig-paren">(</span><em>n</em>, <em>logging_settings=None</em>, <em>dispersal_settings={'clear': True</em>, <em>'mode': 'external'}</em>, <em>produce_fruits=True</em>, <em>increment_time=True</em>, <em>h5file=None</em>, <em>plot_func=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.run_simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.run_simulation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run the code in run_schedule() ‘n’ times.</p>
+<dd><p>Run the code in ‘run_schedule’ ‘n’ times.</p>
 <dl class="docutils">
 <dt>Args:</dt>
-<dd>n (int): Number of simulations to be run.
-logging_years (range): The years in which selective logging occurs.
-min_dbh (float): minimum dbh for a tree to be considered suitable for logging.
-max_dbh (float): maximum dbh for a tree to be considered suitable for logging.
-vol (float): total volume of timber to be extracted by logging event.
-h5file (str): path to the HDF5 file in which model outputs will be saved
-plot_func (function): a function that will be run every step. Usually a plotting function that saves a image file to the disk. Must accept a ‘step’ argument,which will receive the step number and can be used to generate the file name.
-<a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs: List of keyword arguments to be passed to plot_func in addition to ‘step’.</dd>
-<dt>Returns:</dt>
-<dd>None</dd>
+<dd><dl class="first last docutils">
+<dt>n <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Number of simulations to be run.</dd>
+<dt>logging_years <span class="classifier-delimiter">:</span> <span class="classifier">range</span></dt>
+<dd>The years in which selective logging occurs.</dd>
+<dt>min_dbh <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Minimum dbh for a tree to be considered suitable for logging.</dd>
+<dt>max_dbh <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Maximum dbh for a tree to be considered suitable for logging.</dd>
+<dt>vol <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Total volume of timber to be extracted by logging event.</dd>
+<dt>h5file <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd>Path to the HDF5 file in which model outputs will be saved</dd>
+<dt>plot_func <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd>A function that will be run every step.
+Usually a plotting function that saves a image file
+to the disk.Must accept a ‘step’ argument,which will
+receive the step number and can be used to generate the file
+name.</dd>
+<dt><a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs</dt>
+<dd>List of keyword arguments to be passed to plot_func in
+addition to ‘step’.</dd>
 </dl>
+</dd>
+</dl>
+<p>Returns : None</p>
 </dd></dl>
 
 <dl class="method">
@@ -318,8 +375,13 @@ plot_func (function): a function that will be run every step. Usually a plotting
 <dd><p>Set a random position within the patch for each seed in est_seeds.</p>
 <dl class="docutils">
 <dt>Args:</dt>
-<dd>est_seed (dict):A dictionary with patches as keys (‘(x,y)’) and the number of established seeds as values.</dd>
-<dt>Returns:</dt>
+<dd><dl class="first last docutils">
+<dt>est_seed <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd>A dictionary with patches as keys (‘(x,y)’) and the number
+of established seeds as values.</dd>
+</dl>
+</dd>
+<dt>Returns <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
 <dd>A list of seed positions within patches.</dd>
 </dl>
 </dd></dl>
@@ -327,13 +389,10 @@ plot_func (function): a function that will be run every step. Usually a plotting
 <dl class="method">
 <dt id="world.Tree_World.stablish_new_trees">
 <code class="descname">stablish_new_trees</code><span class="sig-paren">(</span><em>clear=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.stablish_new_trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.stablish_new_trees" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create new tree individuals. Use ‘define_seedbank()’, ‘topology.seed_establishment’ and ‘seeds_pos’.</p>
-<blockquote>
-<div>Note: This method can be substitued by an equivalent in order to incorporate more realistic representations of seed dispersal.</div></blockquote>
-<dl class="docutils">
-<dt>Returns:</dt>
-<dd>None.</dd>
-</dl>
+<dd><p>Create new tree individuals.
+Uses ‘define_seedbank()’, ‘topology.seed_establishment’ and ‘seeds_pos’.</p>
+<p>Note: This method can be substitued by an equivalent in order to incorporate more realistic representations of seed dispersal.</p>
+<p>Returns : None</p>
 </dd></dl>
 
 <dl class="method">
@@ -342,11 +401,20 @@ plot_func (function): a function that will be run every step. Usually a plotting
 <dd><p>Search for suitable trees for logging in the given patches.</p>
 <dl class="docutils">
 <dt>Args:</dt>
-<dd>patches (list): A list of patches (tuples in the format (x,y))
-min_dbh (float): minimum dbh for a tree to be considered suitable for logging.
-max_dbh (float): max dbh for a tree to be considered suitable for logging.</dd>
-<dt>Returns:</dt>
-<dd>A dictionary with patches as keys ((x,y)) and lists of suitable tree ids as values</dd>
+<dd><dl class="first last docutils">
+<dt>patches <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd>A list of patches (tuples in the format (x,y)).</dd>
+<dt>min_dbh <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Minimum dbh (Diameter at Breast Height) for a tree to be
+considered suitable for logging.</dd>
+<dt>max_dbh :float</dt>
+<dd>Maximum dbh (Diameter at Breast Height) for a tree to be
+considered suitable for logging.</dd>
+</dl>
+</dd>
+<dt>Returns <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd>A dictionary with patches as keys ((x,y)) and lists of
+suitable tree ids as values.</dd>
 </dl>
 </dd></dl>
 

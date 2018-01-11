@@ -10,11 +10,11 @@ Welcome to trees_ibm's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   model_description
    world
    topology
    tree_agent
    visualization
-
 
 
 

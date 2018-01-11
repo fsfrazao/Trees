@@ -90,20 +90,32 @@ class Tree_World(World):
         Tree.UpdateTrees()
 
     def run_simulation(self, n, logging_settings=None, dispersal_settings={'mode': 'external', 'clear': True}, produce_fruits=True, increment_time=True, h5file=None, plot_func=None, **kwargs):
-        """Run the code in run_schedule() 'n' times.
+        """Run the code in 'run_schedule' 'n' times.
 
         Args:
-            n (int): Number of simulations to be run.
-            logging_years (range): The years in which selective logging occurs.
-            min_dbh (float): minimum dbh for a tree to be considered suitable for logging.
-            max_dbh (float): maximum dbh for a tree to be considered suitable for logging.
-            vol (float): total volume of timber to be extracted by logging event.
-            h5file (str): path to the HDF5 file in which model outputs will be saved
-            plot_func (function): a function that will be run every step. Usually a plotting function that saves a image file to the disk. Must accept a 'step' argument,which will receive the step number and can be used to generate the file name.
-            **kwargs: List of keyword arguments to be passed to plot_func in addition to 'step'.
+            n : int
+                Number of simulations to be run.
+            logging_years : range
+                The years in which selective logging occurs.
+            min_dbh : float
+                Minimum dbh for a tree to be considered suitable for logging.
+            max_dbh : float
+                Maximum dbh for a tree to be considered suitable for logging.
+            vol : float
+                Total volume of timber to be extracted by logging event.
+            h5file : str
+                Path to the HDF5 file in which model outputs will be saved
+            plot_func : function
+                A function that will be run every step.
+                Usually a plotting function that saves a image file
+                to the disk.Must accept a 'step' argument,which will
+                receive the step number and can be used to generate the file
+                name.
+            **kwargs
+                List of keyword arguments to be passed to plot_func in
+                addition to 'step'.
 
-        Returns:
-            None
+        Returns : None
         """
         if h5file:
             self.db = open_file(h5file, "r+")
@@ -140,7 +152,7 @@ class Tree_World(World):
                 self.Stocks["Dwood"].append(self.Sdead["current"])
                 self.Stocks["AGB"].append(Tree.Total_AGB() * .44)
 
-            if not plot_func == None:
+            if plot_func is not None:
                 plot_func(step=i, **kwargs)
 
             if logging_settings is not None:
@@ -169,11 +181,13 @@ class Tree_World(World):
         """Schedule of actions to be run in every time step
 
         Args:
-            step (int): The current step. Received from run_simulation().
-            h5_database (str): path to the HDF5 file in which model outputs will be saved
+            step : int
+                The current step. Received from run_simulation().
+            h5_database : str
+                Path to the HDF5 file in which model outputs will be saved.
 
         Returns:
-            (float) the Net Ecosystem Exchange (as calculater by 'calculate_NEE') for thar step.
+            (float) the Net Ecosystem Exchange (as calculated by  'calculate_NEE') for thar step.
         """
         list_of_patches = self.topology.trees_per_patch.keys()
         cohorts = self.topology.cohorts(list_of_patches)
@@ -204,27 +218,37 @@ class Tree_World(World):
         return self.calculate_NEE()
 
     def create_agents(self, FT, n, pos=None, ids=None, DBHs=None, ages=None, **kwargs):
-        """ Creates 'n' trees of type 'FT'. A list of positions, ids and DBHs can be provided (Useful to recreate trees from a previous model run, for example).
+        """ Creates 'n' trees of type 'FT'. A list of positions, ids and DBHs
+            can be provided (Useful to recreate trees from a previous model
+            run, for example).
 
         Note: overwrites methods create_agents from class Agent.
 
         Args:
-            agent_type (class): the type (class) of agents to be created
-            n (int): number of agents to be created
-            pos (list,None): a list of 'n' tuples '(x,y)' with the coordinates in which agents will be created. If set to None, agents are created in random positions.
-            ids (list): a list of 'n' ints to be used as tree ids.
-            DBHs: a list of 'n' floats to be used as tree DBHs.
-            kwargs: the arguments to be passed to the 'agent_type' class. All agents will be created with this same set of arguments.
+            agent_type : class
+                The type (class) of agents to be created
+            n : int
+                Number of agents to be created
+            pos : list :None
+                A list of 'n' tuples '(x,y)' with the coordinates in which
+                agents will be created. If set to None, agents are created
+                in random positions.
+            ids : list
+                A list of 'n' ints to be used as tree ids.
+            DBHs : list
+                A list of 'n' floats to be used as tree DBHs.
+            **kwargs
+                The arguments to be passed to the 'agent_type' class.
+                All agents will be created with this same set of arguments.
 
-        Returns:
-            None.
+        Returns : None
         """
-        if pos == None:
+        if pos is None:
             pos = [(np.random.rand() * self.topology.x_max,
                     np.random.rand() * self.topology.y_max)
                    for i in range(n)]
 
-        if ids == None:
+        if ids is None:
             for i in range(n):
                 FT(position=pos[i], **kwargs)
 
@@ -366,8 +390,7 @@ class Tree_World(World):
             sys_lvl, "Stocks", CarbonStocks, "Carbon Stocks")
         #Emissions_table=h5file.create_table(sys_lvl,"Emissions",CarbonEmissions,"Emissions from soil stocks, living trees and dead wood")
 
-        ind_lvl = h5file.create_group("/sim_{0}/trees".format(self.sim_number), "ind_lvl",
-                                      "Individual Level Observations for Simulation {0}".format(self.sim_number))
+        ind_lvl = h5file.create_group("/sim_{0}/trees".format(self.sim_number), "ind_lvl","Individual Level Observations for Simulation {0}".format(self.sim_number))
 
         Ind_table = h5file.create_table(
             ind_lvl, "Ind", Individuals, "Individual Level Data")
@@ -410,7 +433,8 @@ class Tree_World(World):
         trees_per_type = {k: [] for k in Tree.DERIVED_TREES.keys()}
         for t_id, t in Tree.Instances.items():
             trees_per_type[t.Ftype].append(
-                {"id": t_id, "position": t.position, "DBH": t.DBH, "age": t.age})
+                {"id": t_id, "position": t.position,
+                 "DBH": t.DBH, "age": t.age})
 
         with open(output_file, 'w') as json_file:
             json.dump(trees_per_type, json_file)
@@ -419,12 +443,18 @@ class Tree_World(World):
         """Search for suitable trees for logging in the given patches.
 
         Args:
-            patches (list): A list of patches (tuples in the format (x,y))
-            min_dbh (float): minimum dbh for a tree to be considered suitable for logging.
-            max_dbh (float): max dbh for a tree to be considered suitable for logging.
+            patches : list
+                A list of patches (tuples in the format (x,y)).
+            min_dbh : float
+                Minimum dbh (Diameter at Breast Height) for a tree to be
+                considered suitable for logging.
+            max_dbh :float
+                Maximum dbh (Diameter at Breast Height) for a tree to be
+                considered suitable for logging.
 
-        Returns:
-            A dictionary with patches as keys ((x,y)) and lists of suitable tree ids as values
+        Returns : dict
+            A dictionary with patches as keys ((x,y)) and lists of
+            suitable tree ids as values.
         """
 
         suitables_per_patch = {}
@@ -440,11 +470,14 @@ class Tree_World(World):
         """Randomly log 'suitable_trees' until the 'total_vol' is reached.
 
         Args:
-            suitable_trees (dict): A dictionary with patches as keys ((x,y)) and lists of suitable tree ids as values (resulting from suitable_trees())
-            total_vol (float): the total vol of timber to be logged
+            suitable_trees : dict
+                A dictionary with patches as keys ((x,y)) and lists of
+                suitable tree ids as values (resulting from suitable_trees())
+            total_vol: float
+                The total vol of timber to be logged
 
-        Returns:
-            None
+        Returns : None
+
         """
 
         total_logged = 0
@@ -467,10 +500,12 @@ class Tree_World(World):
         """Randomly determines how many seed each patch will receive.
 
         Args:
-            Nseed (int):The total number of seed to be distributed among all patches.
+            Nseed :int
+                The total number of seed to be distributed among all patches.
 
-        Returns:
-            A dictionary in which keys are patches ('(x,y)') and values are the number of seeds
+        Returns : dict
+            A dictionary in which keys are patches ('(x,y)') and values are
+            the number of seeds.
         """
 
         seedbank = {}
@@ -488,9 +523,11 @@ class Tree_World(World):
         """Set a random position within the patch for each seed in est_seeds.
 
         Args:
-            est_seed (dict):A dictionary with patches as keys ('(x,y)') and the number of established seeds as values.
+            est_seed : dict
+                A dictionary with patches as keys ('(x,y)') and the number
+                of established seeds as values.
 
-        Returns:
+        Returns : list
             A list of seed positions within patches.
         """
 
@@ -517,7 +554,7 @@ class Tree_World(World):
                 pos), pos=pos, world=self, dbh=2)
 
     def incorporate_new_seedbank(self, new_seedbank, clear=True):
-        if clear == True:
+        if clear is True:
             self.clear_seedbank()
 
         for ft in new_seedbank.keys():
@@ -527,12 +564,12 @@ class Tree_World(World):
         self.topology.seedbank = {k: [] for k in self.topology.seedbank.keys()}
 
     def stablish_new_trees(self, clear=True):
-        """Create new tree individuals. Use 'define_seedbank()', 'topology.seed_establishment' and 'seeds_pos'.
+        """Create new tree individuals.
+        Uses 'define_seedbank()', 'topology.seed_establishment' and 'seeds_pos'.
 
-            Note: This method can be substitued by an equivalent in order to incorporate more realistic representations of seed dispersal.
+        Note: This method can be substitued by an equivalent in order to incorporate more realistic representations of seed dispersal.
 
-        Returns:
-            None.
+        Returns : None
         """
 
         self.topology.seedbank = self.topology.seed_establishment(
@@ -545,8 +582,7 @@ class Tree_World(World):
         """ Calculate the amount of carbon (tC) in the dead wood stock based
             on the trees that died in the previous year (Smort).
 
-            Returns:
-                None.
+            Returns : None
 
         """
         # if self.Smort>=10:self.Smort=10#(Tree.Total_AGB()*0.2): self.Smort=(Tree.Total_AGB()*0.2)
@@ -561,8 +597,7 @@ class Tree_World(World):
 
             Calculation is based on decomposition rates for the dead wood (tsdead_Sslow) and the rate with which carbon is transferred from this stock to the atmosphere (tsslow_A).
 
-            Returns:
-                None.
+            Returns : None
         """
 
         self.Sslow["current"] = self.Sslow["previous"] + self.tsdead_Sslow * \
@@ -574,8 +609,7 @@ class Tree_World(World):
 
             Calculation is based on decomposition rates for the dead wood (tsdead_Sfast) and the rate with which carbon is transferred from this stock to the atmosphere (tsfast_A).
 
-            Returns:
-                None.
+            Returns : None
         """
 
         self.Sfast["current"] = self.Sfast["previous"] + self.tsdead_Sfast * \
@@ -587,10 +621,10 @@ class Tree_World(World):
 
         This is all the carbon that was absorbed by living trees (Cgpp) minus
         what was emitted to the atmosphere by the living trees (Cr) and
-        the decomposition of the dead wood and soil stocks (tsdead_A+tsslow_A+tsfast_A).
+        the decomposition of the dead wood and soil stocks
+        (tsdead_A+tsslow_A+tsfast_A).
 
-        Returns:
-            None.
+        Returns : None
 
         """
 
