@@ -1,5 +1,5 @@
 from py_ibm import *
-#from plot_trees import plot_tree_pos
+# from plot_trees import plot_tree_pos
 from trees_ibm.tree_agent import Tree
 import pdb
 from tables import *
@@ -12,27 +12,41 @@ class Tree_World(World):
 
 
     Args:
-        topology (Tree_Grid instance): grid object on which agents will live.
-        AET (int): actual evapotranspiration in the previous year in mm.
-        Assumed to be constant every year.
+        topology : Tree_Grid instance
+          Grid object on which agents will live.
+        AET : int
+         Actual evapotranspiration in the previous year in mm.
+         Assumed to be constant every year.
 
     Attributes:
-        Smort (float): Carbon of all trees that died in one year [tC]
-        Sdead (float): Dead wood carbon stock [tC]
-        tsdead (float): Anual decomposition rate
-        tsdead_A (float): Proportion of decomposed dead wood that is released to the atmosphere.
-        Sslow (float): Slow decomposition portion of soil stock [tC]
-        tsdead_Sslow (float): Proportion of decomposed dead wood that is tranferred to the slow decomposition Soil stock
-        self.tsslow_A (float):Proportion of slow decomposition soil stock that is released to the atmosphere.
-        Sfast (float):Fast decomposition portion of soil stock [tC]
-        tsfast_A (float):Proportion of fast decomposition soil stock that is released to the atmosphere.
-        tsdead_Sfast (float): Proportion of decomposed dead wood that is tranferred to the fast decomposition Soil stock.
-        Cgpp (float): Carbon captured in the gross primary productivity of the living forest
-        Cr (float):Carbon released by the total respiration of the living forest (i.e. for maintenance and growth)
+        Smort : float
+            Carbon of all trees that died in one year [tC].
+        Sdead :float)
+            Dead wood carbon stock [tC].
+        tsdead : float
+            Anual decomposition rate.
+        tsdead_A : float
+            Proportion of decomposed dead wood that is released to the atmosphere.
+        Sslow : float
+            Slow decomposition portion of soil stock [tC].
+        tsdead_Sslow :float
+            Proportion of decomposed dead wood that is tranferred to the slow decomposition Soil stock.
+        tsslow_A : float
+            Proportion of slow decomposition soil stock that is released to the atmosphere.
+        Sfast : float
+            Fast decomposition portion of soil stock [tC].
+        tsfast_A : float
+            Proportion of fast decomposition soil stock that is released to the atmosphere.
+        tsdead_Sfast : float
+            Proportion of decomposed dead wood that is tranferred to the fast decomposition Soil stock.
+        Cgpp : float
+            Carbon captured in the gross primary productivity of the living forest.
+        Cr : float
+            Carbon released by the total respiration of the living forest (i.e. for maintenance and growth)
 
     Usage:
-        >>>grid01=Tree_Grid(x_max=5,y_max=5,delta_h=0.5,patch_area=400,I0=860,lday=12,phi_act=360,k=0.7)
-        >>>world01=Tree_World(topology=grid01)
+        >>> grid01=Tree_Grid(x_max=5,y_max=5,delta_h=0.5,patch_area=400,I0=860,lday=12,phi_act=360,k=0.7)
+        >>> world01=Tree_World(topology=grid01)
         >>> print(world01)
         World object
     """
