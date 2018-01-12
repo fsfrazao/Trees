@@ -7,14 +7,17 @@ Welcome to trees_ibm's documentation!
 =====================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
+   introduction
+   installation
    model_description
-   world
-   topology
-   tree_agent
-   visualization
+   examples
+   modules
+   contribute
+
+
 
 
 
