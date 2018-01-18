@@ -7,37 +7,64 @@ import numpy as np
 
 
 class Tree(Agent):
-    """ Represent individual trees.
+    """ Represents individual trees.
 
     Args:
-        position (tuple): (x,y) coordinates of where tree will be stablished.
-        world (world object): world where tree will live.
-        dbh (float): Diameter at Breast Height (in cm).
-        h0 (float): Height-stem diameter relationship parameter.
-        h1 (float): Height-stem diameter relationship parameter.
-        cl0 (float): Crown Length-Height relationship parameter.
-        cd0 (float): Crown Diameter-Stem Diameter relationship parameter.
-        cd1 (float): Crown Diameter-Stem Diameter relationship parameter.
-        cd2 (float): Crown Diameter-Stem Diameter relationship parameter.
-        rho (float): wood density in t of Organic Dry Matter/cubic meter.
-        sigma (float): ratio of total aboveground biomass to stem biomass.
-        f0 (float): form factor-stem diameter relationship parameter.
-        f1 (float): form factor-stem diameter relationship parameter.
-        l0 (float): Leaf Area Index (LAI)-Stem relationship parameter.
-        l1 (float): Leaf Area Index (LAI)-Stem relationship parameter.
-        m (float): Light trasnmission coefficient.
-        alpha (float): quantum eciency; initial slope of the type specic light response curve.
-        pmax (float): maximum leaf gross photosynthetic rate.
-        rg (float): fraction of gross primary production available for growth that is attributed to growth respiration.
-        deltaDmax (float): maximum diameter increment.
-        DdeltaDmax (float): % of Dmax that reaches deltaDmax.
-        age (int): age (years).
-        Ftype (str): functional type.
-        Mb (float): backgroung mortality probability.
-        Dfall (float): mimimum dbh for a tree to fall.
-        pfall (float): probabbility that a tree with dbh>Dfall will fall.
-        m_max (float): maximum size-dependent mortality for small trees.
-        Dmort (float): DBH up to which mortality is increased (for small trees).
+        position: tuple
+            (x,y) coordinates of where tree will be stablished.
+        world : world object
+            world where tree will live.
+        dbh: float
+            Diameter at Breast Height (in cm).
+        h0: float:
+            Height-stem diameter relationship parameter.
+        h1: float
+            Height-stem diameter relationship parameter.
+        cl0: float
+            Crown Length-Height relationship parameter.
+        cd0: float
+            Crown Diameter-Stem Diameter relationship parameter.
+        cd1: float
+            Crown Diameter-Stem Diameter relationship parameter.
+        cd2: float
+            Crown Diameter-Stem Diameter relationship parameter.
+        rho: float
+            Wood density in t of Organic Dry Matter/cubic meter.
+        sigma: float
+            Ratio of total aboveground biomass to stem biomass.
+        f0: float
+            Form factor-stem diameter relationship parameter.
+        f1: float
+            Form factor-stem diameter relationship parameter.
+        l0: float
+            Leaf Area Index (LAI)-Stem relationship parameter.
+        l1: float
+            Leaf Area Index (LAI)-Stem relationship parameter.
+        m: float
+            Light trasnmission coefficient.
+        alpha: float
+            Quantum eficiency; initial slope of the type specic light response curve.
+        pmax: float
+            Maximum leaf gross photosynthetic rate.
+        rg: float
+            Fraction of gross primary production available for growth that is attributed to growth respiration.
+        deltaDmax: float
+            Maximum diameter increment.
+        DdeltaDmax: float
+            % of Dmax that reaches deltaDmax.
+        age: int
+            Age (years).
+        Ftype: str
+            Functional type.
+        Mb: float): backgroung mortality probability.
+        Dfall: float
+            Mimimum dbh for a tree to fall.
+        pfall: float
+            Probabbility that a tree with dbh>Dfall will fall.
+        m_max: float
+            Maximum size-dependent mortality for small trees.
+        Dmort: float
+            DBH up to which mortality is increased (for small trees).
 
     Attributes:
 
@@ -51,51 +78,96 @@ class Tree(Agent):
         lday (float):
         phi_act (float):
 
-        H (float): Height (m).
-        CL (float): Crown length (m).
-        CD (float): Crown diameter (m)
-        CA (float): Crown area (sq. m)
-        AGB (float): Above ground biomass (tODM)
-        LAI (float): Leaf area index.
-        lmax (float):
-        lmin (float):
-        L_mean (float):
-        Li (float):
-        Mc (float):
-        basic_m (float):
-        Mb (float):
-        Md (float):
-        GPP (float): Gross primary production in this time step.
-        Rm (float): Respiration maintenance in this timestep.
-        position (tuple): (x,y) coordinates of where tree is located.
-        world (world object): world where tree lives.
-        dbh (float): Diameter at Breast Height (in cm).
-        h0 (float): Height-stem diameter relationship parameter.
-        h1 (float): Height-stem diameter relationship parameter.
-        cl0 (float): Crown Length-Height relationship parameter.
-        cd0 (float): Crown Diameter-Stem Diameter relationship parameter.
-        cd1 (float): Crown Diameter-Stem Diameter relationship parameter.
-        cd2 (float): Crown Diameter-Stem Diameter relationship parameter.
-        rho (float): wood density in t of Organic Dry Matter/cubic meter.
-        sigma (float): ratio of total aboveground biomass to stem biomass.
-        f0 (float): form factor-stem diameter relationship parameter.
-        f1 (float): form factor-stem diameter relationship parameter.
-        l0 (float): Leaf Area Index (LAI)-Stem relationship parameter.
-        l1 (float): Leaf Area Index (LAI)-Stem relationship parameter.
-        m (float): Light trasnmission coefficient.
-        alpha (float): quantum eciency; initial slope of the type-specic light response curve.
-        pmax (float): maximum leaf gross photosynthetic rate.
-        rg (float): fraction of gross primary production available for growth that is attributed to growth respiration.
-        deltaDmax (float): maximum diameter increment.
-        DdeltaDmax (float): % of Dmax that reaches deltaDmax.
-        age (int): age (years).
-        Ftype (str): functional type.
-        Mb (float): backgroung mortality probability.
-        max_height (float): maximum height this tree can reach.
-        Dfall (float): mimimum dbh for a tree to fall.
-        pfall (float): probabbility that a tree with dbh>Dfall will fall.
-        m_max (float): maximum size-dependent mortality for small trees.
-        Dmort (float): DBH up to which mortality is increased (for small trees).
+        H: float
+            Height (m).
+        CL: float
+            Crown length (m).
+        CD: float
+            Crown diameter (m)
+        CA: float
+            Crown area (sq. m)
+        AGB: float
+            Above ground biomass (tODM)
+        LAI: float
+            Leaf area index.
+        lmax: float
+            Top layer occupied by this tree's crown.
+        lmin: float
+            Bottom layer occupied by this tree's crown.
+        L_mean: float
+            Average leaf area per layer.
+        Li: float
+            Amount of light receiveid by this tree.
+        Mc: float
+            Crowding mortality.
+        basic_m: float
+            Basic mortality.
+        Mb: float
+            Background mortality.
+        Md: float
+            Damage mortality.
+        GPP: float
+            Gross primary production in this time step.
+        Rm: float
+            Respiration maintenance in this timestep.
+        position: tuple
+            (x,y) coordinates of where tree is located.
+        world: world object
+            World where tree lives.
+        dbh: float
+            Diameter at Breast Height (in cm).
+        h0: float
+            Height-stem diameter relationship parameter.
+        h1: float
+            Height-stem diameter relationship parameter.
+        cl0: float
+            Crown Length-Height relationship parameter.
+        cd0: float
+            Crown Diameter-Stem Diameter relationship parameter.
+        cd1: float
+            Crown Diameter-Stem Diameter relationship parameter.
+        cd2: float
+            Crown Diameter-Stem Diameter relationship parameter.
+        rho: float
+            Wood density in t of Organic Dry Matter/cubic meter.
+        sigma: float
+            Ratio of total aboveground biomass to stem biomass.
+        f0: float:
+            Form factor-stem diameter relationship parameter.
+        f1: float:
+            Form factor-stem diameter relationship parameter.
+        l0: float
+            Leaf Area Index (LAI)-Stem relationship parameter.
+        l1: float
+            Leaf Area Index (LAI)-Stem relationship parameter.
+        m: float
+            Light trasnmission coefficient.
+        alpha: float
+            Quantum eciency; initial slope of the type-specic light response curve.
+        pmax: float
+            Maximum leaf gross photosynthetic rate.
+        rg: float
+            Fraction of gross primary production available for growth that is attributed to growth respiration.
+        deltaDmax: float
+            Maximum diameter increment.
+        DdeltaDmax: float
+            % of Dmax that reaches deltaDmax.
+        age: int
+            Age (years).
+        Ftype:  str
+            Functional type.
+        Mb: float
+            Backgroung mortality probability.
+        max_height: float
+            Maximum height this tree can reach.
+        Dfall: float
+            Mimimum dbh for a tree to fall.
+        pfall: float
+            Probabbility that a tree with dbh>Dfall will fall.
+        m_max: float)
+            Maximum size-dependent mortality for small trees.
+        Dmort: float
+            DBH up to which mortality is increased (for small trees).
 
     """
 
@@ -106,6 +178,44 @@ class Tree(Agent):
 
     @classmethod
     def TreeFactory(cls, new_cls_name, new_parameters):
+        """ Creates a Tree subclass to represent a Functional Type.
+
+            Args:
+                new_cls_name: str
+                    Name of the functional type
+
+                new_parameters: dict
+                    Dictionary containing the the parameters specific to each functional type.
+                    The following format is expected:
+                        {'h0':value,
+                            'h1':value,
+                            'cl0':value,
+                            'cd0':value,
+                            'cd1':value,
+                            'cd2':value,
+                            'rho':value,
+                            'sigma':value,
+                            'f0':value,
+                            'f1':value,
+                            'l0':value,
+                            'l1':value,
+                            'm':value,
+                            'alpha':value,
+                            'pmax':value,
+                            'max_dbh':value,
+                            'deltaDmax':value,
+                            'DdeltaDmax':value,
+                            'Dmort':value,
+                            'Dfall':value,
+                            'pfall':value,
+                            'rg':value,
+                            'm_max':value,
+                        }
+
+                Returns: Tree subclass
+                    A subclass of the Tree class with the provided parameter values as default.
+        """
+
 
         def new_init(self, position, world, dbh, age=0, id=None, **kwargs):
 
@@ -201,6 +311,12 @@ class Tree(Agent):
 
     @classmethod
     def CountFruits(cls):
+        """ Counts the total number of fruits in the landscape.
+            Fruits from all trees of all Functional Types are counted.
+
+            Returns: int
+                Number of fruits.
+        """
         fruits = 0
         for t in cls.Instances.values():
             fruits += t.available_fruits
@@ -208,17 +324,29 @@ class Tree(Agent):
 
     @classmethod
     def UpdateTrees(cls):
+        """Updates all living trees
+
+            Returns: None
+        """
         for t in cls.Instances.values():
             t.update()
 
     @classmethod
     def ProduceFruits(cls):
+        """ Makes all trees with diameter bigger than 10 cm produce fruits.
+
+            Returns: None
+        """
         for t in cls.Instances.values():
             if t.DBH > 10:
                 t.available_fruits = t.Nfruit
 
     @classmethod
     def DisperseSeeds(cls):
+        """Makes all trees with diameter bigger than 10 cm disperse their seeds.
+
+            Returns: None
+        """
         for t in cls.Instances.values():
             if t.DBH > 10:
                 t.disperse_seeds(a=t.Adisp, fraction=t.Fdisp)
@@ -227,8 +355,8 @@ class Tree(Agent):
     def TreesAboveDBH(self, dbh):
         """Calculate the total number of trees with DBH above the speciefied threshold.
 
-        Returns:
-            (int): Number of trees.
+        Returns: int
+            Number of trees.
         """
 
         trees = [k for k in self.Instances.keys(
@@ -239,8 +367,8 @@ class Tree(Agent):
     def Total_AGB(self):
         """ Calculate the total Above Ground Biomass for all living trees.
 
-        Returns:
-            (float): total AGB in t of Organic Dry matter (tODM).
+        Returns: float
+            Total Aboveground Biomass in tons of Organic Dry matter (tODM).
         """
 
         Tagb = 0
@@ -254,8 +382,8 @@ class Tree(Agent):
     def Cgpp(self):
         """ Calculate the total Carbon absorbed as Gross Primary Production.
 
-        Returns:
-            (float): Total Carbon absorbed.
+        Returns: float
+            Total Carbon absorbed.
         """
 
         Cgpp = 0
@@ -269,8 +397,8 @@ class Tree(Agent):
     def Cr(self):
         """ Calculate the total Carbon released through respiration.
 
-        Returns:
-            (float): Total Carbon released by all living trees.
+        Returns: float
+            Total Carbon released by all living trees.
         """
         Cr = 0
         trees = [k for k in self.Instances.keys()]
@@ -422,6 +550,31 @@ class Tree(Agent):
 
     def update(self):
         """ Updates geometry related parameters and mortality probabilities.
+
+            Returns: dict
+                A dictionary with the new attribute values.
+                Can be imported by the 'import_attributes' method.
+
+                The following attributes are returned:
+
+                {"DBH":value,
+                "H":value,
+                "CL":value,
+                "CD":value,
+                "CA":value,
+                "AGB":value,
+                "LAI":value,
+                "lmax":value,
+                "lmin":value,
+                "L_mean":value,
+                "Li":value,
+                "Mc":value,
+                "Mb":value,
+                "age":value,
+                "available_fruits":value,
+            }
+
+
         """
         self.H = self.H_from_DBH()
         self.CL = self.CL_from_H()
@@ -460,6 +613,30 @@ class Tree(Agent):
         return (attributes)
 
     def import_attributes(self, attributes):
+        """ Updates this tree's attributes with the values in 'attributes'.
+
+            Args:
+                attributes: dict
+                    A dict with attribute name : value.
+                    The following attributes are expected:
+
+                    {"DBH":value,
+                    "H":value,
+                    "CL":value,
+                    "CD":value,
+                    "CA":value,
+                    "AGB":value,
+                    "LAI":value,
+                    "lmax":value,
+                    "lmin":value,
+                    "L_mean":value,
+                    "Li":value,
+                    "Mc":value,
+                    "Mb":value,
+                    "age":value,
+                    "available_fruits":value,
+                }
+        """
         self.DBH = attributes["DBH"]
         self.H = attributes["H"]
         self.CL = attributes["CL"]
@@ -484,40 +661,35 @@ class Tree(Agent):
     def H_from_DBH(self):
         """Calculate tree height calculated according to eq.1 in SI-Fisher et al.(2015).
 
-        Returns:
-            (float): H.
+        Returns: float
         """
         return self.h0 * self.DBH**self.h1
 
     def CL_from_H(self):
         """Calculate tree crown_length (CL) calculated according to eq.2 in SI-Fisher et al.(2015)
 
-        Returns:
-            (float): CL.
+        Returns: float
         """
         return self.cl0 * self.H
 
     def CD_from_DBH(self):
         """Calculate tree crown diameter (CD) calculated according to eq.3 in SI-Fisher et al.(2015).
 
-        Returns:
-            (float): CD.
+        Returns: float
         """
         return (self.cd0 * self.DBH**self.cd1) - self.cd2
 
     def CA_from_CD(self):
         """Calculate tree crown area (CA) calculated according to eq.4 in SI-Fisher et al.(2015)
 
-        Returns:
-            (float): CA.
+        Returns: float
         """
         return (np.pi / 4) * (self.CD**2)
 
     def calculate_volume(self):
         """ Calculate the volume of the stem based on DBH.
 
-        Returns:
-            (float): volume.
+        Returns: float
         """
 
         return self.H * (np.pi * ((self.DBH / 100) / 2)**2)
@@ -525,8 +697,8 @@ class Tree(Agent):
     def AGB_from_DBH(self, D):
         """ Calculate tree aboveground biomass (AGB) calculated according to eq.5 in SI-Fisher et al.(2015)
 
-        Returns:
-            (float): AGB.
+        Returns: float
+
         """
 
         return (np.pi / 4) * (D**2) * self.H * self.f * (self.rho / self.sigma)
@@ -534,8 +706,7 @@ class Tree(Agent):
     def calculate_f(self):
         """Calculate the form factor (f) calculated according to eq.6 in SI-Fisher et al.(2015)
 
-        Returns:
-            (float): f.
+        Returns: float
 
         """
 
@@ -544,16 +715,42 @@ class Tree(Agent):
     def LAI_from_DBH(self):
         """Calculate the leaf area index (LAI) calculated according to eq.7 in SI-Fisher et al.(2015)
 
-        Returns:
-            (float): LAI.
+        Returns: float
         """
 
         return self.l0 * self.DBH**self.l1
 
     def decrement_fruit_stock(self, n=1):
+        """ Decreases the fruit stock bt n.
+
+            Args:
+                n: int
+                    Number of fruits
+
+        """
         self.available_fruits -= n
 
     def disperse_seeds(self, fraction=0.5, a=0.3, maximum_distance=100):
+        """ Disperse seeds according to a power distribution.
+
+            Seeds are deposited in the topology's seedbank.
+
+            Power function:
+                    P(x|a)=a*x^(a-1)
+
+            Args:
+                fraction: float
+                    Fraction (between 0.0 and 1.0) of the available fruits to be dispersed ( each fruit contains one seed).
+                a: float
+                    Power factor
+
+                maximum_distance: float
+                        Maximun distance (from the tree) at which a seed can be deposited.
+
+            Returns: None
+        """
+
+
         n_seeds = int(round(self.available_fruits * fraction))
         self.decrement_fruit_stock(n=n_seeds)
         seed_distances = np.random.power(a=a, size=n_seeds)
@@ -564,6 +761,15 @@ class Tree(Agent):
             self.deposit_seed(seed_position)
 
     def random_seed_position(self, distance):
+        """ Randomly selects a point within a circle of radius= 'distance' for a seed to be deposited.
+
+            Args:
+                distance: float
+                    Maximun distance (from the tree) at which a seed can be deposited.
+
+            Returns: tuple
+                    (x,y) seed position.
+        """
         x0, y0 = self.position
         angle = np.random.randint(360)
         new_position = ((x0 + np.cos(np.radians(angle)) * distance,
@@ -583,8 +789,8 @@ class Tree(Agent):
     def Lind(self):
         """Calculate the incoming radiation on top of lmax layer the tree is reaching according to eq.36 in SI-Fisher et al.(2015).
 
-        Returns:
-            (float): Incoming radiation on top of this tree.
+        Returns: float
+            Incoming radiation on top of this tree.
         """
 
         # crown_layers=(np.ceil(self.lmax)-np.floor(self.lmin))/self.world.topology.delta_h
@@ -599,8 +805,8 @@ class Tree(Agent):
     def Pind(self, Li):
         """ Calculate the interim gross photosynthetic rate of one tree per year, according to eq.40 in SI-Fisher et al.(2015)
 
-        Returns:
-            (float) Gross photosynthetic rate.
+        Returns: float
+            Gross photosynthetic rate.
         """
 
         pmk = self.pmax / self.k
@@ -616,9 +822,8 @@ class Tree(Agent):
     def calculate_rm(self):
         """Calculate the maintenance respiration rate(rm) according to eq.46 in SI-Fisher et al.(2015).
 
-        Returns:
-            (float): rm.
-        """
+        Returns: float
+                """
 
         max_Li = self.world.topology.I0
 
@@ -630,8 +835,8 @@ class Tree(Agent):
     def growth(self, D):
         """Calculate the yearly diameter growth according to eq.48 in SI-Fisher et al.(2015). Assumes full availabilty of resources
 
-        Returns:
-            (float):diameter growth.
+        Returns: float
+            Diameter growth.
         """
 
         return (self.alpha0 * D * (1 - (D / self.Dmax))) * np.exp(-self.alpha1 * D)
@@ -639,8 +844,7 @@ class Tree(Agent):
     def calculate_alpha0(self):
         """Calculate the alpha0 growth paramenter, according equations described in sctions F-5 (page 24) of SI-Fisher et al.(2015).
 
-        Returns:
-            (float): alpha 0.
+        Returns: float
 
         """
 
@@ -656,8 +860,8 @@ class Tree(Agent):
     def calculate_alpha1(self):
         """Calculate alpha1 growth paramenter, according equations described in sctions F-5 (page 24) of SI-Fisher et al.(2015).
 
-        Returns:
-            (float): alpha1.
+        Returns: float
+
         """
 
         alpha1 = self.Dmax - 2 * (self.DdeltaDmax * self.Dmax)
@@ -669,8 +873,8 @@ class Tree(Agent):
     def Biomass_gain(self):
         """ Calculate Aboveground Biomass (AGB) gain according to eq.43 in SI-Fisher et al.(2015).
 
-        Returns:
-            (float): AGB.
+        Returns: float
+
         """
 
         self.GPP = self.Pind(self.Li)
@@ -685,8 +889,8 @@ class Tree(Agent):
     def DBH_from_Biomass(self, B):
         """ Calculate diameter at breast height from above ground biomass.
 
-        Returns:
-            (float): the DBH calculated from AGB.
+        Returns: float
+            The DBH calculated from AGB.
         """
 
         p = (np.pi / 4) * self.H * self.f * (self.rho / self.sigma)
@@ -701,8 +905,7 @@ class Tree(Agent):
 
         Note: If DBH decreases to zero, remove tree.
 
-        Returns:
-            None.
+        Returns: None
         """
         gain = self.Biomass_gain()
         if round(self.AGB, 3) <= 0 or gain < 0:
@@ -733,8 +936,7 @@ class Tree(Agent):
     def calculate_Ms(self):
         """Calculate the size-dependent mortality for small trees according to model description in Ruger et al. 2007. (SI, page 4).
 
-        Returns:
-            (float): Ms.
+        Returns: float
         """
         Ms = 0
 
@@ -764,24 +966,24 @@ class Tree(Agent):
     def stochastic_Cm(self):
         """Stochastic crownding mortality.
 
-        Returns:
-            (bool): True if tree dies from crowding.
+        Returns: bool
+            True if tree dies from crowding.
         """
         return np.random.random() <= min(self.Mc, 1.0)
 
     def stochastic_Bm(self):
         """Stochastic Background mortality.
 
-        Returns:
-            (bool): True if tree dies from background mortality.
+        Returns: bool
+            True if tree dies from background mortality.
         """
         return np.random.random() <= min(self.Mb, 1.0)
 
     def stochastic_Dm(self):
         """Stochastic damage mortality.
 
-        Returns:
-            (bool): True if tree dies from damage.
+        Returns: bool
+            True if tree dies from damage.
         """
         return np.random.random() <= min(self.Md, 1.0)
 
