@@ -12,24 +12,36 @@ class Tree_Grid(Rectangular_Grid):
 
 
     Args:
-        x_max (int): number of horizontal cells
-        y_max (int): number of vertical cells
-        patch_area (float): are of each patch (cells) in squared meters
-        I0 (float): Incoming irradiance on top of canopy [umol photon / m^2s]
-        k (float): Light extinction coefficient.
-        delta_h (float): height of each vertical layer.
-        phi_act (float):photosynthetic active period.
-        lday (int):mean day length during the vegetation period phi_act.
-        ndim (int): number of dimensions. One per environmental variable.
-        dim_names (list): a list of 'ndim' strings representing the names of dimensions.
+        x_max : int
+            Number of horizontal cells
+        y_max : int
+            Number of vertical cells
+        patch_area : float
+            Area of each patch (cell) in squared meters
+        I0 : float
+            Incoming irradiance on top of canopy [umol photon / m^2s]
+        k : float
+            Light extinction coefficient.
+        delta_h :float
+            Height of each vertical layer.
+        phi_act : float
+            Photosynthetic active period.
+        lday : int
+            Mean day length during the vegetation period phi_act.
+        ndim : int
+            Number of dimensions. One per environmental variable.
+        dim_names : list
+            A list of 'ndim' strings representing the names of dimensions.
 
     Attributes:
-        LAIs (dict): dictionary with patches as keys and a list of averaged Leaf Area Indexes (one for each vertical layer) as values.
-        CCAs (dict):dictionary with patches as keys a a list of Cummulative Crown Areas (one for each vertical layer) as values.
-        trees_per_patch (list): dictionary with patches ('(x,y)') as keys and a list of tree ids as values
-        total_area(float): area of all simulated patches in ha
-
-
+        LAIs : dict
+            Dictionary with patches as keys and a list of averaged Leaf Area Indices (one for each vertical layer) as values.
+        CCAs : dict
+            Dictionary with patches as keys a a list of Cummulative Crown Areas (one for each vertical layer) as values.
+        trees_per_patch : list
+            Dictionary with patches ('(x,y)') as keys and a list of tree ids as values
+        total_area :float
+            Area of all simulated patches in ha
     """
 
     def __init__(self, x_max, y_max, patch_area, I0, k, delta_h, phi_act, lday, ndim=5, dim_names=["GroundLight", "LianaCoverage", "Temperature", "WindSpeed", "Humidity"]):
@@ -51,6 +63,11 @@ class Tree_Grid(Rectangular_Grid):
         self.seedbank = {k: [] for k in self.FTs}
 
     def exeeding_CCA(self):
+        """ Finds which patches have the cummulative crown area bigger than the patch area in at least one layer.
+
+            Returns: list
+                Alist of patchs ([(x,y),(x,y),...,(x,y)])
+        """
         patches = [patch for patch, layers in self.CCAs.items() if any(
             layer > self.patch_area for layer in layers)]
 
@@ -79,12 +96,16 @@ class Tree_Grid(Rectangular_Grid):
 
         Args:
 
-            seedbank (dict): dictionary with Functional Type (FT) and list of seed positions as values.
-            lmin (float): minimum light intensity at ground level for seed to germinate.
-            h0 (float): allometric paramenter used to calculate initial height
-            h1 (float): allometric paramenter used to calculate initial height
+            seedbank : dict
+                Dictionary with Functional Type (FT) and list of seed positions as values.
+            lmin : float
+                Minimum light intensity at ground level for seed to germinate.
+            h0 : float
+                Allometric paramenter used to calculate initial height.
+            h1 : float
+                Allometric paramenter used to calculate initial height.
 
-        Returns:
+        Returns: dict
             est_seeds: a dictionary with patches as keys ('(x,y)') and number of established seeds as values.
         """
         est_seeds = {}
@@ -117,11 +138,13 @@ class Tree_Grid(Rectangular_Grid):
             Note: Ligth intensity is homogeneized at the patch level.
 
         Args:
-            min_light (float): minimum light intensity at ground for seeds to germinate.
-            patch (tuple): (x,y), patch  that will have the light conditions assessed.
+            min_light : float
+                Minimum light intensity at ground for seeds to germinate.
+            patch : tuple
+                (x,y), patch  that will have the light conditions assessed.
 
-        Returns:
-            Bool. True if light level is above minimum.
+        Returns: bool.
+            True if light level is above minimum.
         """
         return self.surface[self.dim_names["GroundLight"]][patch] > min_light
 
@@ -131,12 +154,15 @@ class Tree_Grid(Rectangular_Grid):
             Note: Cummulative Crown Area is homogeneized at the patch level
 
         Args:
-            h0 (float): allometric paramenter used to calculate initial height
-            h1 (float): allometric paramenter used to calculate initial height
-            patch (tuple): (x,y), patch  that will have the light conditions assessed.
+            h0 : float
+                Allometric paramenter used to calculate initial height
+            h1 : float
+                Allometric paramenter used to calculate initial height
+            patch : tuple
+                (x,y), patch  that will have the light conditions assessed.
 
-        Returns:
-            Bool. True if there is enough space.
+        Returns: bool.
+            True if there is enough space.
         """
         Hmin = h0 * 2**h1
         l = int(np.floor(Hmin / self.delta_h))
@@ -165,10 +191,11 @@ class Tree_Grid(Rectangular_Grid):
 
 
         Args:
-            trees_per_patch (dict): dictionary in which keys are patch coordinates (x,y) and values are  a list of the tree ids in that patch.
+            trees_per_patch :dict
+                Dictionary in which keys are patch coordinates (x,y) and values are a list of the tree ids in that patch.
 
-        Returns:
-            L_per_layer(dict): dictionary in which the keys are patch coordinates('(x,y)')-the same as the ones in trees_per_patch- and values are a list of the LAI per vertical layer
+        Returns: dict
+            L_per_layer: dictionary in which the keys are patch coordinates('(x,y)')-the same as the ones in trees_per_patch- and values are a list of the LAI per vertical layer
         """
 
         L_per_layer = {}
@@ -193,10 +220,11 @@ class Tree_Grid(Rectangular_Grid):
         """Calculate the Leaf Area Index for each patch in the grid.
 
         Args:
-            trees_per_patch (dict): dictionary in which keys are patches ('(x,y)')' and values are lists of the trees ids in that patch.
+            trees_per_patch : dict
+            Dictionary in which keys are patches ('(x,y)')' and values are lists of the trees ids in that patch.
 
-        Returns:
-            L_per_layer(dict): dictionary in which the keys are the same as the ones in trees_per_patch and values are a list of the CCA per vertical layer
+        Returns: dict
+            L_per_layer: dictionary in which the keys are the same as the ones in trees_per_patch and values are a list of the CCA per vertical layer
 
             """
         L_per_layer = {}
@@ -218,10 +246,11 @@ class Tree_Grid(Rectangular_Grid):
         """ Make a list of tree ids and their respective positions.
 
         Args:
-            patch (list): a list of tuples representing the patch coordinates '(x,y)'.
+            patch : list
+                A list of tuples representing the patch coordinates '(x,y)'.
 
-        Returns:
-            id_pos (list):a list tuples with tree ids and positions '(id,(x_pos,y_pos))'
+        Returns: list
+            id_pos: a list tuples with tree ids and positions '(id,(x_pos,y_pos))'
 
         """
 
@@ -237,7 +266,13 @@ class Tree_Grid(Rectangular_Grid):
         """
         Return a dictionary in which keys are a age group and values are lists containing the id of the respective trees.
 
-        list_of_trees is a list with the id of trees.
+            Args:
+                list_of_trees: list
+                    A list with the id of trees.
+
+            Returns: dict
+                A dictionary age as keys and a list of tree ids as values.
+
         """
 
         age_groups = {}
@@ -253,10 +288,11 @@ class Tree_Grid(Rectangular_Grid):
         """Organize trees by functional type.
 
         Args:
-            list_of_trees (list): a list of tree ids.
+            list_of_trees :list
+                A list of tree ids.
 
-        Returns:
-            type_groups(dict): a dictionary in which keys are a Functional
+        Returns: dict
+            type_groups: a dictionary in which keys are a Functional
             Types and values are lists containing the id of the respective trees.
         """
 
@@ -277,14 +313,13 @@ class Tree_Grid(Rectangular_Grid):
             organize a dictionary of dictionaries containing the indices of
             trees in each age group within each type
 
-
-
         Args:
-            Patches (list): a list of tuples representing patch coordinatas
+            Patches :list
+                A list of tuples representing patch coordinatas
             [(x1,y1),(x2,y2)...]
 
-        Returns:
-            cohorsts(dict): a dictionary with trees organized by type and age:
+        Returns: dict
+            cohorsts: a dictionary with trees organized by type and age:
              {FunctionalType1:{AgeGroup1:[tree1,tree2,tree3...]}}
         """
 
@@ -298,7 +333,7 @@ class Tree_Grid(Rectangular_Grid):
         return cohorts
 
     def calculate_liana_coverage(self):
-        """ Calculate the coverage(%) os lianas in on patch based on the previous coverage, temperature, humidity and wind speed
+        """ Calculate the coverage (%) os lianas in on patch based on the previous coverage, temperature, humidity and wind speed
 
         Returns:
                 None
