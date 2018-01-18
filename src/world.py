@@ -1,3 +1,5 @@
+
+
 from py_ibm import *
 # from plot_trees import plot_tree_pos
 from trees_ibm.tree_agent import Tree
@@ -86,6 +88,11 @@ class Tree_World(World):
         #                 "FT6":Tree_FT6}
 
     def initial_update(self):
+        """ Updates the topology and tree attributes.
+            To be executed after the first trees are created.
+
+            Returns:  None
+        """
         self.topology.update()
         Tree.UpdateTrees()
 
@@ -258,6 +265,43 @@ class Tree_World(World):
                    id=ids[i], age=ages[i], **kwargs)
 
     def NEE_data_to_db(self, nee):
+        """ Writes the net ecosystem exchange data to the database.
+
+            Adds one row corresponding to the current time step to the NEE table at /sim_#/trees/sys_lvl/NEE.
+
+            The following collumns are filled:
+
+                dead_wood:
+                    Amount of carbom emissions resulting from dead_wood decomposition.
+
+                soil_slow:
+                    Amount of carbom emissions resulting from slow decompositions soil.
+
+                soil_fast:
+                    Amount of carbom emissions resulting from fast decompositions soil.
+
+                gpp:
+                    Gross primary production. Amount of carbon absorbed by all trees.
+
+                living_trees:
+                    Amount of carbom emissions resulting from the respiration of living trees.
+
+                smort:
+                    Amount of carbon contained in the trees that died during the past time step.
+
+                t_deadwood_sslow:
+                    Amount of carbom tranferred from dead wood to the slow decomposition soil stock.
+
+                t_sslow_sfast:
+                    Amount of carbom tranferred from dead wood to the fast decomposition soil stock.
+
+            Args:
+                nee : float
+                    The resulting net ecosystem exchange for the current time step.
+
+            Returns: None
+
+        """
 
         # NEE_table=self.db.root.sim_1.sys_lvl.NEE
         NEE_table = self.db.get_node(
@@ -282,6 +326,29 @@ class Tree_World(World):
         NEE_table.flush()
 
     def stocks_data_to_db(self):
+        """ Writes the stock data to the database.
+
+            Adds one row corresponding to the current time step to the NEE table at /sim_#/trees/sys_lvl/Stocks.
+
+            The following collumns are filled:
+
+
+                agb:
+                    Above ground biomass (the biomass of all trees alive durint the past time step.)
+
+                dead_wood:
+                    Amount of carbom stored in the dead wood.
+
+                soil_slow:
+                    Amount of carbom stored in the slow-decomposition soil.
+
+                soil_fast:
+                    Amount of carbom stored in the fast-decomposition soil.
+
+
+            Returns: None
+
+        """
         # Stocks_table=self.db.root.sim_1.sys_lvl.Stocks
         Stocks_table = self.db.get_node(
             "/sim_{0}/trees/sys_lvl/Stocks".format(self.sim_number))
@@ -296,6 +363,13 @@ class Tree_World(World):
         Stocks_table.flush()
 
     def pop_data_to_db(self):
+        """ Writes the population data for each Plant Functional Type to the database .
+
+            Adds one row corresponding to the current time step to the NEE table at /sim_#/trees/sys_lvl/Pop. Each column corresponds to one PFT.
+
+            Returns: None
+
+        """
         # Pop_table=self.db.root.sim_1.sys_lvl.Pop
         Pop_table = self.db.get_node(
             "/sim_{0}/trees/sys_lvl/Pop".format(self.sim_number))
@@ -308,6 +382,45 @@ class Tree_World(World):
         Pop_table.flush()
 
     def ind_data_to_db(self, step):
+        """ Writes the individual level tree data to the database.
+
+            Adds one row for each tree that was alive during the last time step to the NEE table at /sim_#/trees/ind_lvl/Ind.
+
+            The following collumns are filled:
+
+                step:
+                    Time step.
+
+                ind_id:
+                    Numerical identification.
+
+                pos_x:
+                     The x coordinate.
+
+                pos_y:
+                    The y coordinate.
+
+                age:
+                    Age
+
+                dbh:
+                    Stem dimater at Breast Height.
+
+                agb:
+                    Aboveground biomass.
+
+                height:
+                    Height.
+
+                crown_area:
+                    Crown area.
+                FT:
+                    Plant Functional Type name
+
+
+            Returns: None
+
+        """
         # Ind_table=self.db.root.sim_1.ind_lvl.Ind
         Ind_table = self.db.get_node(
             "/sim_{0}/trees/ind_lvl/Ind".format(self.sim_number))
@@ -334,6 +447,24 @@ class Tree_World(World):
         Ind_table.flush()
 
     def create_HDF_database(self, database_name):
+        """ Create an HDF database to store simulation data.
+
+            Structure:
+
+                * root/sim_# : group created using self.simulation number.
+                * root/sim_x/sys_lvl: group that holds system level tables.
+                    * root/sim_x/sys_lvl/NEE: table that holds net ecosystem exchange data.
+                    * root/sim_x/sys_lvl/Stocks: table that holds carbon stocks data.
+                    * root/sim_x/sys_lvl/Pop: table that holds population data.
+                * root/sim_x/ind_lvl: group that holds system individual level tables.
+                    * root/sim_x/ind_lvl/Ind: table that holds individual trees data.
+            Args:
+                database_name: str
+                    File name (including '.h5' extension) for the database.
+
+            Returns: None
+
+        """
 
         class NEE(IsDescription):
             dead_wood = Float32Col()
@@ -398,14 +529,46 @@ class Tree_World(World):
         h5file.close()
 
     def seedbank_from_file(self, input_file):
+        """ Loads seedbank from json file into the topology's seedbank attribute..
+
+            Args:
+                input_file: str
+                    .json file cataining seedbank data. Usually generated by the seedbank_to_file method.
+
+            Returns: None
+        """
+
         with open(input_file, 'r') as json_file:
             self.topology.seedbank = json.load(json_file)
 
     def seedbank_to_file(self, output_file):
+        """ Writes seedbank to .json file.
+
+            If the output file already exists it will be overwritten.
+            The format is {patch number:{Functional type : number of seeds}}
+
+            Args:
+                output_file: str
+                    .json file data will contain the data.
+
+            Returns: None
+        """
         with open(output_file, 'w') as json_file:
             json.dump(self.topology.seedbank, json_file)
 
     def model_status_from_file(self, input_file):
+        """Recreates a model landscape at a saved stage.
+
+
+
+            Args:
+                input_file: str
+                    .json file cataining model data. Usually generated by the model_status_to_file method.
+
+            Returns: None
+
+        """
+
         with open(input_file, 'r') as json_file:
             trees = json.load(json_file)
 
@@ -430,6 +593,17 @@ class Tree_World(World):
         Tree.ID = max(Tree.Instances.keys()) + 1
 
     def model_status_to_file(self, output_file):
+        """ Writes seedbank to .json file.
+
+            If the output file already exists it will be overwritten.
+            The format is {Functional type : {tree id, tree position, tree diameter, tree age}}
+
+            Args:
+                output_file: str
+                    .json file data will contain the data.
+
+            Returns: None
+        """
         trees_per_type = {k: [] for k in Tree.DERIVED_TREES.keys()}
         for t_id, t in Tree.Instances.items():
             trees_per_type[t.Ftype].append(
@@ -539,6 +713,15 @@ class Tree_World(World):
         return pos
 
     def external_seed_rain(self):
+        """Creates a seedbank by randomly distibuting seeds across the whole landscape.
+
+          Creates 'Nseed' seeds for each Functional Type.
+
+          Returns: dict
+             Seedbank as a dictionary with keys as Functional Types and values as a list of seed positions (as in [(x,y),(x,y),...,(x,y)])
+
+        """
+
         external_seedbank = {}
         for ft in Tree.DERIVED_TREES.values():
             seedbank_ft = self.define_seedbank(
@@ -548,12 +731,33 @@ class Tree_World(World):
         return external_seedbank
 
     def germinate_suitable_seeds(self, seedbank):
+        """ Creates new trees from seedbank.
+
+            Args:
+                seedbank: dict
+                    dictionary with keys as Functional Types and values as a list of seed positions (as in [(x,y),(x,y),...,(x,y)])
+
+            Returns: None
+        """
+
         for ft in Tree.DERIVED_TREES.keys():
             pos = self.topology.seedbank[ft]
             self.create_agents(Tree.DERIVED_TREES[ft], len(
                 pos), pos=pos, world=self, dbh=2)
 
     def incorporate_new_seedbank(self, new_seedbank, clear=True):
+        """ Adds new seedbank data to the topology's seedbank.
+
+            Args:
+                new_seedbank: dict
+                    dictionary with keys as Functional Types and values as a list of seed positions (as in [(x,y),(x,y),...,(x,y)])
+                clear: bool
+                    True if the current seedbank is to be cleared before the addition. False if the new_seedbank is to be appended to the current one.
+
+            Returns: None.
+
+        """
+
         if clear is True:
             self.clear_seedbank()
 
@@ -561,6 +765,8 @@ class Tree_World(World):
             self.topology.seedbank[ft] += new_seedbank[ft]
 
     def clear_seedbank(self):
+        """ Destroys all the seeds currently in the seedbank """
+
         self.topology.seedbank = {k: [] for k in self.topology.seedbank.keys()}
 
     def stablish_new_trees(self, clear=True):
