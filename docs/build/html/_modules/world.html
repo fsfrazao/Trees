@@ -161,7 +161,9 @@
            <div itemprop="articleBody">
             
   <h1>Source code for world</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">py_ibm</span> <span class="k">import</span> <span class="o">*</span>
+<span></span>
+
+<span class="kn">from</span> <span class="nn">py_ibm</span> <span class="k">import</span> <span class="o">*</span>
 <span class="c1"># from plot_trees import plot_tree_pos</span>
 <span class="kn">from</span> <span class="nn">trees_ibm.tree_agent</span> <span class="k">import</span> <span class="n">Tree</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
@@ -248,9 +250,14 @@
         <span class="c1">#                 &quot;FT5&quot;:Tree_FT5,</span>
         <span class="c1">#                 &quot;FT6&quot;:Tree_FT6}</span>
 
-    <span class="k">def</span> <span class="nf">initial_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Tree_World.initial_update"><a class="viewcode-back" href="../world.html#world.Tree_World.initial_update">[docs]</a>    <span class="k">def</span> <span class="nf">initial_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Updates the topology and tree attributes.</span>
+<span class="sd">            To be executed after the first trees are created.</span>
+
+<span class="sd">            Returns:  None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-        <span class="n">Tree</span><span class="o">.</span><span class="n">UpdateTrees</span><span class="p">()</span>
+        <span class="n">Tree</span><span class="o">.</span><span class="n">UpdateTrees</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Tree_World.run_simulation"><a class="viewcode-back" href="../world.html#world.Tree_World.run_simulation">[docs]</a>    <span class="k">def</span> <span class="nf">run_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">logging_settings</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dispersal_settings</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="s1">&#39;external&#39;</span><span class="p">,</span> <span class="s1">&#39;clear&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span> <span class="n">produce_fruits</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">increment_time</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">h5file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run the code in &#39;run_schedule&#39; &#39;n&#39; times.</span>
@@ -420,7 +427,44 @@
                 <span class="n">FT</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dbh</span><span class="o">=</span><span class="n">DBHs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
                    <span class="nb">id</span><span class="o">=</span><span class="n">ids</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">age</span><span class="o">=</span><span class="n">ages</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">NEE_data_to_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nee</span><span class="p">):</span>
+<div class="viewcode-block" id="Tree_World.NEE_data_to_db"><a class="viewcode-back" href="../world.html#world.Tree_World.NEE_data_to_db">[docs]</a>    <span class="k">def</span> <span class="nf">NEE_data_to_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nee</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Writes the net ecosystem exchange data to the database.</span>
+
+<span class="sd">            Adds one row corresponding to the current time step to the NEE table at /sim_#/trees/sys_lvl/NEE.</span>
+
+<span class="sd">            The following collumns are filled:</span>
+
+<span class="sd">                dead_wood:</span>
+<span class="sd">                    Amount of carbom emissions resulting from dead_wood decomposition.</span>
+
+<span class="sd">                soil_slow:</span>
+<span class="sd">                    Amount of carbom emissions resulting from slow decompositions soil.</span>
+
+<span class="sd">                soil_fast:</span>
+<span class="sd">                    Amount of carbom emissions resulting from fast decompositions soil.</span>
+
+<span class="sd">                gpp:</span>
+<span class="sd">                    Gross primary production. Amount of carbon absorbed by all trees.</span>
+
+<span class="sd">                living_trees:</span>
+<span class="sd">                    Amount of carbom emissions resulting from the respiration of living trees.</span>
+
+<span class="sd">                smort:</span>
+<span class="sd">                    Amount of carbon contained in the trees that died during the past time step.</span>
+
+<span class="sd">                t_deadwood_sslow:</span>
+<span class="sd">                    Amount of carbom tranferred from dead wood to the slow decomposition soil stock.</span>
+
+<span class="sd">                t_sslow_sfast:</span>
+<span class="sd">                    Amount of carbom tranferred from dead wood to the fast decomposition soil stock.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                nee : float</span>
+<span class="sd">                    The resulting net ecosystem exchange for the current time step.</span>
+
+<span class="sd">            Returns: None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># NEE_table=self.db.root.sim_1.sys_lvl.NEE</span>
         <span class="n">NEE_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span>
@@ -442,9 +486,32 @@
 
         <span class="n">nee_r</span><span class="p">[</span><span class="s1">&#39;nee&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nee</span>
         <span class="n">nee_r</span><span class="o">.</span><span class="n">append</span><span class="p">()</span>
-        <span class="n">NEE_table</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="n">NEE_table</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">stocks_data_to_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Tree_World.stocks_data_to_db"><a class="viewcode-back" href="../world.html#world.Tree_World.stocks_data_to_db">[docs]</a>    <span class="k">def</span> <span class="nf">stocks_data_to_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Writes the stock data to the database.</span>
+
+<span class="sd">            Adds one row corresponding to the current time step to the NEE table at /sim_#/trees/sys_lvl/Stocks.</span>
+
+<span class="sd">            The following collumns are filled:</span>
+
+
+<span class="sd">                agb:</span>
+<span class="sd">                    Above ground biomass (the biomass of all trees alive durint the past time step.)</span>
+
+<span class="sd">                dead_wood:</span>
+<span class="sd">                    Amount of carbom stored in the dead wood.</span>
+
+<span class="sd">                soil_slow:</span>
+<span class="sd">                    Amount of carbom stored in the slow-decomposition soil.</span>
+
+<span class="sd">                soil_fast:</span>
+<span class="sd">                    Amount of carbom stored in the fast-decomposition soil.</span>
+
+
+<span class="sd">            Returns: None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Stocks_table=self.db.root.sim_1.sys_lvl.Stocks</span>
         <span class="n">Stocks_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span>
             <span class="s2">&quot;/sim_</span><span class="si">{0}</span><span class="s2">/trees/sys_lvl/Stocks&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_number</span><span class="p">))</span>
@@ -456,9 +523,16 @@
         <span class="n">stocks_r</span><span class="p">[</span><span class="s1">&#39;soil_fast&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sfast</span><span class="p">[</span><span class="s2">&quot;current&quot;</span><span class="p">]</span>
         <span class="n">stocks_r</span><span class="o">.</span><span class="n">append</span><span class="p">()</span>
 
-        <span class="n">Stocks_table</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="n">Stocks_table</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">pop_data_to_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Tree_World.pop_data_to_db"><a class="viewcode-back" href="../world.html#world.Tree_World.pop_data_to_db">[docs]</a>    <span class="k">def</span> <span class="nf">pop_data_to_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Writes the population data for each Plant Functional Type to the database .</span>
+
+<span class="sd">            Adds one row corresponding to the current time step to the NEE table at /sim_#/trees/sys_lvl/Pop. Each column corresponds to one PFT.</span>
+
+<span class="sd">            Returns: None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Pop_table=self.db.root.sim_1.sys_lvl.Pop</span>
         <span class="n">Pop_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span>
             <span class="s2">&quot;/sim_</span><span class="si">{0}</span><span class="s2">/trees/sys_lvl/Pop&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_number</span><span class="p">))</span>
@@ -468,9 +542,48 @@
             <span class="n">pop_r</span><span class="p">[</span><span class="n">ft</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="p">[</span><span class="n">ft</span><span class="p">]</span><span class="o">.</span><span class="n">Indices</span><span class="p">)</span>
         <span class="n">pop_r</span><span class="o">.</span><span class="n">append</span><span class="p">()</span>
 
-        <span class="n">Pop_table</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="n">Pop_table</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">ind_data_to_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+<div class="viewcode-block" id="Tree_World.ind_data_to_db"><a class="viewcode-back" href="../world.html#world.Tree_World.ind_data_to_db">[docs]</a>    <span class="k">def</span> <span class="nf">ind_data_to_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Writes the individual level tree data to the database.</span>
+
+<span class="sd">            Adds one row for each tree that was alive during the last time step to the NEE table at /sim_#/trees/ind_lvl/Ind.</span>
+
+<span class="sd">            The following collumns are filled:</span>
+
+<span class="sd">                step:</span>
+<span class="sd">                    Time step.</span>
+
+<span class="sd">                ind_id:</span>
+<span class="sd">                    Numerical identification.</span>
+
+<span class="sd">                pos_x:</span>
+<span class="sd">                     The x coordinate.</span>
+
+<span class="sd">                pos_y:</span>
+<span class="sd">                    The y coordinate.</span>
+
+<span class="sd">                age:</span>
+<span class="sd">                    Age</span>
+
+<span class="sd">                dbh:</span>
+<span class="sd">                    Stem dimater at Breast Height.</span>
+
+<span class="sd">                agb:</span>
+<span class="sd">                    Aboveground biomass.</span>
+
+<span class="sd">                height:</span>
+<span class="sd">                    Height.</span>
+
+<span class="sd">                crown_area:</span>
+<span class="sd">                    Crown area.</span>
+<span class="sd">                FT:</span>
+<span class="sd">                    Plant Functional Type name</span>
+
+
+<span class="sd">            Returns: None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Ind_table=self.db.root.sim_1.ind_lvl.Ind</span>
         <span class="n">Ind_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span>
             <span class="s2">&quot;/sim_</span><span class="si">{0}</span><span class="s2">/trees/ind_lvl/Ind&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_number</span><span class="p">))</span>
@@ -494,9 +607,27 @@
             <span class="n">ind_r</span><span class="p">[</span><span class="s2">&quot;FT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">Ftype</span>
             <span class="n">ind_r</span><span class="o">.</span><span class="n">append</span><span class="p">()</span>
 
-        <span class="n">Ind_table</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="n">Ind_table</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">create_HDF_database</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_name</span><span class="p">):</span>
+<div class="viewcode-block" id="Tree_World.create_HDF_database"><a class="viewcode-back" href="../world.html#world.Tree_World.create_HDF_database">[docs]</a>    <span class="k">def</span> <span class="nf">create_HDF_database</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create an HDF database to store simulation data.</span>
+
+<span class="sd">            Structure:</span>
+
+<span class="sd">                * root/sim_# : group created using self.simulation number.</span>
+<span class="sd">                * root/sim_x/sys_lvl: group that holds system level tables.</span>
+<span class="sd">                    * root/sim_x/sys_lvl/NEE: table that holds net ecosystem exchange data.</span>
+<span class="sd">                    * root/sim_x/sys_lvl/Stocks: table that holds carbon stocks data.</span>
+<span class="sd">                    * root/sim_x/sys_lvl/Pop: table that holds population data.</span>
+<span class="sd">                * root/sim_x/ind_lvl: group that holds system individual level tables.</span>
+<span class="sd">                    * root/sim_x/ind_lvl/Ind: table that holds individual trees data.</span>
+<span class="sd">            Args:</span>
+<span class="sd">                database_name: str</span>
+<span class="sd">                    File name (including &#39;.h5&#39; extension) for the database.</span>
+
+<span class="sd">            Returns: None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">class</span> <span class="nc">NEE</span><span class="p">(</span><span class="n">IsDescription</span><span class="p">):</span>
             <span class="n">dead_wood</span> <span class="o">=</span> <span class="n">Float32Col</span><span class="p">()</span>
@@ -558,17 +689,49 @@
         <span class="n">Ind_table</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span>
             <span class="n">ind_lvl</span><span class="p">,</span> <span class="s2">&quot;Ind&quot;</span><span class="p">,</span> <span class="n">Individuals</span><span class="p">,</span> <span class="s2">&quot;Individual Level Data&quot;</span><span class="p">)</span>
 
-        <span class="n">h5file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">h5file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">seedbank_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_file</span><span class="p">):</span>
+<div class="viewcode-block" id="Tree_World.seedbank_from_file"><a class="viewcode-back" href="../world.html#world.Tree_World.seedbank_from_file">[docs]</a>    <span class="k">def</span> <span class="nf">seedbank_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Loads seedbank from json file into the topology&#39;s seedbank attribute..</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                input_file: str</span>
+<span class="sd">                    .json file cataining seedbank data. Usually generated by the seedbank_to_file method.</span>
+
+<span class="sd">            Returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">seedbank_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
+<div class="viewcode-block" id="Tree_World.seedbank_to_file"><a class="viewcode-back" href="../world.html#world.Tree_World.seedbank_to_file">[docs]</a>    <span class="k">def</span> <span class="nf">seedbank_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Writes seedbank to .json file.</span>
+
+<span class="sd">            If the output file already exists it will be overwritten.</span>
+<span class="sd">            The format is {patch number:{Functional type : number of seeds}}</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                output_file: str</span>
+<span class="sd">                    .json file data will contain the data.</span>
+
+<span class="sd">            Returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span><span class="p">,</span> <span class="n">json_file</span><span class="p">)</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span><span class="p">,</span> <span class="n">json_file</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">model_status_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_file</span><span class="p">):</span>
+<div class="viewcode-block" id="Tree_World.model_status_from_file"><a class="viewcode-back" href="../world.html#world.Tree_World.model_status_from_file">[docs]</a>    <span class="k">def</span> <span class="nf">model_status_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Recreates a model landscape at a saved stage.</span>
+
+
+
+<span class="sd">            Args:</span>
+<span class="sd">                input_file: str</span>
+<span class="sd">                    .json file cataining model data. Usually generated by the model_status_to_file method.</span>
+
+<span class="sd">            Returns: None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
             <span class="n">trees</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
 
@@ -590,9 +753,20 @@
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">t</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
             <span class="n">t</span><span class="o">.</span><span class="n">AGB</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">AGB_from_DBH</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">DBH</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
-        <span class="n">Tree</span><span class="o">.</span><span class="n">ID</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">Tree</span><span class="o">.</span><span class="n">ID</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span></div>
 
-    <span class="k">def</span> <span class="nf">model_status_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
+<div class="viewcode-block" id="Tree_World.model_status_to_file"><a class="viewcode-back" href="../world.html#world.Tree_World.model_status_to_file">[docs]</a>    <span class="k">def</span> <span class="nf">model_status_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Writes seedbank to .json file.</span>
+
+<span class="sd">            If the output file already exists it will be overwritten.</span>
+<span class="sd">            The format is {Functional type : {tree id, tree position, tree diameter, tree age}}</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                output_file: str</span>
+<span class="sd">                    .json file data will contain the data.</span>
+
+<span class="sd">            Returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">trees_per_type</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
         <span class="k">for</span> <span class="n">t_id</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">trees_per_type</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">Ftype</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -600,7 +774,7 @@
                  <span class="s2">&quot;DBH&quot;</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">DBH</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">age</span><span class="p">})</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">trees_per_type</span><span class="p">,</span> <span class="n">json_file</span><span class="p">)</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">trees_per_type</span><span class="p">,</span> <span class="n">json_file</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Tree_World.suitable_trees"><a class="viewcode-back" href="../world.html#world.Tree_World.suitable_trees">[docs]</a>    <span class="k">def</span> <span class="nf">suitable_trees</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patches</span><span class="p">,</span> <span class="n">min_dbh</span><span class="p">,</span> <span class="n">max_dbh</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Search for suitable trees for logging in the given patches.</span>
@@ -701,30 +875,62 @@
                 <span class="n">pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">in_bounds</span><span class="p">(</span><span class="n">seed_pos</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">pos</span></div>
 
-    <span class="k">def</span> <span class="nf">external_seed_rain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Tree_World.external_seed_rain"><a class="viewcode-back" href="../world.html#world.Tree_World.external_seed_rain">[docs]</a>    <span class="k">def</span> <span class="nf">external_seed_rain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a seedbank by randomly distibuting seeds across the whole landscape.</span>
+
+<span class="sd">          Creates &#39;Nseed&#39; seeds for each Functional Type.</span>
+
+<span class="sd">          Returns: dict</span>
+<span class="sd">             Seedbank as a dictionary with keys as Functional Types and values as a list of seed positions (as in [(x,y),(x,y),...,(x,y)])</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">external_seedbank</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">ft</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">seedbank_ft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">define_seedbank</span><span class="p">(</span>
                 <span class="n">Nseed</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">ft</span><span class="o">.</span><span class="n">Nseed</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">total_area</span><span class="p">))</span>
             <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seeds_pos</span><span class="p">(</span><span class="n">seedbank_ft</span><span class="p">)</span>
             <span class="n">external_seedbank</span><span class="p">[</span><span class="n">ft</span><span class="o">.</span><span class="n">Ftype</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span>
-        <span class="k">return</span> <span class="n">external_seedbank</span>
+        <span class="k">return</span> <span class="n">external_seedbank</span></div>
 
-    <span class="k">def</span> <span class="nf">germinate_suitable_seeds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seedbank</span><span class="p">):</span>
+<div class="viewcode-block" id="Tree_World.germinate_suitable_seeds"><a class="viewcode-back" href="../world.html#world.Tree_World.germinate_suitable_seeds">[docs]</a>    <span class="k">def</span> <span class="nf">germinate_suitable_seeds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seedbank</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Creates new trees from seedbank.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                seedbank: dict</span>
+<span class="sd">                    dictionary with keys as Functional Types and values as a list of seed positions (as in [(x,y),(x,y),...,(x,y)])</span>
+
+<span class="sd">            Returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">for</span> <span class="n">ft</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span><span class="p">[</span><span class="n">ft</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">create_agents</span><span class="p">(</span><span class="n">Tree</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="p">[</span><span class="n">ft</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span>
-                <span class="n">pos</span><span class="p">),</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">world</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbh</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">pos</span><span class="p">),</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">world</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbh</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">incorporate_new_seedbank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_seedbank</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Tree_World.incorporate_new_seedbank"><a class="viewcode-back" href="../world.html#world.Tree_World.incorporate_new_seedbank">[docs]</a>    <span class="k">def</span> <span class="nf">incorporate_new_seedbank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_seedbank</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Adds new seedbank data to the topology&#39;s seedbank.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                new_seedbank: dict</span>
+<span class="sd">                    dictionary with keys as Functional Types and values as a list of seed positions (as in [(x,y),(x,y),...,(x,y)])</span>
+<span class="sd">                clear: bool</span>
+<span class="sd">                    True if the current seedbank is to be cleared before the addition. False if the new_seedbank is to be appended to the current one.</span>
+
+<span class="sd">            Returns: None.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="n">clear</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">clear_seedbank</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">ft</span> <span class="ow">in</span> <span class="n">new_seedbank</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span><span class="p">[</span><span class="n">ft</span><span class="p">]</span> <span class="o">+=</span> <span class="n">new_seedbank</span><span class="p">[</span><span class="n">ft</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span><span class="p">[</span><span class="n">ft</span><span class="p">]</span> <span class="o">+=</span> <span class="n">new_seedbank</span><span class="p">[</span><span class="n">ft</span><span class="p">]</span></div>
 
-    <span class="k">def</span> <span class="nf">clear_seedbank</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+<div class="viewcode-block" id="Tree_World.clear_seedbank"><a class="viewcode-back" href="../world.html#world.Tree_World.clear_seedbank">[docs]</a>    <span class="k">def</span> <span class="nf">clear_seedbank</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Destroys all the seeds currently in the seedbank &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span></div>
 
 <div class="viewcode-block" id="Tree_World.stablish_new_trees"><a class="viewcode-back" href="../world.html#world.Tree_World.stablish_new_trees">[docs]</a>    <span class="k">def</span> <span class="nf">stablish_new_trees</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create new tree individuals.</span>

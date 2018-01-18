@@ -224,6 +224,43 @@ Assumed to be constant every year.</dd>
 </dd>
 </dl>
 <dl class="method">
+<dt id="world.Tree_World.NEE_data_to_db">
+<code class="descname">NEE_data_to_db</code><span class="sig-paren">(</span><em>nee</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.NEE_data_to_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.NEE_data_to_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the net ecosystem exchange data to the database.</p>
+<p>Adds one row corresponding to the current time step to the NEE table at /sim_#/trees/sys_lvl/NEE.</p>
+<p>The following collumns are filled:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>dead_wood:</dt>
+<dd>Amount of carbom emissions resulting from dead_wood decomposition.</dd>
+<dt>soil_slow:</dt>
+<dd>Amount of carbom emissions resulting from slow decompositions soil.</dd>
+<dt>soil_fast:</dt>
+<dd>Amount of carbom emissions resulting from fast decompositions soil.</dd>
+<dt>gpp:</dt>
+<dd>Gross primary production. Amount of carbon absorbed by all trees.</dd>
+<dt>living_trees:</dt>
+<dd>Amount of carbom emissions resulting from the respiration of living trees.</dd>
+<dt>smort:</dt>
+<dd>Amount of carbon contained in the trees that died during the past time step.</dd>
+<dt>t_deadwood_sslow:</dt>
+<dd>Amount of carbom tranferred from dead wood to the slow decomposition soil stock.</dd>
+<dt>t_sslow_sfast:</dt>
+<dd>Amount of carbom tranferred from dead wood to the fast decomposition soil stock.</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>nee <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>The resulting net ecosystem exchange for the current time step.</dd>
+</dl>
+</dd>
+</dl>
+<p>Returns: None</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="world.Tree_World.calculate_NEE">
 <code class="descname">calculate_NEE</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.calculate_NEE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.calculate_NEE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the Net Ecosystem Exchange (NEE) for the previous timestep.</p>
@@ -258,6 +295,51 @@ stock.</p>
 stock.</p>
 <p>Calculation is based on decomposition rates for the dead wood (tsdead_Sslow) and the rate with which carbon is transferred from this stock to the atmosphere (tsslow_A).</p>
 <p>Returns : None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.clear_seedbank">
+<code class="descname">clear_seedbank</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.clear_seedbank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.clear_seedbank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroys all the seeds currently in the seedbank</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.create_HDF_database">
+<code class="descname">create_HDF_database</code><span class="sig-paren">(</span><em>database_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.create_HDF_database"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.create_HDF_database" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an HDF database to store simulation data.</p>
+<p>Structure:</p>
+<blockquote>
+<div><ul class="simple">
+<li>root/sim_# : group created using self.simulation number.</li>
+<li><dl class="first docutils">
+<dt>root/sim_x/sys_lvl: group that holds system level tables.</dt>
+<dd><ul class="first last">
+<li>root/sim_x/sys_lvl/NEE: table that holds net ecosystem exchange data.</li>
+<li>root/sim_x/sys_lvl/Stocks: table that holds carbon stocks data.</li>
+<li>root/sim_x/sys_lvl/Pop: table that holds population data.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>root/sim_x/ind_lvl: group that holds system individual level tables.</dt>
+<dd><ul class="first last">
+<li>root/sim_x/ind_lvl/Ind: table that holds individual trees data.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>database_name: str</dt>
+<dd>File name (including ‘.h5’ extension) for the database.</dd>
+</dl>
+</dd>
+</dl>
+<p>Returns: None</p>
 </dd></dl>
 
 <dl class="method">
@@ -311,6 +393,90 @@ the number of seeds.</dd>
 </dd></dl>
 
 <dl class="method">
+<dt id="world.Tree_World.external_seed_rain">
+<code class="descname">external_seed_rain</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.external_seed_rain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.external_seed_rain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a seedbank by randomly distibuting seeds across the whole landscape.</p>
+<p>Creates ‘Nseed’ seeds for each Functional Type.</p>
+<dl class="docutils">
+<dt>Returns: dict</dt>
+<dd>Seedbank as a dictionary with keys as Functional Types and values as a list of seed positions (as in [(x,y),(x,y),…,(x,y)])</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.germinate_suitable_seeds">
+<code class="descname">germinate_suitable_seeds</code><span class="sig-paren">(</span><em>seedbank</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.germinate_suitable_seeds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.germinate_suitable_seeds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates new trees from seedbank.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>seedbank: dict</dt>
+<dd>dictionary with keys as Functional Types and values as a list of seed positions (as in [(x,y),(x,y),…,(x,y)])</dd>
+</dl>
+</dd>
+</dl>
+<p>Returns: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.incorporate_new_seedbank">
+<code class="descname">incorporate_new_seedbank</code><span class="sig-paren">(</span><em>new_seedbank</em>, <em>clear=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.incorporate_new_seedbank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.incorporate_new_seedbank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds new seedbank data to the topology’s seedbank.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>new_seedbank: dict</dt>
+<dd>dictionary with keys as Functional Types and values as a list of seed positions (as in [(x,y),(x,y),…,(x,y)])</dd>
+<dt>clear: bool</dt>
+<dd>True if the current seedbank is to be cleared before the addition. False if the new_seedbank is to be appended to the current one.</dd>
+</dl>
+</dd>
+</dl>
+<p>Returns: None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.ind_data_to_db">
+<code class="descname">ind_data_to_db</code><span class="sig-paren">(</span><em>step</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.ind_data_to_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.ind_data_to_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the individual level tree data to the database.</p>
+<p>Adds one row for each tree that was alive during the last time step to the NEE table at /sim_#/trees/ind_lvl/Ind.</p>
+<p>The following collumns are filled:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>step:</dt>
+<dd>Time step.</dd>
+<dt>ind_id:</dt>
+<dd>Numerical identification.</dd>
+<dt>pos_x:</dt>
+<dd>The x coordinate.</dd>
+<dt>pos_y:</dt>
+<dd>The y coordinate.</dd>
+<dt>age:</dt>
+<dd>Age</dd>
+<dt>dbh:</dt>
+<dd>Stem dimater at Breast Height.</dd>
+<dt>agb:</dt>
+<dd>Aboveground biomass.</dd>
+<dt>height:</dt>
+<dd>Height.</dd>
+<dt>crown_area:</dt>
+<dd>Crown area.</dd>
+<dt>FT:</dt>
+<dd>Plant Functional Type name</dd>
+</dl>
+</div></blockquote>
+<p>Returns: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.initial_update">
+<code class="descname">initial_update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.initial_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.initial_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the topology and tree attributes.
+To be executed after the first trees are created.</p>
+<p>Returns:  None</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="world.Tree_World.log_trees">
 <code class="descname">log_trees</code><span class="sig-paren">(</span><em>suitable_trees</em>, <em>total_vol</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.log_trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.log_trees" title="Permalink to this definition">¶</a></dt>
 <dd><p>Randomly log ‘suitable_trees’ until the ‘total_vol’ is reached.</p>
@@ -326,6 +492,46 @@ suitable tree ids as values (resulting from suitable_trees())</dd>
 </dd>
 </dl>
 <p>Returns : None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.model_status_from_file">
+<code class="descname">model_status_from_file</code><span class="sig-paren">(</span><em>input_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.model_status_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.model_status_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recreates a model landscape at a saved stage.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>input_file: str</dt>
+<dd>.json file cataining model data. Usually generated by the model_status_to_file method.</dd>
+</dl>
+</dd>
+</dl>
+<p>Returns: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.model_status_to_file">
+<code class="descname">model_status_to_file</code><span class="sig-paren">(</span><em>output_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.model_status_to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.model_status_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes seedbank to .json file.</p>
+<p>If the output file already exists it will be overwritten.
+The format is {Functional type : {tree id, tree position, tree diameter, tree age}}</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>output_file: str</dt>
+<dd>.json file data will contain the data.</dd>
+</dl>
+</dd>
+</dl>
+<p>Returns: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.pop_data_to_db">
+<code class="descname">pop_data_to_db</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.pop_data_to_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.pop_data_to_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the population data for each Plant Functional Type to the database .</p>
+<p>Adds one row corresponding to the current time step to the NEE table at /sim_#/trees/sys_lvl/Pop. Each column corresponds to one PFT.</p>
+<p>Returns: None</p>
 </dd></dl>
 
 <dl class="method">
@@ -381,6 +587,38 @@ addition to ‘step’.</dd>
 </dd></dl>
 
 <dl class="method">
+<dt id="world.Tree_World.seedbank_from_file">
+<code class="descname">seedbank_from_file</code><span class="sig-paren">(</span><em>input_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.seedbank_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.seedbank_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads seedbank from json file into the topology’s seedbank attribute..</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>input_file: str</dt>
+<dd>.json file cataining seedbank data. Usually generated by the seedbank_to_file method.</dd>
+</dl>
+</dd>
+</dl>
+<p>Returns: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.seedbank_to_file">
+<code class="descname">seedbank_to_file</code><span class="sig-paren">(</span><em>output_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.seedbank_to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.seedbank_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes seedbank to .json file.</p>
+<p>If the output file already exists it will be overwritten.
+The format is {patch number:{Functional type : number of seeds}}</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>output_file: str</dt>
+<dd>.json file data will contain the data.</dd>
+</dl>
+</dd>
+</dl>
+<p>Returns: None</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="world.Tree_World.seeds_pos">
 <code class="descname">seeds_pos</code><span class="sig-paren">(</span><em>est_seeds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.seeds_pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.seeds_pos" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set a random position within the patch for each seed in est_seeds.</p>
@@ -404,6 +642,27 @@ of established seeds as values.</dd>
 Uses ‘define_seedbank()’, ‘topology.seed_establishment’ and ‘seeds_pos’.</p>
 <p>Note: This method can be substitued by an equivalent in order to incorporate more realistic representations of seed dispersal.</p>
 <p>Returns : None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="world.Tree_World.stocks_data_to_db">
+<code class="descname">stocks_data_to_db</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.stocks_data_to_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.stocks_data_to_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the stock data to the database.</p>
+<p>Adds one row corresponding to the current time step to the NEE table at /sim_#/trees/sys_lvl/Stocks.</p>
+<p>The following collumns are filled:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>agb:</dt>
+<dd>Above ground biomass (the biomass of all trees alive durint the past time step.)</dd>
+<dt>dead_wood:</dt>
+<dd>Amount of carbom stored in the dead wood.</dd>
+<dt>soil_slow:</dt>
+<dd>Amount of carbom stored in the slow-decomposition soil.</dd>
+<dt>soil_fast:</dt>
+<dd>Amount of carbom stored in the fast-decomposition soil.</dd>
+</dl>
+</div></blockquote>
+<p>Returns: None</p>
 </dd></dl>
 
 <dl class="method">
