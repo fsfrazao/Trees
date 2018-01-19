@@ -338,8 +338,8 @@ class Tree(Agent):
             Returns: None
         """
         for t in cls.Instances.values():
-            if t.DBH > 10:
-                t.available_fruits = t.Nfruit
+            if t.DBH>10:
+                t.available_fruits=t.fruits_from_DBH()
 
     @classmethod
     def DisperseSeeds(cls):
@@ -656,7 +656,14 @@ class Tree(Agent):
         # self.age+=1
 
     def fruits_from_DBH(self):
-        return self.Nseed
+        """ Calculates the number of new fruits based on stem diameter
+
+            TODO:
+                *Make  'adj' a functional type level parameter (a class attribute)
+
+        """
+        adj=0.01
+        return int(self.Nfruit*self.DBH*adj)
 
     def H_from_DBH(self):
         """Calculate tree height calculated according to eq.1 in SI-Fisher et al.(2015).
