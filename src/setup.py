@@ -12,4 +12,6 @@ setup(name='trees_ibm',
           'numpy',
           'py_ibm',
           ],
+      setup_requires=['pytest-runner',],
+      tests_require=['pytest',],
       zip_safe=False)

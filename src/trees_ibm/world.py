@@ -1,5 +1,3 @@
-
-
 from py_ibm import *
 # from plot_trees import plot_tree_pos
 from trees_ibm.tree_agent import Tree
@@ -539,7 +537,11 @@ class Tree_World(World):
         """
 
         with open(input_file, 'r') as json_file:
-            self.topology.seedbank = json.load(json_file)
+            # seeds come as lists
+            seedbank = json.load(json_file)
+            # turn the lists back to tuples
+            seedbank = {ft: [tuple(seed_pos) for seed_pos in list_of_pos] for ft, list_of_pos in seedbank.items()}
+            self.topology.seedbank = seedbank
 
     def seedbank_to_file(self, output_file):
         """ Writes seedbank to .json file.
@@ -555,6 +557,7 @@ class Tree_World(World):
         """
         with open(output_file, 'w') as json_file:
             json.dump(self.topology.seedbank, json_file)
+            # tuples are turned into lists in .joson
 
     def model_status_from_file(self, input_file):
         """Recreates a model landscape at a saved stage.
@@ -731,7 +734,7 @@ class Tree_World(World):
         return external_seedbank
 
     def germinate_suitable_seeds(self, seedbank):
-        """ Creates new trees from seedbank.
+        """ Creates new trees from seedbank.external_seedbank
 
             Args:
                 seedbank: dict

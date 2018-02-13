@@ -1,0 +1,21 @@
+{
+  "tests/test_tree_agent.py::test_CA_from_CD[0.5-0.0015]": true,
+  "tests/test_tree_agent.py::test_CA_from_CD[19-20-200]": true,
+  "tests/test_tree_agent.py::test_CA_from_CD[2-0.6]": true,
+  "tests/test_tree_agent.py::test_CA_from_CD[2-1.6]": true,
+  "tests/test_tree_agent.py::test_CA_from_CD[20-0.6]": true,
+  "tests/test_tree_agent.py::test_CA_from_CD[20-16.0]": true,
+  "tests/test_tree_agent.py::test_CA_from_CD[5-0.0015]": true,
+  "tests/test_tree_agent.py::test_CA_from_CD[5-2-3.14]": true,
+  "tests/test_tree_agent.py::test_CL_from_H[2-5.002]": true,
+  "tests/test_tree_agent.py::test_CL_from_H[20-19.91]": true,
+  "tests/test_tree_agent.py::test_H_from_DBH[0-19.91]": true,
+  "tests/test_tree_agent.py::test_H_from_DBH[2-0]": true,
+  "tests/test_tree_agent.py::test_H_from_DBH[20-10]": true,
+  "tests/test_tree_agent.py::test_LAI_from_DBH[0.5-1.031]": true,
+  "tests/test_tree_agent.py::test_LAI_from_DBH[2-16.497]": true,
+  "tests/test_tree_agent.py::test_calculate_f[0-0]": true,
+  "tests/test_tree_agent.py::test_calculate_f[0.5-1.031]": true,
+  "tests/test_tree_agent.py::test_calculate_f[2-16.497]": true,
+  "tests/test_tree_agent.py::test_decrement_fruit_stock[0-1-0]": true
+}
