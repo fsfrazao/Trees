@@ -175,24 +175,36 @@
 
 
 <span class="sd">    Args:</span>
-<span class="sd">        x_max (int): number of horizontal cells</span>
-<span class="sd">        y_max (int): number of vertical cells</span>
-<span class="sd">        patch_area (float): are of each patch (cells) in squared meters</span>
-<span class="sd">        I0 (float): Incoming irradiance on top of canopy [umol photon / m^2s]</span>
-<span class="sd">        k (float): Light extinction coefficient.</span>
-<span class="sd">        delta_h (float): height of each vertical layer.</span>
-<span class="sd">        phi_act (float):photosynthetic active period.</span>
-<span class="sd">        lday (int):mean day length during the vegetation period phi_act.</span>
-<span class="sd">        ndim (int): number of dimensions. One per environmental variable.</span>
-<span class="sd">        dim_names (list): a list of &#39;ndim&#39; strings representing the names of dimensions.</span>
+<span class="sd">        x_max : int</span>
+<span class="sd">            Number of horizontal cells</span>
+<span class="sd">        y_max : int</span>
+<span class="sd">            Number of vertical cells</span>
+<span class="sd">        patch_area : float</span>
+<span class="sd">            Area of each patch (cell) in squared meters</span>
+<span class="sd">        I0 : float</span>
+<span class="sd">            Incoming irradiance on top of canopy [umol photon / m^2s]</span>
+<span class="sd">        k : float</span>
+<span class="sd">            Light extinction coefficient.</span>
+<span class="sd">        delta_h :float</span>
+<span class="sd">            Height of each vertical layer.</span>
+<span class="sd">        phi_act : float</span>
+<span class="sd">            Photosynthetic active period.</span>
+<span class="sd">        lday : int</span>
+<span class="sd">            Mean day length during the vegetation period phi_act.</span>
+<span class="sd">        ndim : int</span>
+<span class="sd">            Number of dimensions. One per environmental variable.</span>
+<span class="sd">        dim_names : list</span>
+<span class="sd">            A list of &#39;ndim&#39; strings representing the names of dimensions.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        LAIs (dict): dictionary with patches as keys and a list of averaged Leaf Area Indexes (one for each vertical layer) as values.</span>
-<span class="sd">        CCAs (dict):dictionary with patches as keys a a list of Cummulative Crown Areas (one for each vertical layer) as values.</span>
-<span class="sd">        trees_per_patch (list): dictionary with patches (&#39;(x,y)&#39;) as keys and a list of tree ids as values</span>
-<span class="sd">        total_area(float): area of all simulated patches in ha</span>
-
-
+<span class="sd">        LAIs : dict</span>
+<span class="sd">            Dictionary with patches as keys and a list of averaged Leaf Area Indices (one for each vertical layer) as values.</span>
+<span class="sd">        CCAs : dict</span>
+<span class="sd">            Dictionary with patches as keys a a list of Cummulative Crown Areas (one for each vertical layer) as values.</span>
+<span class="sd">        trees_per_patch : list</span>
+<span class="sd">            Dictionary with patches (&#39;(x,y)&#39;) as keys and a list of tree ids as values</span>
+<span class="sd">        total_area :float</span>
+<span class="sd">            Area of all simulated patches in ha</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="n">patch_area</span><span class="p">,</span> <span class="n">I0</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">delta_h</span><span class="p">,</span> <span class="n">phi_act</span><span class="p">,</span> <span class="n">lday</span><span class="p">,</span> <span class="n">ndim</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">dim_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GroundLight&quot;</span><span class="p">,</span> <span class="s2">&quot;LianaCoverage&quot;</span><span class="p">,</span> <span class="s2">&quot;Temperature&quot;</span><span class="p">,</span> <span class="s2">&quot;WindSpeed&quot;</span><span class="p">,</span> <span class="s2">&quot;Humidity&quot;</span><span class="p">]):</span>
@@ -213,11 +225,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">FTs</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">Tree</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">seedbank</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">FTs</span><span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">exeeding_CCA</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Tree_Grid.exeeding_CCA"><a class="viewcode-back" href="../topology.html#topology.Tree_Grid.exeeding_CCA">[docs]</a>    <span class="k">def</span> <span class="nf">exeeding_CCA</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Finds which patches have the cummulative crown area bigger than the patch area in at least one layer.</span>
+
+<span class="sd">            Returns: list</span>
+<span class="sd">                Alist of patchs ([(x,y),(x,y),...,(x,y)])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">patches</span> <span class="o">=</span> <span class="p">[</span><span class="n">patch</span> <span class="k">for</span> <span class="n">patch</span><span class="p">,</span> <span class="n">layers</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">CCAs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
             <span class="n">layer</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_area</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">)]</span>
 
-        <span class="k">return</span> <span class="n">patches</span>
+        <span class="k">return</span> <span class="n">patches</span></div>
 
 <div class="viewcode-block" id="Tree_Grid.update"><a class="viewcode-back" href="../topology.html#topology.Tree_Grid.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Execute the methods that calculate values for each dimension of the grid.</span>
@@ -242,12 +259,16 @@
 
 <span class="sd">        Args:</span>
 
-<span class="sd">            seedbank (dict): dictionary with Functional Type (FT) and list of seed positions as values.</span>
-<span class="sd">            lmin (float): minimum light intensity at ground level for seed to germinate.</span>
-<span class="sd">            h0 (float): allometric paramenter used to calculate initial height</span>
-<span class="sd">            h1 (float): allometric paramenter used to calculate initial height</span>
+<span class="sd">            seedbank : dict</span>
+<span class="sd">                Dictionary with Functional Type (FT) and list of seed positions as values.</span>
+<span class="sd">            lmin : float</span>
+<span class="sd">                Minimum light intensity at ground level for seed to germinate.</span>
+<span class="sd">            h0 : float</span>
+<span class="sd">                Allometric paramenter used to calculate initial height.</span>
+<span class="sd">            h1 : float</span>
+<span class="sd">                Allometric paramenter used to calculate initial height.</span>
 
-<span class="sd">        Returns:</span>
+<span class="sd">        Returns: dict</span>
 <span class="sd">            est_seeds: a dictionary with patches as keys (&#39;(x,y)&#39;) and number of established seeds as values.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">est_seeds</span> <span class="o">=</span> <span class="p">{}</span>
@@ -280,11 +301,13 @@
 <span class="sd">            Note: Ligth intensity is homogeneized at the patch level.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            min_light (float): minimum light intensity at ground for seeds to germinate.</span>
-<span class="sd">            patch (tuple): (x,y), patch  that will have the light conditions assessed.</span>
+<span class="sd">            min_light : float</span>
+<span class="sd">                Minimum light intensity at ground for seeds to germinate.</span>
+<span class="sd">            patch : tuple</span>
+<span class="sd">                (x,y), patch  that will have the light conditions assessed.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            Bool. True if light level is above minimum.</span>
+<span class="sd">        Returns: bool.</span>
+<span class="sd">            True if light level is above minimum.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_names</span><span class="p">[</span><span class="s2">&quot;GroundLight&quot;</span><span class="p">]][</span><span class="n">patch</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">min_light</span></div>
 
@@ -294,12 +317,15 @@
 <span class="sd">            Note: Cummulative Crown Area is homogeneized at the patch level</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            h0 (float): allometric paramenter used to calculate initial height</span>
-<span class="sd">            h1 (float): allometric paramenter used to calculate initial height</span>
-<span class="sd">            patch (tuple): (x,y), patch  that will have the light conditions assessed.</span>
+<span class="sd">            h0 : float</span>
+<span class="sd">                Allometric paramenter used to calculate initial height</span>
+<span class="sd">            h1 : float</span>
+<span class="sd">                Allometric paramenter used to calculate initial height</span>
+<span class="sd">            patch : tuple</span>
+<span class="sd">                (x,y), patch  that will have the light conditions assessed.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            Bool. True if there is enough space.</span>
+<span class="sd">        Returns: bool.</span>
+<span class="sd">            True if there is enough space.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">Hmin</span> <span class="o">=</span> <span class="n">h0</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="n">h1</span>
         <span class="n">l</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">Hmin</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_h</span><span class="p">))</span>
@@ -328,10 +354,11 @@
 
 
 <span class="sd">        Args:</span>
-<span class="sd">            trees_per_patch (dict): dictionary in which keys are patch coordinates (x,y) and values are  a list of the tree ids in that patch.</span>
+<span class="sd">            trees_per_patch :dict</span>
+<span class="sd">                Dictionary in which keys are patch coordinates (x,y) and values are a list of the tree ids in that patch.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            L_per_layer(dict): dictionary in which the keys are patch coordinates(&#39;(x,y)&#39;)-the same as the ones in trees_per_patch- and values are a list of the LAI per vertical layer</span>
+<span class="sd">        Returns: dict</span>
+<span class="sd">            L_per_layer: dictionary in which the keys are patch coordinates(&#39;(x,y)&#39;)-the same as the ones in trees_per_patch- and values are a list of the LAI per vertical layer</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">L_per_layer</span> <span class="o">=</span> <span class="p">{}</span>
@@ -356,10 +383,11 @@
         <span class="sd">&quot;&quot;&quot;Calculate the Leaf Area Index for each patch in the grid.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            trees_per_patch (dict): dictionary in which keys are patches (&#39;(x,y)&#39;)&#39; and values are lists of the trees ids in that patch.</span>
+<span class="sd">            trees_per_patch : dict</span>
+<span class="sd">            Dictionary in which keys are patches (&#39;(x,y)&#39;)&#39; and values are lists of the trees ids in that patch.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            L_per_layer(dict): dictionary in which the keys are the same as the ones in trees_per_patch and values are a list of the CCA per vertical layer</span>
+<span class="sd">        Returns: dict</span>
+<span class="sd">            L_per_layer: dictionary in which the keys are the same as the ones in trees_per_patch and values are a list of the CCA per vertical layer</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
         <span class="n">L_per_layer</span> <span class="o">=</span> <span class="p">{}</span>
@@ -381,10 +409,11 @@
         <span class="sd">&quot;&quot;&quot; Make a list of tree ids and their respective positions.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            patch (list): a list of tuples representing the patch coordinates &#39;(x,y)&#39;.</span>
+<span class="sd">            patch : list</span>
+<span class="sd">                A list of tuples representing the patch coordinates &#39;(x,y)&#39;.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            id_pos (list):a list tuples with tree ids and positions &#39;(id,(x_pos,y_pos))&#39;</span>
+<span class="sd">        Returns: list</span>
+<span class="sd">            id_pos: a list tuples with tree ids and positions &#39;(id,(x_pos,y_pos))&#39;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -400,7 +429,13 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a dictionary in which keys are a age group and values are lists containing the id of the respective trees.</span>
 
-<span class="sd">        list_of_trees is a list with the id of trees.</span>
+<span class="sd">            Args:</span>
+<span class="sd">                list_of_trees: list</span>
+<span class="sd">                    A list with the id of trees.</span>
+
+<span class="sd">            Returns: dict</span>
+<span class="sd">                A dictionary age as keys and a list of tree ids as values.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">age_groups</span> <span class="o">=</span> <span class="p">{}</span>
@@ -416,10 +451,11 @@
         <span class="sd">&quot;&quot;&quot;Organize trees by functional type.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            list_of_trees (list): a list of tree ids.</span>
+<span class="sd">            list_of_trees :list</span>
+<span class="sd">                A list of tree ids.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            type_groups(dict): a dictionary in which keys are a Functional</span>
+<span class="sd">        Returns: dict</span>
+<span class="sd">            type_groups: a dictionary in which keys are a Functional</span>
 <span class="sd">            Types and values are lists containing the id of the respective trees.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -440,14 +476,13 @@
 <span class="sd">            organize a dictionary of dictionaries containing the indices of</span>
 <span class="sd">            trees in each age group within each type</span>
 
-
-
 <span class="sd">        Args:</span>
-<span class="sd">            Patches (list): a list of tuples representing patch coordinatas</span>
+<span class="sd">            Patches :list</span>
+<span class="sd">                A list of tuples representing patch coordinatas</span>
 <span class="sd">            [(x1,y1),(x2,y2)...]</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            cohorsts(dict): a dictionary with trees organized by type and age:</span>
+<span class="sd">        Returns: dict</span>
+<span class="sd">            cohorsts: a dictionary with trees organized by type and age:</span>
 <span class="sd">             {FunctionalType1:{AgeGroup1:[tree1,tree2,tree3...]}}</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -461,7 +496,7 @@
         <span class="k">return</span> <span class="n">cohorts</span></div>
 
 <div class="viewcode-block" id="Tree_Grid.calculate_liana_coverage"><a class="viewcode-back" href="../topology.html#topology.Tree_Grid.calculate_liana_coverage">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_liana_coverage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Calculate the coverage(%) os lianas in on patch based on the previous coverage, temperature, humidity and wind speed</span>
+        <span class="sd">&quot;&quot;&quot; Calculate the coverage (%) os lianas in on patch based on the previous coverage, temperature, humidity and wind speed</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">                None</span>

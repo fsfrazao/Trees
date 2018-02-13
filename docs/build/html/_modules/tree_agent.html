@@ -170,38 +170,65 @@
 
 
 <div class="viewcode-block" id="Tree"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree">[docs]</a><span class="k">class</span> <span class="nc">Tree</span><span class="p">(</span><span class="n">Agent</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Represent individual trees.</span>
+    <span class="sd">&quot;&quot;&quot; Represents individual trees.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        position (tuple): (x,y) coordinates of where tree will be stablished.</span>
-<span class="sd">        world (world object): world where tree will live.</span>
-<span class="sd">        dbh (float): Diameter at Breast Height (in cm).</span>
-<span class="sd">        h0 (float): Height-stem diameter relationship parameter.</span>
-<span class="sd">        h1 (float): Height-stem diameter relationship parameter.</span>
-<span class="sd">        cl0 (float): Crown Length-Height relationship parameter.</span>
-<span class="sd">        cd0 (float): Crown Diameter-Stem Diameter relationship parameter.</span>
-<span class="sd">        cd1 (float): Crown Diameter-Stem Diameter relationship parameter.</span>
-<span class="sd">        cd2 (float): Crown Diameter-Stem Diameter relationship parameter.</span>
-<span class="sd">        rho (float): wood density in t of Organic Dry Matter/cubic meter.</span>
-<span class="sd">        sigma (float): ratio of total aboveground biomass to stem biomass.</span>
-<span class="sd">        f0 (float): form factor-stem diameter relationship parameter.</span>
-<span class="sd">        f1 (float): form factor-stem diameter relationship parameter.</span>
-<span class="sd">        l0 (float): Leaf Area Index (LAI)-Stem relationship parameter.</span>
-<span class="sd">        l1 (float): Leaf Area Index (LAI)-Stem relationship parameter.</span>
-<span class="sd">        m (float): Light trasnmission coefficient.</span>
-<span class="sd">        alpha (float): quantum eciency; initial slope of the type speci
+<span class="sd">        position: tuple</span>
+<span class="sd">            (x,y) coordinates of where tree will be stablished.</span>
+<span class="sd">        world : world object</span>
+<span class="sd">            world where tree will live.</span>
+<span class="sd">        dbh: float</span>
+<span class="sd">            Diameter at Breast Height (in cm).</span>
+<span class="sd">        h0: float:</span>
+<span class="sd">            Height-stem diameter relationship parameter.</span>
+<span class="sd">        h1: float</span>
+<span class="sd">            Height-stem diameter relationship parameter.</span>
+<span class="sd">        cl0: float</span>
+<span class="sd">            Crown Length-Height relationship parameter.</span>
+<span class="sd">        cd0: float</span>
+<span class="sd">            Crown Diameter-Stem Diameter relationship parameter.</span>
+<span class="sd">        cd1: float</span>
+<span class="sd">            Crown Diameter-Stem Diameter relationship parameter.</span>
+<span class="sd">        cd2: float</span>
+<span class="sd">            Crown Diameter-Stem Diameter relationship parameter.</span>
+<span class="sd">        rho: float</span>
+<span class="sd">            Wood density in t of Organic Dry Matter/cubic meter.</span>
+<span class="sd">        sigma: float</span>
+<span class="sd">            Ratio of total aboveground biomass to stem biomass.</span>
+<span class="sd">        f0: float</span>
+<span class="sd">            Form factor-stem diameter relationship parameter.</span>
+<span class="sd">        f1: float</span>
+<span class="sd">            Form factor-stem diameter relationship parameter.</span>
+<span class="sd">        l0: float</span>
+<span class="sd">            Leaf Area Index (LAI)-Stem relationship parameter.</span>
+<span class="sd">        l1: float</span>
+<span class="sd">            Leaf Area Index (LAI)-Stem relationship parameter.</span>
+<span class="sd">        m: float</span>
+<span class="sd">            Light trasnmission coefficient.</span>
+<span class="sd">        alpha: float</span>
+<span class="sd">            Quantum eficiency; initial slope of the type speci
 c light response curve.</span>
-<span class="sd">        pmax (float): maximum leaf gross photosynthetic rate.</span>
-<span class="sd">        rg (float): fraction of gross primary production available for growth that is attributed to growth respiration.</span>
-<span class="sd">        deltaDmax (float): maximum diameter increment.</span>
-<span class="sd">        DdeltaDmax (float): % of Dmax that reaches deltaDmax.</span>
-<span class="sd">        age (int): age (years).</span>
-<span class="sd">        Ftype (str): functional type.</span>
-<span class="sd">        Mb (float): backgroung mortality probability.</span>
-<span class="sd">        Dfall (float): mimimum dbh for a tree to fall.</span>
-<span class="sd">        pfall (float): probabbility that a tree with dbh&gt;Dfall will fall.</span>
-<span class="sd">        m_max (float): maximum size-dependent mortality for small trees.</span>
-<span class="sd">        Dmort (float): DBH up to which mortality is increased (for small trees).</span>
+<span class="sd">        pmax: float</span>
+<span class="sd">            Maximum leaf gross photosynthetic rate.</span>
+<span class="sd">        rg: float</span>
+<span class="sd">            Fraction of gross primary production available for growth that is attributed to growth respiration.</span>
+<span class="sd">        deltaDmax: float</span>
+<span class="sd">            Maximum diameter increment.</span>
+<span class="sd">        DdeltaDmax: float</span>
+<span class="sd">            % of Dmax that reaches deltaDmax.</span>
+<span class="sd">        age: int</span>
+<span class="sd">            Age (years).</span>
+<span class="sd">        Ftype: str</span>
+<span class="sd">            Functional type.</span>
+<span class="sd">        Mb: float): backgroung mortality probability.</span>
+<span class="sd">        Dfall: float</span>
+<span class="sd">            Mimimum dbh for a tree to fall.</span>
+<span class="sd">        pfall: float</span>
+<span class="sd">            Probabbility that a tree with dbh&gt;Dfall will fall.</span>
+<span class="sd">        m_max: float</span>
+<span class="sd">            Maximum size-dependent mortality for small trees.</span>
+<span class="sd">        Dmort: float</span>
+<span class="sd">            DBH up to which mortality is increased (for small trees).</span>
 
 <span class="sd">    Attributes:</span>
 
@@ -215,62 +242,145 @@ c light response curve.</span>
 <span class="sd">        lday (float):</span>
 <span class="sd">        phi_act (float):</span>
 
-<span class="sd">        H (float): Height (m).</span>
-<span class="sd">        CL (float): Crown length (m).</span>
-<span class="sd">        CD (float): Crown diameter (m)</span>
-<span class="sd">        CA (float): Crown area (sq. m)</span>
-<span class="sd">        AGB (float): Above ground biomass (tODM)</span>
-<span class="sd">        LAI (float): Leaf area index.</span>
-<span class="sd">        lmax (float):</span>
-<span class="sd">        lmin (float):</span>
-<span class="sd">        L_mean (float):</span>
-<span class="sd">        Li (float):</span>
-<span class="sd">        Mc (float):</span>
-<span class="sd">        basic_m (float):</span>
-<span class="sd">        Mb (float):</span>
-<span class="sd">        Md (float):</span>
-<span class="sd">        GPP (float): Gross primary production in this time step.</span>
-<span class="sd">        Rm (float): Respiration maintenance in this timestep.</span>
-<span class="sd">        position (tuple): (x,y) coordinates of where tree is located.</span>
-<span class="sd">        world (world object): world where tree lives.</span>
-<span class="sd">        dbh (float): Diameter at Breast Height (in cm).</span>
-<span class="sd">        h0 (float): Height-stem diameter relationship parameter.</span>
-<span class="sd">        h1 (float): Height-stem diameter relationship parameter.</span>
-<span class="sd">        cl0 (float): Crown Length-Height relationship parameter.</span>
-<span class="sd">        cd0 (float): Crown Diameter-Stem Diameter relationship parameter.</span>
-<span class="sd">        cd1 (float): Crown Diameter-Stem Diameter relationship parameter.</span>
-<span class="sd">        cd2 (float): Crown Diameter-Stem Diameter relationship parameter.</span>
-<span class="sd">        rho (float): wood density in t of Organic Dry Matter/cubic meter.</span>
-<span class="sd">        sigma (float): ratio of total aboveground biomass to stem biomass.</span>
-<span class="sd">        f0 (float): form factor-stem diameter relationship parameter.</span>
-<span class="sd">        f1 (float): form factor-stem diameter relationship parameter.</span>
-<span class="sd">        l0 (float): Leaf Area Index (LAI)-Stem relationship parameter.</span>
-<span class="sd">        l1 (float): Leaf Area Index (LAI)-Stem relationship parameter.</span>
-<span class="sd">        m (float): Light trasnmission coefficient.</span>
-<span class="sd">        alpha (float): quantum eciency; initial slope of the type-speci
+<span class="sd">        H: float</span>
+<span class="sd">            Height (m).</span>
+<span class="sd">        CL: float</span>
+<span class="sd">            Crown length (m).</span>
+<span class="sd">        CD: float</span>
+<span class="sd">            Crown diameter (m)</span>
+<span class="sd">        CA: float</span>
+<span class="sd">            Crown area (sq. m)</span>
+<span class="sd">        AGB: float</span>
+<span class="sd">            Above ground biomass (tODM)</span>
+<span class="sd">        LAI: float</span>
+<span class="sd">            Leaf area index.</span>
+<span class="sd">        lmax: float</span>
+<span class="sd">            Top layer occupied by this tree&#39;s crown.</span>
+<span class="sd">        lmin: float</span>
+<span class="sd">            Bottom layer occupied by this tree&#39;s crown.</span>
+<span class="sd">        L_mean: float</span>
+<span class="sd">            Average leaf area per layer.</span>
+<span class="sd">        Li: float</span>
+<span class="sd">            Amount of light receiveid by this tree.</span>
+<span class="sd">        Mc: float</span>
+<span class="sd">            Crowding mortality.</span>
+<span class="sd">        basic_m: float</span>
+<span class="sd">            Basic mortality.</span>
+<span class="sd">        Mb: float</span>
+<span class="sd">            Background mortality.</span>
+<span class="sd">        Md: float</span>
+<span class="sd">            Damage mortality.</span>
+<span class="sd">        GPP: float</span>
+<span class="sd">            Gross primary production in this time step.</span>
+<span class="sd">        Rm: float</span>
+<span class="sd">            Respiration maintenance in this timestep.</span>
+<span class="sd">        position: tuple</span>
+<span class="sd">            (x,y) coordinates of where tree is located.</span>
+<span class="sd">        world: world object</span>
+<span class="sd">            World where tree lives.</span>
+<span class="sd">        dbh: float</span>
+<span class="sd">            Diameter at Breast Height (in cm).</span>
+<span class="sd">        h0: float</span>
+<span class="sd">            Height-stem diameter relationship parameter.</span>
+<span class="sd">        h1: float</span>
+<span class="sd">            Height-stem diameter relationship parameter.</span>
+<span class="sd">        cl0: float</span>
+<span class="sd">            Crown Length-Height relationship parameter.</span>
+<span class="sd">        cd0: float</span>
+<span class="sd">            Crown Diameter-Stem Diameter relationship parameter.</span>
+<span class="sd">        cd1: float</span>
+<span class="sd">            Crown Diameter-Stem Diameter relationship parameter.</span>
+<span class="sd">        cd2: float</span>
+<span class="sd">            Crown Diameter-Stem Diameter relationship parameter.</span>
+<span class="sd">        rho: float</span>
+<span class="sd">            Wood density in t of Organic Dry Matter/cubic meter.</span>
+<span class="sd">        sigma: float</span>
+<span class="sd">            Ratio of total aboveground biomass to stem biomass.</span>
+<span class="sd">        f0: float:</span>
+<span class="sd">            Form factor-stem diameter relationship parameter.</span>
+<span class="sd">        f1: float:</span>
+<span class="sd">            Form factor-stem diameter relationship parameter.</span>
+<span class="sd">        l0: float</span>
+<span class="sd">            Leaf Area Index (LAI)-Stem relationship parameter.</span>
+<span class="sd">        l1: float</span>
+<span class="sd">            Leaf Area Index (LAI)-Stem relationship parameter.</span>
+<span class="sd">        m: float</span>
+<span class="sd">            Light trasnmission coefficient.</span>
+<span class="sd">        alpha: float</span>
+<span class="sd">            Quantum eciency; initial slope of the type-speci
 c light response curve.</span>
-<span class="sd">        pmax (float): maximum leaf gross photosynthetic rate.</span>
-<span class="sd">        rg (float): fraction of gross primary production available for growth that is attributed to growth respiration.</span>
-<span class="sd">        deltaDmax (float): maximum diameter increment.</span>
-<span class="sd">        DdeltaDmax (float): % of Dmax that reaches deltaDmax.</span>
-<span class="sd">        age (int): age (years).</span>
-<span class="sd">        Ftype (str): functional type.</span>
-<span class="sd">        Mb (float): backgroung mortality probability.</span>
-<span class="sd">        max_height (float): maximum height this tree can reach.</span>
-<span class="sd">        Dfall (float): mimimum dbh for a tree to fall.</span>
-<span class="sd">        pfall (float): probabbility that a tree with dbh&gt;Dfall will fall.</span>
-<span class="sd">        m_max (float): maximum size-dependent mortality for small trees.</span>
-<span class="sd">        Dmort (float): DBH up to which mortality is increased (for small trees).</span>
+<span class="sd">        pmax: float</span>
+<span class="sd">            Maximum leaf gross photosynthetic rate.</span>
+<span class="sd">        rg: float</span>
+<span class="sd">            Fraction of gross primary production available for growth that is attributed to growth respiration.</span>
+<span class="sd">        deltaDmax: float</span>
+<span class="sd">            Maximum diameter increment.</span>
+<span class="sd">        DdeltaDmax: float</span>
+<span class="sd">            % of Dmax that reaches deltaDmax.</span>
+<span class="sd">        age: int</span>
+<span class="sd">            Age (years).</span>
+<span class="sd">        Ftype:  str</span>
+<span class="sd">            Functional type.</span>
+<span class="sd">        Mb: float</span>
+<span class="sd">            Backgroung mortality probability.</span>
+<span class="sd">        max_height: float</span>
+<span class="sd">            Maximum height this tree can reach.</span>
+<span class="sd">        Dfall: float</span>
+<span class="sd">            Mimimum dbh for a tree to fall.</span>
+<span class="sd">        pfall: float</span>
+<span class="sd">            Probabbility that a tree with dbh&gt;Dfall will fall.</span>
+<span class="sd">        m_max: float)</span>
+<span class="sd">            Maximum size-dependent mortality for small trees.</span>
+<span class="sd">        Dmort: float</span>
+<span class="sd">            DBH up to which mortality is increased (for small trees).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">ID</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">Instances</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">DERIVED_TREES</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">DeadTrees</span> <span class="o">=</span> <span class="p">{}</span>
+<div class="viewcode-block" id="Tree.TreeFactory"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.TreeFactory">[docs]</a>    <span class="n">DeadTrees</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">TreeFactory</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">new_cls_name</span><span class="p">,</span> <span class="n">new_parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Creates a Tree subclass to represent a Functional Type.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                new_cls_name: str</span>
+<span class="sd">                    Name of the functional type</span>
+
+<span class="sd">                new_parameters: dict</span>
+<span class="sd">                    Dictionary containing the the parameters specific to each functional type.</span>
+<span class="sd">                    The following format is expected:</span>
+<span class="sd">                        {&#39;h0&#39;:value,</span>
+<span class="sd">                            &#39;h1&#39;:value,</span>
+<span class="sd">                            &#39;cl0&#39;:value,</span>
+<span class="sd">                            &#39;cd0&#39;:value,</span>
+<span class="sd">                            &#39;cd1&#39;:value,</span>
+<span class="sd">                            &#39;cd2&#39;:value,</span>
+<span class="sd">                            &#39;rho&#39;:value,</span>
+<span class="sd">                            &#39;sigma&#39;:value,</span>
+<span class="sd">                            &#39;f0&#39;:value,</span>
+<span class="sd">                            &#39;f1&#39;:value,</span>
+<span class="sd">                            &#39;l0&#39;:value,</span>
+<span class="sd">                            &#39;l1&#39;:value,</span>
+<span class="sd">                            &#39;m&#39;:value,</span>
+<span class="sd">                            &#39;alpha&#39;:value,</span>
+<span class="sd">                            &#39;pmax&#39;:value,</span>
+<span class="sd">                            &#39;max_dbh&#39;:value,</span>
+<span class="sd">                            &#39;deltaDmax&#39;:value,</span>
+<span class="sd">                            &#39;DdeltaDmax&#39;:value,</span>
+<span class="sd">                            &#39;Dmort&#39;:value,</span>
+<span class="sd">                            &#39;Dfall&#39;:value,</span>
+<span class="sd">                            &#39;pfall&#39;:value,</span>
+<span class="sd">                            &#39;rg&#39;:value,</span>
+<span class="sd">                            &#39;m_max&#39;:value,</span>
+<span class="sd">                        }</span>
+
+<span class="sd">                Returns: Tree subclass</span>
+<span class="sd">                    A subclass of the Tree class with the provided parameter values as default.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
 
         <span class="k">def</span> <span class="nf">new_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="n">dbh</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
@@ -356,35 +466,53 @@ c light response curve.</span>
         <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">new_cls_name</span><span class="p">,</span> <span class="p">(</span><span class="n">cls</span><span class="p">,),</span> <span class="n">new_attr_met</span><span class="p">)</span>
 
         <span class="n">cls</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="p">[</span><span class="n">new_cls_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_cls</span>
-        <span class="n">cls</span><span class="o">.</span><span class="n">DeadTrees</span><span class="p">[</span><span class="n">new_cls_name</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">cls</span><span class="o">.</span><span class="n">DeadTrees</span><span class="p">[</span><span class="n">new_cls_name</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span></div>
 
         <span class="k">return</span> <span class="n">new_cls</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">FTPopulation</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">ft</span><span class="p">):</span>
-        <span class="k">pass</span>
+<div class="viewcode-block" id="Tree.CountFruits"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.CountFruits">[docs]</a>        <span class="k">pass</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">CountFruits</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Counts the total number of fruits in the landscape.</span>
+<span class="sd">            Fruits from all trees of all Functional Types are counted.</span>
+
+<span class="sd">            Returns: int</span>
+<span class="sd">                Number of fruits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fruits</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span></div>
             <span class="n">fruits</span> <span class="o">+=</span> <span class="n">t</span><span class="o">.</span><span class="n">available_fruits</span>
-        <span class="k">return</span> <span class="n">fruits</span>
+<div class="viewcode-block" id="Tree.UpdateTrees"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.UpdateTrees">[docs]</a>        <span class="k">return</span> <span class="n">fruits</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">UpdateTrees</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Updates all living trees</span>
+
+<span class="sd">            Returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="n">t</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+<div class="viewcode-block" id="Tree.ProduceFruits"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.ProduceFruits">[docs]</a>            <span class="n">t</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">ProduceFruits</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot; Makes all trees with diameter bigger than 10 cm produce fruits.</span>
+
+<span class="sd">            Returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span></div>
             <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">DBH</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
-                <span class="n">t</span><span class="o">.</span><span class="n">available_fruits</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">Nfruit</span>
+<div class="viewcode-block" id="Tree.DisperseSeeds"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.DisperseSeeds">[docs]</a>                <span class="n">t</span><span class="o">.</span><span class="n">available_fruits</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">Nfruit</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">DisperseSeeds</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;Makes all trees with diameter bigger than 10 cm disperse their seeds.</span>
+
+<span class="sd">            Returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span></div>
             <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">DBH</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
 <div class="viewcode-block" id="Tree.TreesAboveDBH"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.TreesAboveDBH">[docs]</a>                <span class="n">t</span><span class="o">.</span><span class="n">disperse_seeds</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">Adisp</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">Fdisp</span><span class="p">)</span>
 
@@ -392,8 +520,8 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">TreesAboveDBH</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbh</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the total number of trees with DBH above the speciefied threshold.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (int): Number of trees.</span>
+<span class="sd">        Returns: int</span>
+<span class="sd">            Number of trees.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">trees</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span></div>
@@ -404,8 +532,8 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">Total_AGB</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Calculate the total Above Ground Biomass for all living trees.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): total AGB in t of Organic Dry matter (tODM).</span>
+<span class="sd">        Returns: float</span>
+<span class="sd">            Total Aboveground Biomass in tons of Organic Dry matter (tODM).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">Tagb</span> <span class="o">=</span> <span class="mi">0</span>
@@ -419,8 +547,8 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">Cgpp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Calculate the total Carbon absorbed as Gross Primary Production.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): Total Carbon absorbed.</span>
+<span class="sd">        Returns: float</span>
+<span class="sd">            Total Carbon absorbed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">Cgpp</span> <span class="o">=</span> <span class="mi">0</span>
@@ -434,8 +562,8 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">Cr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Calculate the total Carbon released through respiration.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): Total Carbon released by all living trees.</span>
+<span class="sd">        Returns: float</span>
+<span class="sd">            Total Carbon released by all living trees.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">Cr</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">trees</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
@@ -587,6 +715,31 @@ c light response curve.</span>
 
     <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Updates geometry related parameters and mortality probabilities.</span>
+
+<span class="sd">            Returns: dict</span>
+<span class="sd">                A dictionary with the new attribute values.</span>
+<span class="sd">                Can be imported by the &#39;import_attributes&#39; method.</span>
+
+<span class="sd">                The following attributes are returned:</span>
+
+<span class="sd">                {&quot;DBH&quot;:value,</span>
+<span class="sd">                &quot;H&quot;:value,</span>
+<span class="sd">                &quot;CL&quot;:value,</span>
+<span class="sd">                &quot;CD&quot;:value,</span>
+<span class="sd">                &quot;CA&quot;:value,</span>
+<span class="sd">                &quot;AGB&quot;:value,</span>
+<span class="sd">                &quot;LAI&quot;:value,</span>
+<span class="sd">                &quot;lmax&quot;:value,</span>
+<span class="sd">                &quot;lmin&quot;:value,</span>
+<span class="sd">                &quot;L_mean&quot;:value,</span>
+<span class="sd">                &quot;Li&quot;:value,</span>
+<span class="sd">                &quot;Mc&quot;:value,</span>
+<span class="sd">                &quot;Mb&quot;:value,</span>
+<span class="sd">                &quot;age&quot;:value,</span>
+<span class="sd">                &quot;available_fruits&quot;:value,</span>
+<span class="sd">            }</span>
+
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H_from_DBH</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">CL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CL_from_H</span><span class="p">()</span>
@@ -622,9 +775,33 @@ c light response curve.</span>
                       <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="p">,</span>
                       <span class="s2">&quot;available_fruits&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_fruits</span><span class="p">,</span> <span class="p">}</span></div>
 
-        <span class="k">return</span> <span class="p">(</span><span class="n">attributes</span><span class="p">)</span>
+<div class="viewcode-block" id="Tree.import_attributes"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.import_attributes">[docs]</a>        <span class="k">return</span> <span class="p">(</span><span class="n">attributes</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">import_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attributes</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Updates this tree&#39;s attributes with the values in &#39;attributes&#39;.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                attributes: dict</span>
+<span class="sd">                    A dict with attribute name : value.</span>
+<span class="sd">                    The following attributes are expected:</span>
+
+<span class="sd">                    {&quot;DBH&quot;:value,</span>
+<span class="sd">                    &quot;H&quot;:value,</span>
+<span class="sd">                    &quot;CL&quot;:value,</span>
+<span class="sd">                    &quot;CD&quot;:value,</span>
+<span class="sd">                    &quot;CA&quot;:value,</span>
+<span class="sd">                    &quot;AGB&quot;:value,</span>
+<span class="sd">                    &quot;LAI&quot;:value,</span>
+<span class="sd">                    &quot;lmax&quot;:value,</span>
+<span class="sd">                    &quot;lmin&quot;:value,</span>
+<span class="sd">                    &quot;L_mean&quot;:value,</span>
+<span class="sd">                    &quot;Li&quot;:value,</span>
+<span class="sd">                    &quot;Mc&quot;:value,</span>
+<span class="sd">                    &quot;Mb&quot;:value,</span>
+<span class="sd">                    &quot;age&quot;:value,</span>
+<span class="sd">                    &quot;available_fruits&quot;:value,</span>
+<span class="sd">                }</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">DBH</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;DBH&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">CL</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;CL&quot;</span><span class="p">]</span>
@@ -638,7 +815,7 @@ c light response curve.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Li</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;Li&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Mc</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;Mc&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Mb</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;Mb&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">]</span></div>
         <span class="bp">self</span><span class="o">.</span><span class="n">Md</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">available_fruits</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;available_fruits&quot;</span><span class="p">]</span>
         <span class="c1"># self.age+=1</span>
@@ -649,40 +826,35 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">H_from_DBH</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate tree height calculated according to eq.1 in SI-Fisher et al.(2015).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): H.</span></div>
+<span class="sd">        Returns: float</span></div>
 <span class="sd">        &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Tree.CL_from_H"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.CL_from_H">[docs]</a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">h0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">DBH</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">h1</span>
 
     <span class="k">def</span> <span class="nf">CL_from_H</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate tree crown_length (CL) calculated according to eq.2 in SI-Fisher et al.(2015)</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): CL.</span></div>
+<span class="sd">        Returns: float</span></div>
 <span class="sd">        &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Tree.CD_from_DBH"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.CD_from_DBH">[docs]</a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span>
 
     <span class="k">def</span> <span class="nf">CD_from_DBH</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate tree crown diameter (CD) calculated according to eq.3 in SI-Fisher et al.(2015).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): CD.</span></div>
+<span class="sd">        Returns: float</span></div>
 <span class="sd">        &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Tree.CA_from_CD"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.CA_from_CD">[docs]</a>        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cd0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">DBH</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">cd1</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cd2</span>
 
     <span class="k">def</span> <span class="nf">CA_from_CD</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate tree crown area (CA) calculated according to eq.4 in SI-Fisher et al.(2015)</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): CA.</span></div>
+<span class="sd">        Returns: float</span></div>
 <span class="sd">        &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Tree.calculate_volume"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.calculate_volume">[docs]</a>        <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CD</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">calculate_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Calculate the volume of the stem based on DBH.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): volume.</span>
+<span class="sd">        Returns: float</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="Tree.AGB_from_DBH"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.AGB_from_DBH">[docs]</a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">DBH</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
@@ -690,8 +862,8 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">AGB_from_DBH</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Calculate tree aboveground biomass (AGB) calculated according to eq.5 in SI-Fisher et al.(2015)</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): AGB.</span>
+<span class="sd">        Returns: float</span>
+
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="Tree.calculate_f"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.calculate_f">[docs]</a>        <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">D</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">)</span>
@@ -699,8 +871,7 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">calculate_f</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the form factor (f) calculated according to eq.6 in SI-Fisher et al.(2015)</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): f.</span>
+<span class="sd">        Returns: float</span>
 
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
@@ -709,30 +880,65 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">LAI_from_DBH</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the leaf area index (LAI) calculated according to eq.7 in SI-Fisher et al.(2015)</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): LAI.</span>
+<span class="sd">        Returns: float</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">l0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">DBH</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">l1</span>
+<div class="viewcode-block" id="Tree.decrement_fruit_stock"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.decrement_fruit_stock">[docs]</a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">l0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">DBH</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">l1</span>
 
     <span class="k">def</span> <span class="nf">decrement_fruit_stock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">available_fruits</span> <span class="o">-=</span> <span class="n">n</span>
+        <span class="sd">&quot;&quot;&quot; Decreases the fruit stock bt n.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                n: int</span>
+<span class="sd">                    Number of fruits</span>
+</div>
+<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Tree.disperse_seeds"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.disperse_seeds">[docs]</a>        <span class="bp">self</span><span class="o">.</span><span class="n">available_fruits</span> <span class="o">-=</span> <span class="n">n</span>
 
     <span class="k">def</span> <span class="nf">disperse_seeds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">maximum_distance</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Disperse seeds according to a power distribution.</span>
+
+<span class="sd">            Seeds are deposited in the topology&#39;s seedbank.</span>
+
+<span class="sd">            Power function:</span>
+<span class="sd">                    P(x|a)=a*x^(a-1)</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                fraction: float</span>
+<span class="sd">                    Fraction (between 0.0 and 1.0) of the available fruits to be dispersed ( each fruit contains one seed).</span>
+<span class="sd">                a: float</span>
+<span class="sd">                    Power factor</span>
+
+<span class="sd">                maximum_distance: float</span>
+<span class="sd">                        Maximun distance (from the tree) at which a seed can be deposited.</span>
+
+<span class="sd">            Returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
         <span class="n">n_seeds</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">available_fruits</span> <span class="o">*</span> <span class="n">fraction</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">decrement_fruit_stock</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n_seeds</span><span class="p">)</span>
         <span class="n">seed_distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_seeds</span><span class="p">)</span>
         <span class="n">max_distance</span> <span class="o">=</span> <span class="n">maximum_distance</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">patch_area</span><span class="o">**</span><span class="mf">0.5</span>
         <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">seed_distances</span><span class="p">:</span>
-            <span class="n">seed_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_seed_position</span><span class="p">(</span>
+            <span class="n">seed_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_seed_position</span><span class="p">(</span></div>
                 <span class="n">distance</span><span class="o">=</span><span class="n">d</span> <span class="o">*</span> <span class="n">max_distance</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">deposit_seed</span><span class="p">(</span><span class="n">seed_position</span><span class="p">)</span>
+<div class="viewcode-block" id="Tree.random_seed_position"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.random_seed_position">[docs]</a>            <span class="bp">self</span><span class="o">.</span><span class="n">deposit_seed</span><span class="p">(</span><span class="n">seed_position</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">random_seed_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Randomly selects a point within a circle of radius= &#39;distance&#39; for a seed to be deposited.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                distance: float</span>
+<span class="sd">                    Maximun distance (from the tree) at which a seed can be deposited.</span>
+
+<span class="sd">            Returns: tuple</span>
+<span class="sd">                    (x,y) seed position.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span>
         <span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
         <span class="n">new_position</span> <span class="o">=</span> <span class="p">((</span><span class="n">x0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span> <span class="o">*</span> <span class="n">distance</span><span class="p">,</span>
-                         <span class="n">y0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span> <span class="o">*</span> <span class="n">distance</span><span class="p">))</span>
+                         <span class="n">y0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span> <span class="o">*</span> <span class="n">distance</span><span class="p">))</span></div>
         <span class="n">verified_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">in_bounds</span><span class="p">(</span><span class="n">new_position</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">verified_position</span>
 
@@ -748,8 +954,8 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">Lind</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the incoming radiation on top of lmax layer the tree is reaching according to eq.36 in SI-Fisher et al.(2015).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): Incoming radiation on top of this tree.</span>
+<span class="sd">        Returns: float</span>
+<span class="sd">            Incoming radiation on top of this tree.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># crown_layers=(np.ceil(self.lmax)-np.floor(self.lmin))/self.world.topology.delta_h</span>
@@ -764,8 +970,8 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">Pind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Li</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Calculate the interim gross photosynthetic rate of one tree per year, according to eq.40 in SI-Fisher et al.(2015)</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float) Gross photosynthetic rate.</span>
+<span class="sd">        Returns: float</span>
+<span class="sd">            Gross photosynthetic rate.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">pmk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pmax</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
@@ -781,9 +987,8 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">calculate_rm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the maintenance respiration rate(rm) according to eq.46 in SI-Fisher et al.(2015).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): rm.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        Returns: float</span>
+<span class="sd">                &quot;&quot;&quot;</span>
 
         <span class="n">max_Li</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">I0</span>
 
@@ -795,8 +1000,8 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">growth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the yearly diameter growth according to eq.48 in SI-Fisher et al.(2015). Assumes full availabilty of resources</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float):diameter growth.</span>
+<span class="sd">        Returns: float</span>
+<span class="sd">            Diameter growth.</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="Tree.calculate_alpha0"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.calculate_alpha0">[docs]</a>        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha0</span> <span class="o">*</span> <span class="n">D</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">D</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Dmax</span><span class="p">)))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha1</span> <span class="o">*</span> <span class="n">D</span><span class="p">)</span>
@@ -804,8 +1009,7 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">calculate_alpha0</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the alpha0 growth paramenter, according equations described in sctions F-5 (page 24) of SI-Fisher et al.(2015).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): alpha 0.</span>
+<span class="sd">        Returns: float</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -821,8 +1025,8 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">calculate_alpha1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate alpha1 growth paramenter, according equations described in sctions F-5 (page 24) of SI-Fisher et al.(2015).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): alpha1.</span>
+<span class="sd">        Returns: float</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">alpha1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Dmax</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DdeltaDmax</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Dmax</span><span class="p">)</span>
@@ -834,8 +1038,8 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">Biomass_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Calculate Aboveground Biomass (AGB) gain according to eq.43 in SI-Fisher et al.(2015).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): AGB.</span>
+<span class="sd">        Returns: float</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">GPP</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Pind</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Li</span><span class="p">)</span>
@@ -850,8 +1054,8 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">DBH_from_Biomass</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Calculate diameter at breast height from above ground biomass.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): the DBH calculated from AGB.</span>
+<span class="sd">        Returns: float</span>
+<span class="sd">            The DBH calculated from AGB.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">)</span>
@@ -866,8 +1070,7 @@ c light response curve.</span>
 
 <span class="sd">        Note: If DBH decreases to zero, remove tree.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None.</span>
+<span class="sd">        Returns: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">gain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Biomass_gain</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AGB</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">gain</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -898,8 +1101,7 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">calculate_Ms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the size-dependent mortality for small trees according to model description in Ruger et al. 2007. (SI, page 4).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (float): Ms.</span>
+<span class="sd">        Returns: float</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">Ms</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -929,24 +1131,24 @@ c light response curve.</span>
     <span class="k">def</span> <span class="nf">stochastic_Cm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Stochastic crownding mortality.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (bool): True if tree dies from crowding.</span></div>
+<span class="sd">        Returns: bool</span>
+<span class="sd">            True if tree dies from crowding.</span></div>
 <span class="sd">        &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Tree.stochastic_Bm"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.stochastic_Bm">[docs]</a>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Mc</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">stochastic_Bm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Stochastic Background mortality.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (bool): True if tree dies from background mortality.</span></div>
+<span class="sd">        Returns: bool</span>
+<span class="sd">            True if tree dies from background mortality.</span></div>
 <span class="sd">        &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Tree.stochastic_Dm"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.stochastic_Dm">[docs]</a>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Mb</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">stochastic_Dm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Stochastic damage mortality.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (bool): True if tree dies from damage.</span></div>
+<span class="sd">        Returns: bool</span>
+<span class="sd">            True if tree dies from damage.</span></div>
 <span class="sd">        &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Tree.log_me"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.log_me">[docs]</a>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Md</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 
