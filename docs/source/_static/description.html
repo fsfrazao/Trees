@@ -15,20 +15,20 @@
  id="x1-1000"></a>Contents</h3>
    <div class="tableofcontents">
 
-<br />   &#x00A0;&#x00A0;<span class="subsubsectionToc" >2.1.1 <a
-href="#x1-150002.1.1" id="QQ2-1-15">Purpose</a></span>
-<br />   &#x00A0;&#x00A0;<span class="subsubsectionToc" >2.1.2 <a
-href="#x1-160002.1.2" id="QQ2-1-16">State variables and scales</a></span>
-<br />   &#x00A0;&#x00A0;<span class="subsubsectionToc" >2.1.3 <a
-href="#x1-170002.1.3" id="QQ2-1-18">Process overview and scheduling</a></span>
-<br />   &#x00A0;&#x00A0;<span class="subsubsectionToc" >2.1.4 <a
-href="#x1-180002.1.4" id="QQ2-1-19">Design concepts</a></span>
-<br />   &#x00A0;&#x00A0;<span class="subsubsectionToc" >2.1.5 <a
-href="#x1-190002.1.5" id="QQ2-1-20">Initialization</a></span>
-<br />   &#x00A0;&#x00A0;<span class="subsubsectionToc" >2.1.6 <a
-href="#x1-200002.1.6" id="QQ2-1-21">Input</a></span>
-<br />   &#x00A0;&#x00A0;<span class="subsubsectionToc" >2.1.7 <a
-href="#x1-210002.1.7" id="QQ2-1-22">Submodels</a></span>
+     <br />   &#x00A0;&#x00A0;<span class="subsubsectionToc" >1 <a
+     href="#x1-170002.1.1" id="QQ2-1-21">Purpose</a></span>
+     <br />   &#x00A0;&#x00A0;<span class="subsubsectionToc" >2 <a
+     href="#x1-180002.1.2" id="QQ2-1-22">State variables and scales</a></span>
+     <br />   &#x00A0;&#x00A0;<span class="subsubsectionToc" >3 <a
+     href="#x1-190002.1.3" id="QQ2-1-23">Process overview and scheduling</a></span>
+     <br />   &#x00A0;&#x00A0;<span class="subsubsectionToc" >4 <a
+     href="#x1-200002.1.4" id="QQ2-1-24">Design concepts</a></span>
+     <br />   &#x00A0;&#x00A0;<span class="subsubsectionToc" >5 <a
+     href="#x1-210002.1.5" id="QQ2-1-25">Initialization</a></span>
+     <br />   &#x00A0;&#x00A0;<span class="subsubsectionToc" >6 <a
+     href="#x1-220002.1.6" id="QQ2-1-26">Input</a></span>
+     <br />   &#x00A0;&#x00A0;<span class="subsubsectionToc" >7 <a
+     href="#x1-230002.1.7" id="QQ2-1-27">Submodels</a></span>
    </div>
 
 
@@ -108,1147 +108,1327 @@ for this dissertation</a></span><br />
    </div>
  -->
 
-
-<h4 class="subsectionHead"><span class="titlemark">2.1   </span> <a
- id="x1-140002.1"></a>Model Description</h4>
-<!--l. 150--><p class="noindent" >The model structure was largely based on the FORMIND model (<a
+ <h3 class="sectionHead"><span class="titlemark">2   </span> <a
+id="x1-150002"></a>The Trees model</h3>
+<!--l. 214--><p class="noindent" >
+ <h4 class="subsectionHead"><span class="titlemark">1   </span> <a
+id="x1-160002.1"></a>Model Description</h4>
+<!--l. 215--><p class="noindent" >The individual-based forest model structure is largely based on the FORMIND model
+(<a
 href="#XCh1:11">K�hler and Huth</a>,&#x00A0;<a
-href="#XCh1:11">1998</a>), following
-the description provided by <a
+href="#XCh1:11">1998</a>), following the description provided by <a
 href="#XCh1:01">Fischer et&#x00A0;al.</a>&#x00A0;<a
-href="#XCh1:01">2014</a> (See also <a
+href="#XCh1:01">2014</a> (see
+<a
 href="#XCh1:12">R�ger et&#x00A0;al.</a>&#x00A0;(<a
-href="#XCh1:12">2007</a>) for another version and
-application of FORMIND). However, the code that implements the model was rewritten in Python as
-an Object-Oriented, open-source module (See &#8221;Objected-Oriented implementation&#8221; below). This
-description follows the ODD protocol, proposed by <a
-href="#XCh1:13">Grimm et&#x00A0;al.</a>&#x00A0;<a
-href="#XCh1:13">2010</a>. A few significant changes were
-made to the model structure and implementation, which are discussed in detail in sections 3.2 and
-3.3.
-<!--l. 153--><p class="noindent" >
-   <h5 class="subsubsectionHead"><span class="titlemark">2.1.1   </span> <a
- id="x1-150002.1.1"></a>Purpose</h5>
-<!--l. 154--><p class="noindent" >The Tree model is an individual-based, spatially explicit model developed to study the long-term
-impacts of logging on carbon stocks and carbon sequestration in uneven-aged mixed species tropical
-forests.
-<!--l. 156--><p class="noindent" >
-   <h5 class="subsubsectionHead"><span class="titlemark">2.1.2   </span> <a
- id="x1-160002.1.2"></a>State variables and scales</h5>
-<!--l. 157--><p class="noindent" >The model is three-dimensional, grid and individual-based. Ecological processes are formulated in three
-organizational scales: individual trees, patches and landscape. In addition, cohorts are an extra level
-between trees and patches and group trees of the same plant functional type (PFT) and age, located
-within a given patch. However, this level is used for purely computational reasons and no attributes are
-accessible (see section 3.2.1 for more details on cohorts and section 3.3 for more details on
+href="#XCh1:12">2007</a>) for another version and application of FORMIND). Most of the
+equations used are based on the formulation detailed in the supplementary material of
+<a
+href="#XCh1:01">Fischer et&#x00A0;al.</a>&#x00A0;(<a
+href="#XCh1:01">2014</a>). When equations are identical, references are provided in
+squared brackets, indicating the equation number in that document (<span
+class="cmti-12">e.g.,</span>
+[eq. 15 in FMD], where FDM stands for FORMIND model description). A
+few significant changes were made to the FORMIND model structure and
+implementation, which are discussed in detail in sections 2 and 3 and also
+indicated in the appropriate submodel descriptions in section 1.7. The code
+that implements the model was rewritten in Python as an Object-Oriented,
+open-source module (See &#8220;Objected-Oriented implementation&#8221; below). The
+description in sections 1.1-1.7 follows the ODD protocol, proposed by <a
+href="#XCh1:13">Grimm
+et&#x00A0;al.</a>&#x00A0;(<a
+href="#XCh1:13">2010</a>).
+<!--l. 220--><p class="noindent" >
+ <h5 class="subsubsectionHead"><span class="titlemark">1   </span> <a
+id="x1-170002.1.1"></a>Purpose</h5>
+<!--l. 221--><p class="noindent" >The Trees model is an individual-based, spatially explicit model developed to study the
+long-term impacts of logging and other forms of disturbance on tree abundances and
+distributions, carbon stocks and carbon sequestration in uneven-aged mixed species
+tropical forests.
+
+
+<!--l. 223--><p class="noindent" >
+ <h5 class="subsubsectionHead"><span class="titlemark">2   </span> <a
+id="x1-180002.1.2"></a>State variables and scales</h5>
+<!--l. 224--><p class="noindent" >The model is implemented in three-dimensional space, and is grid and individual-based.
+Ecological processes are formulated in three organizational scales: trees, patches and
+landscape (table <a
+href="#x1-33001r1">2.1<!--tex4ht:ref: tbl:attributes --></a>). Each tree is represented individually from birth to death. To
+enable the dynamics of species-rich forests to be simulated more efficiently, species with
+similar functional characteristics are grouped in plant functional types (PFTs). Groups
+are based on shade-tolerance and maximum height (however, single species
+can be represented just as easily). In addition, cohorts are an extra level that
+aggregate trees of the same age and PFT within a patch. However, this level is
+used for purely computational reasons and no attributes are accessible (see
+section 2.2.1 for more details on cohorts and section 2.3 for more details on
 PFTs).
-<!--l. 159--><p class="indent" >   Each tree is represented individually from birth to death.To enable the dynamics of species-rich
-forests to be simulated,species with similar functional characteristics are grouped in PFTs. Groups
-based on shade-tolerance and maximum height are defined (however, single species can be represented
-just as easily).
+<!--l. 226--><p class="indent" >   Patches are squared cells with unique x and y coordinates and area equivalent to the
+crown area of a mature tree (parameter <span
+class="cmti-12">a </span>in table <a
+href="#x1-33001r1">2.1<!--tex4ht:ref: tbl:attributes --></a>). Patches are divided in small
+vertical layers (&#x0394;<span
+class="cmti-12">h </span>in Table <a
+href="#x1-33001r1">2.1<!--tex4ht:ref: tbl:attributes --></a>) that might have different light availability due
+to light diffusion and interception. Light availability is calculated for each
+layer, as well as the sum of leaf areas. Patches are linked to their neighbors
+since individual trees in one patch may fall into a neighboring patch. The
+landscape is the set of all patches organized in a rectangular grid with periodic
+boundaries. Forests are simulated in monthly time steps. The total period of time
+simulated can be decades or centuries, depending on the simulation goals. For the
+logging example given on section 2.4 the total time was 50 years because that
+exceeds the time that most sustainable logging operations wait to revisit a site
+<a
+href="#XRefWorks:115">CONAMA</a>&#x00A0;(<a
+href="#XRefWorks:115">2009</a>).
 
 
-<!--l. 161--><p class="indent" >   Patches are squared cells with unique x and y coordinates and area equivalent to the crown area of
-a mature tree (parameter <span
-class="cmti-10">a </span>in table <a
-href="#x1-16001r1">1<!--tex4ht:ref: tbl:attributes --></a>). Patches are divided in small vertical layers (<span
-class="cmmi-10">&delta;</span><span
-class="cmti-10">h </span>in table <a
-href="#x1-16001r1">1<!--tex4ht:ref: tbl:attributes --></a>),
-which are used to represent light diffusion and interception.Light availability is calculated for each
-layer, as well as the sum of leaf areas. Patches are linked to their neighbors to allow trees to fall into
-another patch. Forests are simulated in monthly time steps and normally 50 to 100 years will be
-simulated.
-<!--l. 163--><p class="indent" >   Finally, the landscape is the rectangular grid that results from the combination of all patches. The
-grid is represented as a torus (i.e. with periodic boundaries). The attibutes for each level are listed the
-table below .
-   <div class="table">
+<!--l. 229--><p class="noindent" >
+ <h5 class="subsubsectionHead"><span class="titlemark">3   </span> <a
+id="x1-190002.1.3"></a>Process overview and scheduling</h5>
+<!--l. 230--><p class="noindent" >Within each time-step (1 month) the model proceeds in the following order:
+re-calculation of light availability within the forest, growth and update of geometrical
+characteristics. Mortality and recruitment events occur once a year (every 12
+time-steps), while logging events are executed as scheduled (the default is every 25
+years).
+<!--l. 233--><p class="indent" >   Within each patch, all trees compete for light and space following a gap model.
+Light availability is assumed to be the main driver of tree growth and forest succession.
+For each patch, the light availability is calculated according to an extinction law that
+depends on the vertical distribution of the leaf area. Light availability is then
+determined for each tree. The same equation is used to calculate the light incidence at
+the soil level (section 2.1.7, submodel III). Annual growth is calculated based on the
+physiological processes of photosynthesis (section 2.1.7, submodels IV and V) and
+respiration (section 2.1.7, submodel VI). Growth is expressed as the monthly increment
+in aboveground biomass (section 2.1.7, submodel VII). Biomass acquisition is translated
+into DBH increment, which is used to update height, crown area and other
+geometrical attributes through allometric equations (section 2.1.7, submodel
+VIII). Tree mortality can occur either through self-thinning in dense patches,
+stochastic mortality, gap creation by large falling trees or logging (section
+2.1.7, submodel II). Recruitment (section 2.1.7, submodel I) occurs when the
+light intensity at forest floor exceeds a PFT-specific threshold (parameter
+<span
+class="cmmi-12">I</span><sub><span
+class="cmmi-8">seed</span></sub>; see table <a
+href="#x1-33003r3">2.3<!--tex4ht:ref: table:PFT_parameters --></a>). At the beginning of each year, a PFT-specific number
+of seeds (defined by parameter <span
+class="cmmi-12">N</span><sub><span
+class="cmmi-8">seed</span></sub>) is randomly distributed across all the
+patches. The effective recruitment rates for each PFT describes the number of
+seeds which met the minimum light and space criteria to grow over the DBH
+of 1 cm in each year. At the end of each year mortality events are executed
+sequentially. If logging operations are scheduled for that year, they occur after
 
 
-<!--l. 166--><p class="indent" >   <a
- id="x1-16001r1"></a><hr class="float"><div class="float"
+natural mortality events. Figure <a
+href="#x1-34001r1">2.1<!--tex4ht:ref: fig:tree_model_overview --></a> illustrates the order in which submodels are
+executed.
+<!--l. 235--><p class="noindent" >
+ <h5 class="subsubsectionHead"><span class="titlemark">4   </span> <a
+id="x1-200002.1.4"></a>Design concepts</h5>
+    <ul class="itemize1">
+    <li class="itemize"><span
+class="cmti-12">Emergence</span>: Patch level state variables such as light availability at the ground
+    level and vertical layers, as well as landscape level variables such as carbon
+    stocks  and  net  carbon  exchange,  depend  on  the  abundance  and  spatial
+    distribution of individual trees.
+    </li>
+    <li class="itemize"><span
+class="cmti-12">Sensing</span>: Individuals sense their size (biomass), which affects growth.
+    </li>
+    <li class="itemize"><span
+class="cmti-12">Interactions</span>:  Trees  in  the  same  patch  compete  for  light  and  space
+    (self-thinning). Trees in different patches may interact when tall trees fall
+    and damage smaller ones.
+    </li>
+    <li class="itemize"><span
+class="cmti-12">Stochasticity</span>: All mortality processes are described as probabilities. Seed
+    dispersal can follow a random distribution depending on dispersal mode
+    (uniform or power distribution).
+    </li>
+    <li class="itemize"><span
+class="cmti-12">Collectives</span>: Cohorts are collectives of trees with the same age and Functional
+    Type which are located in the same patch. Trees in the same cohort have
+    the same size.
+
+
+    </li>
+    <li class="itemize"><span
+class="cmti-12">Observation</span>: Observations can be made at the individual (Biomass, Leaf
+    Area and any other individual attribute), population (Abundance, totals
+    and  summary  statistics  for  any  individual  attribute)  or  landscape  levels
+    (Abundance  per  PFT,  totals  and  summary  statistics  for  any  individual
+    attribute, Net Carbon Exchange per year and total carbon stocks in soils,
+    deadwood  and  living  aboveground  biomass).  Outputs  can  be  recorded
+    hierarchically in a HDF5 database. Some plotting functions are also available
+    for the most commonly used data.</li></ul>
+<!--l. 255--><p class="noindent" >
+ <h5 class="subsubsectionHead"><span class="titlemark">5   </span> <a
+id="x1-210002.1.5"></a>Initialization</h5>
+<!--l. 256--><p class="noindent" >A simulation can be started with a treeless area, in which case a seed bank is
+generated by randomly distributing a predefined number of seeds (N<span
+class="cmr-8">seed</span>) across all
+patches. The total number of seeds is a PFT-specific parameter (N<span
+class="cmr-8">seed</span>) and a
+uniform distribution is used to determine the position of each seed in the grid.
+The model can also reconstruct an existing forest from a data file containing
+information about trees (position in space, id, age, DBH and the PFT to which they
+belong), the seed bank (how many seed of each PFT are available in the soil) and
+landscape level carbon stocks. This information can be generated by pausing and
+saving an ongoing simulation. To test different scenarios on a mature forest, a
+combination of the two features can be used in order to reduce computation
+times: starting from a clear area, the model runs for a long period (<span
+class="cmti-12">e.g., </span>300
+years) and the resulting forest can be saved and used multiple times as the
+starting point of different scenarios that run for shorter periods of time (<span
+class="cmti-12">e.g., </span>50
+years).
+
+
+<!--l. 260--><p class="noindent" >
+ <h5 class="subsubsectionHead"><span class="titlemark">6   </span> <a
+id="x1-220002.1.6"></a>Input</h5>
+<!--l. 261--><p class="noindent" >The position and other attributes of all trees can be saved and used as an input,
+allowing simulations to be paused and continued. Other than that, no other inputs are
+used. Site conditions are assumed to be homogeneous and there is no inter-annual
+variability of environmental conditions.
+<!--l. 263--><p class="noindent" >
+ <h5 class="subsubsectionHead"><span class="titlemark">7   </span> <a
+id="x1-230002.1.7"></a>Submodels</h5>
+<!--l. 264--><p class="noindent" >The submodels are summarized in figure <a
+href="#x1-34001r1">2.1<!--tex4ht:ref: fig:tree_model_overview --></a>.
+<!--l. 266--><p class="indent" >
+
+<p class="noindent" ><hr class="figure"><div class="figure"
 >
 
 
- <div class="caption"
-><span class="id">Table&#x00A0;1: </span><span
-class="content">Attributes for each organizational level</span></div><!--tex4ht:label?: x1-16001r1 -->
-Where appropriate, the respective equation numbers are displayed
-in squared brackets. Abbreviations appear in round brackets.
-<!--tex4ht:inline--><div class="tabular"> <table id="TBL-1" class="tabular"
+<a
+ id="x1-34001r1"></a>
+
+
+<!--l. 943--><p class="noindent" >
+
+<!--l. 944--><p class="noindent" ><img
+src="_static/model_overview.png" alt="PIC"
+>
+<br /> <div class="caption"
+><span class="id">Figure&#x00A0;2.1: </span><span
+class="content">Model overview. Boxes correspond to the submodels described in
+section 2.1.7. Numbers show the order in which events occur. Blue and red arrows
+represent  carbon  sequestration  and  emission  respectively.  After  seed  dispersal
+and recruitment, trees go through the physiological processes leading to growth.
+Decomposition follows the update of geometric attributes and, after the mortality
+submodel is executed, landscape level carbon balances are updated. The plots at
+the bottom display carbon dynamics at the landscape level.</span></div><!--tex4ht:label?: x1-34001r1 -->
+
+
+<!--l. 948--><p class="noindent" ></div><hr class="endfigure">
+
+
+
+   <dl class="enumerate"><dt class="enumerate">
+ I. </dt><dd
+class="enumerate"><span
+class="cmti-12">Recruitment</span>
+   <!--l. 270--><p class="noindent" >Seed dispersal can be implemented by two methods. The first (external seed
+   rain)  randomly  places  seeds  across  the  entire  landscape,  using  the  <span
+class="cmmi-12">N</span><sub><span
+class="cmmi-8">seed</span></sub>
+   parameter to determine the number for each PFT. The second (implicit seed
+   dispersal) uses a power distribution to disperse the seeds around each tree,
+   based on the fruits available. Each fruit is assumed to contain only one seed.
+   The number of fruits for each tree is calculated by
+   <table
+class="equation"><tr><td><a
+id="x1-23002r1"></a>
+   <center class="math-display" >
+   <img
+src="./_static/dissertation0x.png" alt="Nfruits = DBH   &#x22C5; afruits,
+   " class="math-display" ></center></td><td class="equation-label">(1)</td></tr></table>
+   <!--l. 276--><p class="nopar" >
+   <!--l. 279--><p class="noindent" >where <span
+class="cmmi-12">DBH </span>is the Diameter at Breast Height and <span
+class="cmmi-12">a</span><sub><span
+class="cmmi-8">fruits</span></sub> is an adjusting factor.
+   Only trees with DBH above 10 cm produce fruits in this version. Chapter 3
+   describes a third dispersal method (explicit seed dispersal), in which fruits are
+   eaten by explicitly modelled dispersers. In that case, a PFT specific parameter
+   <span
+class="cmmi-12">dis</span><sub><span
+class="cmmi-8">gen</span></sub> determines what proportion of the fruits will be dispersed by the
+   tree&#8217;s power function (referred to as generic dispersal in Chapter 3) and
+   what proportion of the fruits will remain available for the dispersers to
+   eat.
+   <!--l. 281--><p class="noindent" >The probability density distribution for the power function is given by:
+   <table
+class="equation"><tr><td><a
+id="x1-23003r2"></a>
+   <center class="math-display" >
+   <img
+src="./_static/dissertation1x.png" alt="P (x;a) = ax(a-1).
+   " class="math-display" ></center></td><td class="equation-label">(2)</td></tr></table>
+   <!--l. 286--><p class="nopar" >
+
+
+   <!--l. 290--><p class="noindent" >Each PFT has a light requirement for germination (<span
+class="cmti-12">I</span><span
+class="cmti-8">seed</span>). At the beginning of each
+   timestep, light incidence at the floor level is calculated (at a patch level). In each
+   patch, all seeds have their PFT-specific light requirement tested against the light
+   incidence. If <span
+class="cmti-12">I</span><span
+class="cmti-8">floor</span> <span
+class="cmmi-12">&#x003E; </span><span
+class="cmti-12">I</span><span
+class="cmti-8">seed</span>, then the vertical layer closest to the soil (<span
+class="cmti-12">i.e., </span>the one
+   that the seedling will occupy if it is established) is checked for space. If that layer
+   is not yet fully occupied by seedlings, the current seed is then converted into a
+   small tree with DBH=1cm.
+   </dd><dt class="enumerate">
+II. </dt><dd
+class="enumerate"><span
+class="cmti-12">Update of geometric attributes</span>
+   <!--l. 300--><p class="noindent" >A series of allometric equations is used to define the attributes of a tree. Trees are
+   represented as two cylinders (one for the stem and another for the crown) and
+   are addressed by the index <span
+class="cmmi-12">i </span>when applicable. See Figure <a
+href="#x1-34002r2">2.2<!--tex4ht:ref: fig:vertical_layers --></a> (a) for an
+   illustration.
+   <!--l. 304--><p class="noindent" >When an individual grows (submodel VIII), the biomass gain is translated into
+   DBH increment by the following equation:
+   <table
+class="equation"><tr><td><a
+id="x1-23005r3"></a>
+   <center class="math-display" >
+   <img
+src="./_static/dissertation2x.png" alt="         &#x2218; ------------
+DBH   =    -----B------,
+          &#x03C0;4 &#x22C5; H &#x22C5; f &#x22C5; &#x03C1;&#x03C3;
+   " class="math-display" ></center></td><td class="equation-label">(3)</td></tr></table>
+   <!--l. 310--><p class="nopar" >
+
+
+   <!--l. 313--><p class="noindent" >where <span
+class="cmmi-12">H </span>is the height of the tree, <span
+class="cmmi-12">f </span>the form factor that for the idealized
+   cylindrical shape assumed for the stem, <span
+class="cmmi-12">&#x03C1; </span>the wood density and <span
+class="cmmi-12">&#x03C3; </span>the fraction
+   of stem wood biomass from total tree biomass [derived from eq. 5 in
+   FMD].
+   <!--l. 315--><p class="noindent" >All the other geometrical characteristics are updated based on the new DBH as
+   described below.
+   <!--l. 317--><p class="noindent" >Height(H) [eq. 1 in FMD] is determined by:
+   <table
+class="equation"><tr><td><a
+id="x1-23006r4"></a>
+   <center class="math-display" >
+   <img
+src="./_static/dissertation3x.png" alt="               h1
+H  = h0 &#x22C5; DBH    ,
+   " class="math-display" ></center></td><td class="equation-label">(4)</td></tr></table>
+   <!--l. 323--><p class="nopar" >
+   <!--l. 326--><p class="noindent" >where <span
+class="cmmi-12">h</span>0 and <span
+class="cmmi-12">h</span><sub><span
+class="cmr-8">1</span></sub> are type specific parameters.
+   <!--l. 328--><p class="noindent" >Crown length (<span
+class="cmmi-12">CL</span>) [eq. 2 in FMD] is a function of height,
+   <table
+class="equation"><tr><td><a
+id="x1-23007r5"></a>
+
+
+   <center class="math-display" >
+   <img
+src="./_static/dissertation4x.png" alt="CL  = c &#x22C5; H.
+   " class="math-display" ></center></td><td class="equation-label">(5)</td></tr></table>
+   <!--l. 334--><p class="nopar" >
+    Crown diameter [eq. 3 in FMD] is proportional to stem diameter,
+   <table
+class="equation"><tr><td><a
+id="x1-23008r6"></a>
+   <center class="math-display" >
+   <img
+src="./_static/dissertation5x.png" alt="CD   = cd &#x22C5; DBH.
+   " class="math-display" ></center></td><td class="equation-label">(6)</td></tr></table>
+   <!--l. 342--><p class="nopar" >
+   <!--l. 345--><p class="noindent" >Since the crown is represented as a cylinder, crown area (CA) [eq. 4 in FMD] is
+   <table
+class="equation"><tr><td><a
+id="x1-23009r7"></a>
+
+
+   <center class="math-display" >
+   <img
+src="./_static/dissertation6x.png" alt="CA  =  &#x03C0;-&#x22C5; CD2.
+     4
+   " class="math-display" ></center></td><td class="equation-label">(7)</td></tr></table>
+   <!--l. 350--><p class="nopar" >
+   <!--l. 353--><p class="noindent" >The leaf area index of a tree (LAI) [eq. 8 in FMD] represents the total amount of
+   leaf area per unit of crown projection area, which relates to the photosynthetic
+   capacity. It is calculated as a function of DBH,
+   <table
+class="equation"><tr><td><a
+id="x1-23010r8"></a>
+   <center class="math-display" >
+   <img
+src="./_static/dissertation7x.png" alt="LAI  =  l &#x22C5; DBHl1,
+       0
+   " class="math-display" ></center></td><td class="equation-label">(8)</td></tr></table>
+   <!--l. 357--><p class="nopar" >
+   <!--l. 359--><p class="noindent" >where <span
+class="cmmi-12">l</span><sub><span
+class="cmr-8">0</span></sub> and <span
+class="cmmi-12">l</span><sub><span
+class="cmr-8">1</span></sub> are PFT-specific parameters.
+
+
+   </dd><dt class="enumerate">
+III. </dt><dd
+class="enumerate"><span
+class="cmti-12">Tree mortality </span>Mortality is based on section E1 in FMD, but includes additional
+   mortality risks to small trees following <a
+href="#XCh1:12">R�ger et&#x00A0;al.</a>&#x00A0;(<a
+href="#XCh1:12">2007</a>) and excludes
+   deterministic mortality.
+   <!--l. 365--><p class="noindent" >(1) Background mortality: each tree has a base mortality (<span
+class="cmmi-12">m</span>
+<table
+class="equation"><tr><td><a
+id="x1-23012r9"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation8x.png" alt="       (                                                       )
+     |                   DBH                                 |
+     {  mmax  - mmax  &#x22C5;DBHmort-+ mbase,  if DBH   &#x003C;DBHmort    }
+mB  =  |                                                       |
+     (  mbase,                           else                 )
+" class="math-display" ></center></td><td class="equation-label">(9)</td></tr></table>
+<!--l. 374--><p class="nopar" >
+<!--l. 376--><p class="noindent" >where <span
+class="cmmi-12">m</span><sub><span
+class="cmmi-8">max</span></sub> is the maximum size-dependent mortality of small trees and <span
+class="cmmi-12">DBH</span><sub><span
+class="cmmi-8">max</span></sub> is
+the DBH up to which tree mortality is increased.
+<!--l. 388--><p class="noindent" >(2) Self-thinning: Mortality is increased for trees in dense patches due to competition
+for space. Crowding based mortality, <span
+class="cmmi-12">m</span><sub><span
+class="cmmi-8">C</span></sub>, is modelled as
+<table
+class="equation"><tr><td><a
+id="x1-23013r10"></a>
+
+
+<center class="math-display" >
+<img
+src="./_static/dissertation9x.png" alt="            -------
+mC  =  1 - 1CCAmax  ,
+" class="math-display" ></center></td><td class="equation-label">(10)</td></tr></table>
+<!--l. 393--><p class="nopar" >
+<!--l. 396--><p class="noindent" >where <span
+class="cmmi-12">CCA</span><sub><span
+class="cmmi-8">max</span></sub> is the maximum Cumulative Crown Area (which sums the crown areas
+of all trees with the crowns in that height layer).
+<!--l. 400--><p class="noindent" >(3) Damage mortality
+<!--l. 402--><p class="noindent" >When a large tree dies, it might fall and impact its neighbors. Large trees are those
+with DBH above the size threshold defined by the parameter <span
+class="cmmi-12">DBH</span><sub><span
+class="cmmi-8">fall</span></sub>. Damage is
+inflicted on the small trees (<span
+class="cmmi-12">DBH &#x003C; </span>50 cm) at least 1 m shorter than the falling tree if
+they are located on the area where the crowns is going to land. Damage is expressed as
+the ratio between the crown projection area of the falling tree (see submodel VIII for
+details on the calculation of CA) and the patch area (parameter a). The direction of the
+fall is chosen randomly with equal probability. The damage mortality probability
+is
+<table
+class="equation"><tr><td><a
+id="x1-23014r11"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation10x.png" alt="       CA--
+mD  =   a .
+" class="math-display" ></center></td><td class="equation-label">(11)</td></tr></table>
+<!--l. 407--><p class="nopar" >
+<!--l. 412--><p class="noindent" >The tree mortality processes are executed sequentially for each tree. A random
+number between 0 and 1 is drawn from a uniform distribution and the tree dies
+if the number is lower than <span
+class="cmmi-12">m</span><sub><span
+class="cmmi-8">B</span></sub>, otherwise the process is repeated for <span
+class="cmmi-12">m</span><sub><span
+class="cmmi-8">C</span></sub>
+and <span
+class="cmmi-12">m</span><sub><span
+class="cmmi-8">D</span></sub>. When a tree dies, its carbon content (44% of the biomass, according
+to <a
+href="#XCh1:01">Fischer et&#x00A0;al.</a>&#x00A0;(<a
+href="#XCh1:01">2014</a>)) is transferred to a temporary stock <span
+class="cmmi-12">S</span><sub><span
+class="cmmi-8">mort</span></sub>, which is
+subsequently used to update the dead wood stock <span
+class="cmmi-12">S</span><sub><span
+class="cmmi-8">dead</span></sub> as described in equation
+<a
+href="#x1-23045r35">35<!--tex4ht:ref: eq:Sdead --></a>.
+</dd><dt class="enumerate">
+IV.</dt><dd
+class="enumerate"><span
+class="cmti-12">Competition for light</span>
+<!--l. 419--><p class="noindent" >Each patch is vertically divided in small layers of width &#x0394;<span
+class="cmmi-12">h </span>(see figure <a
+href="#x1-34002r2">2.2<!--tex4ht:ref: fig:vertical_layers --></a>). Light
+availability is calculated for the individuals within each patch taking into consideration
+the canopy layers they occupy. If a patch has only one tree, all the light will be available
+to that individual. Due to self-shading, higher stratifications of the crown
+intercept more light, reducing the availability for the layers below. Similarly,
+with the addition of other trees to the same patch, the tallest ones shade the
+smallest.
+<!--l. 421--><p class="noindent" >For each patch and height layer, the leaf area accumulated by all individuals is
+calculated. Each tree contributes parts of its crown leaf area to those height layers
+which are occupied by its crown. The bottom and top layers [eq. 31 and 32 in FMD] are
+defined by:
+
+<!--l. 950--><p class="indent" >   <hr class="figure"><div class="figure"
+>
+
+
+<a
+ id="x1-34002r2"></a>
+
+
+<!--l. 952--><p class="noindent" >
+
+<!--l. 953--><p class="noindent" ><img
+src="_static/vertical_layers.png" alt="PIC"
+>
+<br /> <div class="caption"
+><span class="id">Figure&#x00A0;2.2: </span><span
+class="content">Geometrical representation of each tree and vertical stratification.
+a) Trees are represented as two superimposed cylinders. The crown diameter and
+length, DBH and tree height are geometrical attributes used in the calculation
+of biomass. b) Vertical stratification used to calculate photosynthesis for each
+individual (<span
+class="cmmi-12">P</span><sub><span
+class="cmmi-8">i</span></sub>). Crown Length is divided into layers. Light incidence is higher
+at  the  top  (layer  zero)  due  to  self-shading.  c)  Taller  trees  (<span
+class="cmmi-12">i  </span>=  1)  limit  the
+photosynthetic activity of smaller individuals (<span
+class="cmmi-12">i </span>= 2).</span></div><!--tex4ht:label?: x1-34002r2 -->
+
+
+<!--l. 956--><p class="indent" >   </div><hr class="endfigure">
+
+<table
+class="equation"><tr><td><a
+id="x1-23016r12"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation11x.png" alt="       H
+ltop = ---,
+     &#x0394;h
+" class="math-display" ></center></td><td class="equation-label">(12)</td></tr></table>
+<!--l. 426--><p class="nopar" >
+<!--l. 429--><p class="noindent" >and
+<table
+class="equation"><tr><td><a
+id="x1-23017r13"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation12x.png" alt="l     =  H---CL--,
+bottom      &#x0394;h
+" class="math-display" ></center></td><td class="equation-label">(13)</td></tr></table>
+<!--l. 433--><p class="nopar" >
+<!--l. 436--><p class="noindent" >where <span
+class="cmmi-12">H </span>is the tree&#8217;s height and <span
+class="cmmi-12">CL </span>its crown length.
+
+
+<!--l. 438--><p class="noindent" >A tree&#8217;s leaf area index (<span
+class="cmmi-12">LAI</span>) [based on eq. 34 in FMD] contributes equally to each of
+the patch layers between <span
+class="cmmi-12">l</span><sub><span
+class="cmmi-8">bottom</span></sub> and <span
+class="cmmi-12">l</span><sub><span
+class="cmmi-8">top</span></sub>:
+<table
+class="equation"><tr><td><a
+id="x1-23018r14"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation13x.png" alt="        LAI  &#x22C5; CA
+LAl =  l-----l-----,
+      top   bottom
+" class="math-display" ></center></td><td class="equation-label">(14)</td></tr></table>
+<!--l. 443--><p class="nopar" >
+<!--l. 446--><p class="noindent" >where <span
+class="cmmi-12">LA</span><sub><span
+class="cmmi-8">l</span></sub> is the tree&#8217;s contribution to the leaf area of vertical layer <span
+class="cmmi-12">l </span>of that patch and
+<span
+class="cmmi-12">CA </span>is its crown area. The multiplication of <span
+class="cmmi-12">LAI </span>by <span
+class="cmmi-12">CA </span>gives the leaf area of a single
+tree in m<sup class="textsuperscript"><span
+class="cmr-10x-x-109">2</span></sup>.
+<!--l. 448--><p class="noindent" >To calculate the leaf are per layer (<span
+class="cmmi-12">l</span>) at the patch level <span
+class="cmmi-12">LAP</span><sub><span
+class="cmmi-8">l</span></sub> [based on eq. 35 in FMD],
+the contribution of each tree&#8217;s leaf area per layer (<span
+class="cmmi-12">LA</span><sub><span
+class="cmmi-8">l</span></sub>) relative to the patch area (<span
+class="cmmi-12">a</span>) is
+summed,
+<table
+class="equation"><tr><td><a
+id="x1-23019r15"></a>
+<center class="math-display" >
+
+
+<img
+src="./_static/dissertation14x.png" alt="         1-   &#x2211;
+LAPl  =  a           LAl
+         alwl/ in cdriowvinduinalsl
+" class="math-display" ></center></td><td class="equation-label">(15)</td></tr></table>
+<!--l. 453--><p class="nopar" >
+.
+<!--l. 456--><p class="noindent" >With this information it is possible to calculate the radiation that each tree is able to
+intercept at the top of its crown (<span
+class="cmmi-12">I</span><sub><span
+class="cmmi-8">top</span></sub>) [eq. 36 in FMD],
+<table
+class="equation"><tr><td><a
+id="x1-23020r16"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation15x.png" alt="                (               )
+                     &#x2211;
+Itop = Imax &#x22C5; exp ( - k &#x22C5;   LAPl )  ,
+                    l&#x003E;ltop
+" class="math-display" ></center></td><td class="equation-label">(16)</td></tr></table>
+<!--l. 463--><p class="nopar" >
+<!--l. 466--><p class="noindent" >where I<span
+class="cmr-8">max</span>  is the irradiance above the forest canopy and <span
+class="cmmi-12">k </span>the light extinction
+coefficient. Note that only those layers above <span
+class="cmmi-12">l</span><sub><span
+class="cmmi-8">top</span></sub> are used.
+</dd><dt class="enumerate">
+V.</dt><dd
+class="enumerate"><span
+class="cmti-12">Photosynthesis</span>
+
+
+<!--l. 471--><p class="noindent" >Photosynthesis is based on the incoming irradiance at the top of each tree (<span
+class="cmmi-12">I</span><sub><span
+class="cmmi-8">top</span></sub>).
+Following the approach described by <a
+href="#XCh1:14">Thornley and Johnson</a>&#x00A0;(<a
+href="#XCh1:14">1990</a>) [and eq. 37 in
+FMD], the cylindrical crown is considered as a stack of thin disks. The photosynthesis
+of each disk is modelled by a Michaelis-Menten function describing the relationship
+between the radiation available at the top of each disk <span
+class="cmmi-12">I</span>(<span
+class="cmmi-12">L</span>) and its photosynthetic rate
+<span
+class="cmmi-12">P</span>(<span
+class="cmmi-12">I</span>):
+<table
+class="equation"><tr><td><a
+id="x1-23022r17"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation16x.png" alt="        &#x03B1;-&#x22C5; I-(L-) &#x22C5; pmax
+P (I ) = &#x03B1; &#x22C5; I(L) + p   ,
+                 max
+" class="math-display" ></center></td><td class="equation-label">(17)</td></tr></table>
+<!--l. 479--><p class="nopar" >
+<!--l. 482--><p class="noindent" >where <span
+class="cmmi-12">&#x03B1; </span>is the initial slope of the light response curve and <span
+class="cmmi-12">p</span><sub><span
+class="cmmi-8">max</span></sub> is the maximum rate of
+photosynthesis. The incident irradiance [eq. 38 in FMD] on the surface of a leaf
+is:
+<table
+class="equation"><tr><td><a
+id="x1-23023r18"></a>
+<center class="math-display" >
+
+
+<img
+src="./_static/dissertation17x.png" alt="       ---k--        -k&#x22C5;L
+I(L) = 1 - m  &#x22C5; Itop &#x22C5; e  ,
+" class="math-display" ></center></td><td class="equation-label">(18)</td></tr></table>
+<!--l. 488--><p class="nopar" >
+<!--l. 491--><p class="noindent" >where <span
+class="cmmi-12">I</span><sub><span
+class="cmmi-8">top</span></sub> is the irradiance incident on the tree crown, <span
+class="cmmi-12">k </span>the light extinction
+coefficient and <span
+class="cmmi-12">m </span>the light transmission coefficient of leaves. Since all leaves are
+assumed to be distributed homogeneously within the crown, the higher ones will
+shade the ones below. Thereby, <span
+class="cmmi-12">L </span>= 0 represents the top of the individual
+and <span
+class="cmmi-12">L </span>= <span
+class="cmmi-12">LAI </span>represents the bottom, with <span
+class="cmmi-12">LAI </span>being the leaf area index (eq.
+<a
+href="#x1-23010r8">8<!--tex4ht:ref: eq:leaf_area_index --></a>).
+<!--l. 493--><p class="noindent" >The photosynthetic rate per individual (<span
+class="cmmi-12">P</span><sub><span
+class="cmmi-8">i</span></sub>) [eq. 39 in FMD] is obtained by integrating
+equation <a
+href="#x1-23022r17">17<!--tex4ht:ref: eq:photo_disk --></a> over the individual&#8217;s leaf area index:
+<table
+class="equation"><tr><td><a
+id="x1-23024r19"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation18x.png" alt="     &#x222B;  LAIi
+P  =        P(I(L ))dL.
+i    0
+" class="math-display" ></center></td><td class="equation-label">(19)</td></tr></table>
+<!--l. 498--><p class="nopar" >
+
+
+<!--l. 501--><p class="noindent" >The integration results in [eq. 40 in FMD],
+<table
+class="equation"><tr><td><a
+id="x1-23025r20"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation19x.png" alt="      pmax-    ---&#x03B1;-&#x22C5; k-&#x22C5; Itop +-pmax-(1---m-)--
+Pi =   k   &#x22C5; ln &#x03B1; &#x22C5; k &#x22C5; I e-k&#x22C5;LAIi + p (1 - m ).
+                   top           max
+" class="math-display" ></center></td><td class="equation-label">(20)</td></tr></table>
+<!--l. 510--><p class="nopar" >
+</dd><dt class="enumerate">
+VI.</dt><dd
+class="enumerate"><span
+class="cmti-12">Gross production</span>
+<!--l. 517--><p class="noindent" >Equation <a
+href="#x1-23025r20">20<!--tex4ht:ref: eq:photo_tree --></a> gives the photosynthetic rate in <span
+class="cmmi-12">&#x03BC;mol</span><sub><span
+class="cmmi-8">CO</span><sub><span
+class="cmr-6">2</span></sub></sub><span
+class="cmmi-12">&#x2215;m</span><sup><span
+class="cmr-8">2</span></sup><span
+class="cmmi-12">s</span>. The Gross Primary
+Production (GPP) [eq. 42 in FMD] per tree per year is calculated by multiplying the
+individual photosynthetic rate <span
+class="cmmi-12">P</span><sub><span
+class="cmmi-8">i</span></sub> by the crown area (<span
+class="cmmi-12">CA</span>) and a conversion coefficient
+(<span
+class="cmmi-12">codm</span>) that transforms absorbed CO<span
+class="cmr-8">2</span>  to tons of organic dry mass per year (<span
+class="cmmi-12">t</span><sub><span
+class="cmmi-8">ODM</span></sub><span
+class="cmmi-12">&#x2215;y</span>)
+:
+<table
+class="equation"><tr><td><a
+id="x1-23027r21"></a>
+<center class="math-display" >
+
+
+<img
+src="./_static/dissertation20x.png" alt="GP Pi =  Pi &#x22C5; CA &#x22C5; codm.
+" class="math-display" ></center></td><td class="equation-label">(21)</td></tr></table>
+<!--l. 523--><p class="nopar" >
+<!--l. 526--><p class="noindent" >In the conversion factor [based on eq. 41 in FDM], 3600 accounts for the conversion
+from seconds to hours and l<span
+class="cmr-8">day</span>  represents the average daylight period. The parameter
+<span
+class="cmmi-12">&#x03D5;</span><span
+class="cmr-8">act</span>  gives the number of days in which there is photosynthetic activity within a time
+step. For tropical environments, trees are assumed to do photosynthesis every day of the
+year. The final components 0<span
+class="cmmi-12">.</span>63 <span
+class="cmsy-10x-x-120">&#x22C5; </span>44 <span
+class="cmsy-10x-x-120">&#x22C5; </span>10<sup><span
+class="cmsy-8">-</span><span
+class="cmr-8">12</span></sup> include the molar mass of CO
+<span
+class="cmr-8">2</span>, the
+conversion from grams of CO<span
+class="cmr-8">2</span> to grams Organic Dry Matter (44%) and the conversion
+from <span
+class="cmti-12">grams </span>to <span
+class="cmti-12">tonnes</span>:
+<table
+class="equation"><tr><td><a
+id="x1-23028r22"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation21x.png" alt="codm =  3600 &#x22C5; lday &#x22C5; &#x03D5;act &#x22C5; 0.63 &#x22C5; 44 &#x22C5; 10-12.
+" class="math-display" ></center></td><td class="equation-label">(22)</td></tr></table>
+<!--l. 532--><p class="nopar" >
+
+
+</dd><dt class="enumerate">
+VII.</dt><dd
+class="enumerate"><span
+class="cmti-12">Respiration</span>
+<!--l. 539--><p class="noindent" >Respiration is divided into two components: growth and maintenance. Growth
+respiration is assumed to be a constant fraction of the GPP that is used during the
+build up of new biomass and is defined by the parameter R<span
+class="cmr-8">g</span>.
+<!--l. 542--><p class="noindent" >Maintenance respiration (R<span
+class="cmr-8">m</span>) [eq. 44 in FMD] is calculated based on the estimated
+diameter growth,
+<table
+class="equation"><tr><td><a
+id="x1-23030r23"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation22x.png" alt="      (         B     - B  )
+Rm  =   GP  P - --i,est----i  ,
+                1 - Rg
+" class="math-display" ></center></td><td class="equation-label">(23)</td></tr></table>
+<!--l. 546--><p class="nopar" >
+<!--l. 549--><p class="noindent" >where <span
+class="cmmi-12">B</span><sub><span
+class="cmmi-8">i</span></sub> is the current biomass of tree <span
+class="cmmi-12">i </span>(see equation <a
+href="#x1-23040r31">31<!--tex4ht:ref: eq:Biomass_from_dbh --></a>) and <span
+class="cmmi-12">B</span><sub><span
+class="cmmi-8">i,est</span></sub> is the estimated
+biomass of the same tree after taking into consideration the diameter growth. The latter
+is calculated using equation <a
+href="#x1-23040r31">31<!--tex4ht:ref: eq:Biomass_from_dbh --></a>, however the DBH used as the input corresponds to the
+current diameter plus the diameter increment,
+<table
+class="equation"><tr><td><a
+id="x1-23031r24"></a>
+
+
+<center class="math-display" >
+<img
+src="./_static/dissertation23x.png" alt="B    =  B(DBH    + g (DBH    ))
+i,est           i          i
+" class="math-display" ></center></td><td class="equation-label">(24)</td></tr></table>
+<!--l. 554--><p class="nopar" >
+<!--l. 556--><p class="noindent" >The growth function used in the equation above is designed to match empirical
+measurements [eq. 48 in FDM]. The diameter increment is given by:
+<table
+class="equation"><tr><td><a
+id="x1-23032r25"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation24x.png" alt="                       (           )
+                           DBH----    -&#x03B1;1&#x22C5;DBH
+g(DBH   ) = &#x03B1;0 &#x22C5; DBH  &#x22C5;  1 - Dmax    &#x22C5; e
+" class="math-display" ></center></td><td class="equation-label">(25)</td></tr></table>
+<!--l. 561--><p class="nopar" >
+<table
+class="equation"><tr><td><a
+id="x1-23033r26"></a>
+
+
+<center class="math-display" >
+<img
+src="./_static/dissertation25x.png" alt="           Dmax-2&#x22C5;(D&#x0394;Dmax&#x22C5;Dmax)-
+&#x03B1;0 =  ----eDmax--(D&#x0394;Dmax&#x22C5;Dmax)-&#x22C5; Dmax--&#x22C5; &#x0394;Dmax------
+    (Dmax   - &#x0394;Dmax    &#x22C5; Dmax ) &#x22C5; D &#x0394;Dmax &#x22C5; Dmax
+" class="math-display" ></center></td><td class="equation-label">(26)</td></tr></table>
+<!--l. 567--><p class="nopar" >
+<table
+class="equation"><tr><td><a
+id="x1-23034r27"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation26x.png" alt="&#x03B1;1 = --------Dmax-----2-&#x22C5; &#x0394;Dmax---&#x22C5; Dmax---------
+   Dmax   &#x22C5; D &#x0394;Dmax &#x22C5; Dmax  &#x22C5; (D &#x0394;Dmax &#x22C5; Dmax )2
+" class="math-display" ></center></td><td class="equation-label">(27)</td></tr></table>
+<!--l. 573--><p class="nopar" >
+<!--l. 576--><p class="noindent" >Where Dmax is the maximum diameter a tree can reach, &#x0394;Dmax is the maximum
+increment and D<span
+class="cmr-8">&#x0394;Dmax</span>  is the stem diameter which reaches &#x0394;Dmax. See <a
+href="#XCh1:11">K�hler and
+Huth</a>&#x00A0;(<a
+href="#XCh1:11">1998</a>) for more information on how these parameters can be estimated from field
+measurements.
+
+
+<!--l. 579--><p class="noindent" >The equivalent maintenance respiration in tons of organic dry mass is then calculated
+using the same conversion coefficient used for GPP,
+<table
+class="equation"><tr><td><a
+id="x1-23035r28"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation27x.png" alt="Rm  =  rm &#x22C5; Bi &#x22C5; codm.
+" class="math-display" ></center></td><td class="equation-label">(28)</td></tr></table>
+<!--l. 585--><p class="nopar" >
+</dd><dt class="enumerate">
+VIII.</dt><dd
+class="enumerate"><span
+class="cmti-12">Biomass increment</span>
+<!--l. 591--><p class="noindent" >The biomass increment [eq. 43 in FDM] can be calculated by subtracting the yearly
+respiration value from GPP,
+<table
+class="equation"><tr><td><a
+id="x1-23037r29"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation28x.png" alt="Binc = (1 - Rg)(GP  P - Rm  ).
+" class="math-display" ></center></td><td class="equation-label">(29)</td></tr></table>
+<!--l. 597--><p class="nopar" >
+<!--l. 601--><p class="noindent" >The new biomass of a tree is then determined by,
+<table
+class="equation"><tr><td><a
+id="x1-23038r30"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation29x.png" alt="B    =  B   +  B   .
+new      old    inc
+" class="math-display" ></center></td><td class="equation-label">(30)</td></tr></table>
+<!--l. 607--><p class="nopar" >
+</dd><dt class="enumerate">
+IX.</dt><dd
+class="enumerate"><span
+class="cmti-12">Growth</span>
+<!--l. 614--><p class="noindent" >The biomass is updated based on the DBH increment. By rearranging equation <a
+href="#x1-23005r3">3<!--tex4ht:ref: eq:dbh --></a>, the
+following equation is obtained,
+<table
+class="equation"><tr><td><a
+id="x1-23040r31"></a>
+
+
+<center class="math-display" >
+<img
+src="./_static/dissertation30x.png" alt="B =  &#x03C0;-&#x22C5; DBH2  &#x22C5; H &#x22C5; f &#x22C5; &#x03C1;-,
+   4                 &#x03C3;
+" class="math-display" ></center></td><td class="equation-label">(31)</td></tr></table>
+<!--l. 620--><p class="nopar" >
+<!--l. 624--><p class="noindent" >where <span
+class="cmmi-12">H </span>is the height of the tree, <span
+class="cmmi-12">f </span>a form factor that compensates for the idealized
+cylindrical shape used to represent the stem, <span
+class="cmmi-12">&#x03C1; </span>the wood density and <span
+class="cmmi-12">&#x03C3; </span>the fraction of
+stem wood biomass from total tree biomass.
+</dd><dt class="enumerate">
+X.</dt><dd
+class="enumerate"><span
+class="cmti-12">Carbon balance</span>
+<!--l. 632--><p class="noindent" >Carbon is stored in four different stocks:
+        <ul class="itemize1">
+        <li class="itemize"><span
+class="cmmi-12">AGB</span><sub><span
+class="cmmi-8">total</span></sub>: Living trees, which is the sum of the carbon in each living
+        tree.
+        </li>
+        <li class="itemize"><span
+class="cmmi-12">S</span><sub><span
+class="cmmi-8">dead</span></sub>: Deadwood, which equals to the total carbon in dead trees.
+        </li>
+        <li class="itemize"><span
+class="cmmi-12">S</span><sub><span
+class="cmmi-8">fast</span></sub>: Fast decomposing soil stock, which equals to the amount of carbon
+        resulting from quick decomposition of dead trees.
+        </li>
+
+
+        <li class="itemize"><span
+class="cmmi-12">S</span><sub><span
+class="cmmi-8">slow</span></sub>:  Slow  decomposing  soil  stock,  which  equals  to  the  amount  of
+        carbon resulting from slow decomposition of dead trees.</li></ul>
+<!--l. 640--><p class="noindent" >The dynamics of the total aboveground biomass stock <span
+class="cmmi-12">AGB</span><sub><span
+class="cmmi-8">total</span></sub> is determined by the
+difference between the total carbon captured (see submodel IV-Growth above) as Gross
+Primary Production ( <span
+class="cmmi-12">C</span><sub><span
+class="cmmi-8">GPP</span> </sub>) [page 28 in FMD] and total carbon emissions from tree
+respiration (<span
+class="cmmi-12">C</span><sub><span
+class="cmmi-8">R</span></sub>):
+<table
+class="equation"><tr><td><a
+id="x1-23042r32"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation31x.png" alt="              Nt
+            &#x2211;
+CGP P = 0.44 &#x22C5;   GP  Pi,
+            i=1
+" class="math-display" ></center></td><td class="equation-label">(32)</td></tr></table>
+<!--l. 648--><p class="nopar" >
+<table
+class="equation"><tr><td><a
+id="x1-23043r33"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation32x.png" alt="            Nt
+         &#x2211;
+CR =  0.44 &#x22C5;    (Rm,i + Rg,i &#x22C5; (GP Pi - Rm,i)),
+          i=1
+" class="math-display" ></center></td><td class="equation-label">(33)</td></tr></table>
+<!--l. 653--><p class="nopar" >
+<table
+class="equation"><tr><td><a
+id="x1-23044r34"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation33x.png" alt="AGBtotal = CGP  P - CR.
+" class="math-display" ></center></td><td class="equation-label">(34)</td></tr></table>
+<!--l. 657--><p class="nopar" >
+<!--l. 659--><p class="noindent" >The following equations [in page 27 of FDM] calculate the amount of carbon for each of
+the remaining stocks,
+<table
+class="equation"><tr><td><a
+id="x1-23045r35"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation34x.png" alt="Sdead = Smort - (tSdead-A + tSdead- Sslow + tSdead-Sfast) &#x22C5; Sdead,
+" class="math-display" ></center></td><td class="equation-label">(35)</td></tr></table>
+<!--l. 665--><p class="nopar" >
+<table
+class="equation"><tr><td><a
+id="x1-23046r36"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation35x.png" alt="Sfast = tSdead- Sfast &#x22C5; Sdead - tSfast-A &#x22C5; Sfast,
+" class="math-display" ></center></td><td class="equation-label">(36)</td></tr></table>
+<!--l. 670--><p class="nopar" >
+<table
+class="equation"><tr><td><a
+id="x1-23047r37"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation36x.png" alt="Sslow =  tSdead- Sslow &#x22C5; Sdead - tSslow-A &#x22C5; Sslow,
+
+
+" class="math-display" ></center></td><td class="equation-label">(37)</td></tr></table>
+<!--l. 675--><p class="nopar" >
+<!--l. 678--><p class="noindent" >Where <span
+class="cmmi-12">S</span><sub><span
+class="cmmi-8">mort</span></sub> is the total carbon from trees that died in the past time step.
+The transition rates [in page 27 of FDM] depend on how quickly dead wood
+is decomposed, which is represented by the parameter <span
+class="cmmi-12">t</span><sub><span
+class="cmmi-8">S</span><sub><span
+class="cmmi-6">dead</span></sub></sub>. It is assumed
+that 70% of the dead wood emissions go directly to the atmosphere and the
+other 30% are distributed between the fast and slow decomposing soil stocks.
+<table
+class="equation"><tr><td><a
+id="x1-23048r38"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation37x.png" alt="tSdead-A =  0.7 &#x22C5; tSdead,
+" class="math-display" ></center></td><td class="equation-label">(38)</td></tr></table>
+<!--l. 683--><p class="nopar" >
+<table
+class="equation"><tr><td><a
+id="x1-23049r39"></a>
+<center class="math-display" >
+
+
+<img
+src="./_static/dissertation38x.png" alt="tSdead- Sslow =  0.015 &#x22C5; 0.3 &#x22C5; tSdead,
+" class="math-display" ></center></td><td class="equation-label">(39)</td></tr></table>
+<!--l. 688--><p class="nopar" >
+<table
+class="equation"><tr><td><a
+id="x1-23050r40"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation39x.png" alt="t         =  0.985 &#x22C5; 0.3 &#x22C5; t  .
+Sdead- Sfast               Sdead
+" class="math-display" ></center></td><td class="equation-label">(40)</td></tr></table>
+<!--l. 693--><p class="nopar" >
+<!--l. 696--><p class="noindent" >Net carbon exchange [eq. 51 in FDM] is calculated by subtracting emissions (living
+trees and stocks) from the total carbon absorption,
+<table
+class="equation"><tr><td><a
+id="x1-23051r41"></a>
+<center class="math-display" >
+<img
+src="./_static/dissertation40x.png" alt="N CE  = CGP P - CR  - tSdead-A &#x22C5; Sdead - tSdead-A &#x22C5; Sfast - tSdead-A &#x22C5; Sslow.
+" class="math-display" ></center></td><td class="equation-label">(41)</td></tr></table>
+<!--l. 700--><p class="nopar" >
+</dd><dt class="enumerate">
+XI.</dt><dd
+class="enumerate"><span
+class="cmti-12">Logging</span>
+<!--l. 705--><p class="noindent" >The model keeps track of harvestable trees that comply with defined criteria for the
+logging scenarios (e.g., commercial PFTs, minimum and maximum allowed DBH
+thresholds for harvesting). Logging events are scheduled according to the frequency
+determined for the scenario (<span
+class="cmti-12">e.g., </span>every 25 years). Before the logging module is applied,
+the minimum criterion (i.e., minimum number of trees to be extracted per hectare) is
+evaluated. If the minimum criterion is met, a logging operation takes place; otherwise
+logging is omitted. Patches are visited randomly and the largest harvestable tree on the
+patch is logged, until all patches have been visited at least once or the harvest target
+has been met. Then, patches are revisited randomly until the harvest target is
+met.</dd></dl>
+
+<div class="caption"
+><span class="id">Table&#x00A0;2.1:  </span><span
+class="content">Attributes  for  each  organizational  level.  Where  appropriate,  the
+respective  equation  numbers  are  displayed  in  squared  brackets.  Abbreviations
+appear in round brackets. See table <a
+href="#x1-33002r2">2.2<!--tex4ht:ref: table:tree_parameters --></a> for units. </span></div><!--tex4ht:label?: x1-33001r1 -->
+<div class="tabular"> <table id="TBL-1" class="tabular"
 cellspacing="0" cellpadding="0" rules="groups"
 ><colgroup id="TBL-1-1g"><col
 id="TBL-1-1"><col
 id="TBL-1-2"><col
 id="TBL-1-3"></colgroup><tr
 class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-1"
-class="td11">                                      <div class="multicolumn"  style="white-space:nowrap; text-align:center;">Tree</div>                                      </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-2"
-class="td11">                                     <div class="multicolumn"  style="white-space:nowrap; text-align:center;">Patch</div>                                     </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-3"
-class="td11">                                   <div class="multicolumn"  style="white-space:nowrap; text-align:center;">Landscape</div>
+style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-1"
+class="td11">                                               <div class="multicolumn"  style="white-space:nowrap; text-align:center;"><span
+class="cmr-8">Tree</span></div>                                      </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-2"
+class="td11">                                               <div class="multicolumn"  style="white-space:nowrap; text-align:center;"><span
+class="cmr-8">Patch</span></div>                                      </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-3"
+class="td11">                                            <div class="multicolumn"  style="white-space:nowrap; text-align:center;"><span
+class="cmr-8">Landscape</span></div>
 </td></tr><tr
 class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-1"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;">Identification (id)</div>                                                                 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-2"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;">Position</div>                                                                         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-3"
-class="td11">Net carbon exchange (NCE)[1.39]                                                                                 </td>
-</tr><tr
-class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-3-1"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><!--tex4ht:inline--><div class="tabular"> <table id="TBL-1" class="tabular"
-cellspacing="0" cellpadding="0" rules="groups"
-><colgroup id="TBL-1-1g"><col
-id="TBL-1-1"><col
-id="TBL-1-2"><col
-id="TBL-1-3"></colgroup><tr
- style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-1"
-class="td11">Diameter at breast</td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-1"
-class="td11">height (DBH) [1.22]</td></tr></table>                                                                                                </div></div></td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-3-2"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><!--tex4ht:inline--><div class="tabular"> <table id="TBL-1" class="tabular"
-cellspacing="0" cellpadding="0" rules="groups"
-><colgroup id="TBL-1-1g"><col
-id="TBL-1-1"><col
-id="TBL-1-2"><col
-id="TBL-1-3"></colgroup><tr
- style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-1"
-class="td11">Cumulative crown   </td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-1"
-class="td11">area per layer (CCA)</td></tr></table>                                                                                              </div></div></td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-3-3"
+style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-1"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><span
+class="cmr-8">Age</span></div>                                                                             </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-2"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><span
+class="cmr-8">Area (a)</span></div>                                                                         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-3"
 class="td11"><!--tex4ht:inline--><div class="tabular"> <table id="TBL-2" class="tabular"
 cellspacing="0" cellpadding="0"
 ><colgroup id="TBL-2-1g"><col
 id="TBL-2-1"></colgroup><tr
- style="vertical-align:baseline;" id="TBL-2-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-1"
-class="td00">Total carbon in            </td></tr><tr
- style="vertical-align:baseline;" id="TBL-2-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-2-1"
-class="td00">dead trees (S&#x02D9;dead) [1.30]</td></tr></table>                                                                                         </div></td>
+style="vertical-align:baseline;" id="TBL-2-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-1"
+class="td00"><span
+class="cmr-8">Total carbon in                </span></td></tr><tr
+style="vertical-align:baseline;" id="TBL-2-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-2-1"
+class="td00"><span
+class="cmr-8">living trees (AGB&#x02D9;total) [</span><a
+href="#x1-23044r34"><span
+class="cmr-8">34</span><!--tex4ht:ref: eq:living_trees_stock --></a><span
+class="cmr-8">]</span></td></tr></table>                                                                                                           </div></td>
 </tr><tr
 class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-4-1"
+style="vertical-align:baseline;" id="TBL-1-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-3-1"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><span
+class="cmr-8">Identification(id)</span></div>                                                                   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-3-2"
 class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><!--tex4ht:inline--><div class="tabular"> <table id="TBL-1" class="tabular"
 cellspacing="0" cellpadding="0"
 ><colgroup id="TBL-2-1g"><col
 id="TBL-2-1"></colgroup><tr
- style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-1"
-class="td11">Carbon emission                 </td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-1"
-class="td11">through respiration (Cr) [1.18]</td></tr></table>                                                                                  </div></div></td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-4-2"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><!--tex4ht:inline--><div class="tabular"> <table id="TBL-1" class="tabular"
-cellspacing="0" cellpadding="0"
-><colgroup id="TBL-2-1g"><col
-id="TBL-2-1"></colgroup><tr
- style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-1"
-class="td11">Leaf area index     </td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-1"
-class="td11">per layer (LAI) [1.6]</td></tr></table>                                                                                               </div></div></td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-4-3"
+style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-1"
+class="td11"><span
+class="cmr-8">Cumulative crown   </span></td></tr><tr
+style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-1"
+class="td11"><span
+class="cmr-8">area per layer (CCA)</span></td></tr></table>                                                                                                                    </div></div></td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-3-3"
 class="td11"><!--tex4ht:inline--><div class="tabular"> <table id="TBL-3" class="tabular"
 cellspacing="0" cellpadding="0"
 ><colgroup id="TBL-3-1g"><col
 id="TBL-3-1"></colgroup><tr
- style="vertical-align:baseline;" id="TBL-3-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-1-1"
-class="td00">Total carbon in         </td></tr><tr
- style="vertical-align:baseline;" id="TBL-3-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-2-1"
-class="td00">fast soil (S&#x02D9;sfast) [1.31]</td></tr></table>                                                                                            </div></td>
+style="vertical-align:baseline;" id="TBL-3-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-1-1"
+class="td00"><span
+class="cmr-8">Total carbon in          </span></td></tr><tr
+style="vertical-align:baseline;" id="TBL-3-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-2-1"
+class="td00"><span
+class="cmr-8">dead trees (S&#x02D9;dead) [</span><a
+href="#x1-23045r35"><span
+class="cmr-8">35</span><!--tex4ht:ref: eq:Sdead --></a><span
+class="cmr-8">]</span></td></tr></table>                                                                                                                 </div></td>
 </tr><tr
 class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-5-1"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><!--tex4ht:inline--><div class="tabular"> <table id="TBL-1" class="tabular"
-cellspacing="0" cellpadding="0"
-><colgroup id="TBL-3-1g"><col
-id="TBL-3-1"></colgroup><tr
- style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-1"
-class="td11">Gross primary            </td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-1"
-class="td11">production (GPP) [1.12]</td></tr></table>                                                                                          </div></div></td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-5-2"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;">Area (a)</div>                                                                        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-5-3"
+style="vertical-align:baseline;" id="TBL-1-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-4-1"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><span
+class="cmr-8">Patch</span></div>                                                                           </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-4-2"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><span
+class="cmr-8">Position</span></div>                                                                          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-4-3"
 class="td11"><!--tex4ht:inline--><div class="tabular"> <table id="TBL-4" class="tabular"
 cellspacing="0" cellpadding="0"
 ><colgroup id="TBL-4-1g"><col
 id="TBL-4-1"></colgroup><tr
- style="vertical-align:baseline;" id="TBL-4-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-1-1"
-class="td00">Total carbon in         </td></tr><tr
- style="vertical-align:baseline;" id="TBL-4-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-2-1"
-class="td00">slow soil (S&#x02D9;slow) [1.32]</td></tr></table>                                                                                            </div></td>
+style="vertical-align:baseline;" id="TBL-4-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-1-1"
+class="td00"><span
+class="cmr-8">Total carbon in      </span></td></tr><tr
+style="vertical-align:baseline;" id="TBL-4-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-2-1"
+class="td00"><span
+class="cmr-8">fast soil (S&#x02D9;sfast) [</span><a
+href="#x1-23046r36"><span
+class="cmr-8">36</span><!--tex4ht:ref: eq:Sfast --></a><span
+class="cmr-8">]</span></td></tr></table>                                                                                                                     </div></td>
 </tr><tr
 class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-6-1"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;">Crown length (CL) [1.24]</div>                                                          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-6-2"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;">Seed bank</div>                                                                       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-6-3"
+style="vertical-align:baseline;" id="TBL-1-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-5-1"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><span
+class="cmr-8">Plant functional type (PFT)</span></div>                                                           </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-5-2"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><span
+class="cmr-8">Seed bank</span></div>                                                                        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-5-3"
 class="td11"><!--tex4ht:inline--><div class="tabular"> <table id="TBL-5" class="tabular"
 cellspacing="0" cellpadding="0"
 ><colgroup id="TBL-5-1g"><col
 id="TBL-5-1"></colgroup><tr
- style="vertical-align:baseline;" id="TBL-5-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-1-1"
-class="td00">Total carbon in                  </td></tr><tr
- style="vertical-align:baseline;" id="TBL-5-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-2-1"
-class="td00">living trees (AGB&#x02D9;total) [1.29]</td></tr></table>                                                                                  </div></td>
+style="vertical-align:baseline;" id="TBL-5-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-1-1"
+class="td00"><span
+class="cmr-8">Total carbon in       </span></td></tr><tr
+style="vertical-align:baseline;" id="TBL-5-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-2-1"
+class="td00"><span
+class="cmr-8">slow soil (S&#x02D9;slow) [</span><a
+href="#x1-23047r37"><span
+class="cmr-8">37</span><!--tex4ht:ref: eq:Sslow --></a><span
+class="cmr-8">]</span></td></tr></table>                                                                                                                    </div></td>
 </tr><tr
 class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-7-1"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;">Crown diameter (CD) [1.25]</div>                                                        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-7-2"
+style="vertical-align:baseline;" id="TBL-1-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-6-1"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><span
+class="cmr-8">Position</span></div>                                                                          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-6-2"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><!--tex4ht:inline--><div class="tabular"> <table id="TBL-1" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-5-1g"><col
+id="TBL-5-1"></colgroup><tr
+style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-1"
+class="td11"><span
+class="cmr-8">Leaf area index   </span></td></tr><tr
+style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-1"
+class="td11"><span
+class="cmr-8">per layer (LAI) [</span><a
+href="#x1-23010r8"><span
+class="cmr-8">8</span><!--tex4ht:ref: eq:leaf_area_index --></a><span
+class="cmr-8">]</span></td></tr></table>                                                                                                                        </div></div></td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-6-3"
+class="td11"><!--tex4ht:inline--><div class="tabular"> <table id="TBL-6" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-6-1g"><col
+id="TBL-6-1"></colgroup><tr
+style="vertical-align:baseline;" id="TBL-6-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-1-1"
+class="td00"><span
+class="cmr-8">Net carbon exchange (NCE)[</span><a
+href="#x1-23051r41"><span
+class="cmr-8">41</span><!--tex4ht:ref: eq:NCE --></a><span
+class="cmr-8">]</span></td></tr></table>                                                                                                     </div></td>
+</tr><tr
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr
+style="vertical-align:baseline;" id="TBL-1-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-7-1"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><!--tex4ht:inline--><div class="tabular"> <table id="TBL-1" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-6-1g"><col
+id="TBL-6-1"></colgroup><tr
+style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-1"
+class="td11"><span
+class="cmr-8">Diameter at breast</span></td></tr><tr
+style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-1"
+class="td11"><span
+class="cmr-8">height (DBH) [</span><a
+href="#x1-23005r3"><span
+class="cmr-8">3</span><!--tex4ht:ref: eq:dbh --></a><span
+class="cmr-8">]</span></td></tr></table>                                                                                                                      </div></div></td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-7-2"
 class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"></div>                                                                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-7-3"
-class="td11">                                                                               </td>
+class="td11">                                                                                                  </td>
 </tr><tr
 class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-8-1"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;">Crown area (CA) [1.26]</div>                                                            </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-8-2"
+style="vertical-align:baseline;" id="TBL-1-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-8-1"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><span
+class="cmr-8">Height (H) [</span><a
+href="#x1-23006r4"><span
+class="cmr-8">4</span><!--tex4ht:ref: eq:height --></a><span
+class="cmr-8">]</span></div>                                                                     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-8-2"
 class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"></div>                                                                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-8-3"
-class="td11">                                                                               </td>
+class="td11">                                                                                                  </td>
 </tr><tr
 class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-9-1"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;">Above ground biomass (B) [1.21]</div>                                                    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-9-2"
+style="vertical-align:baseline;" id="TBL-1-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-9-1"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><span
+class="cmr-8">Crown length (CL) [</span><a
+href="#x1-23007r5"><span
+class="cmr-8">5</span><!--tex4ht:ref: eq:crown_length --></a><span
+class="cmr-8">]</span></div>                                                                </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-9-2"
 class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"></div>                                                                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-9-3"
-class="td11">                                                                               </td>
+class="td11">                                                                                                  </td>
 </tr><tr
 class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-10-1"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;">Age</div>                                                                            </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-10-2"
+style="vertical-align:baseline;" id="TBL-1-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-10-1"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><span
+class="cmr-8">Crown diameter (CD) [</span><a
+href="#x1-23008r6"><span
+class="cmr-8">6</span><!--tex4ht:ref: eq:crown_diameter --></a><span
+class="cmr-8">]</span></div>                                                              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-10-2"
 class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"></div>                                                                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-10-3"
-class="td11">                                                                               </td>
+class="td11">                                                                                                  </td>
 </tr><tr
 class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-11-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-11-1"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;">Height (H) [1.23]</div>                                                                 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-11-2"
+style="vertical-align:baseline;" id="TBL-1-11-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-11-1"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><span
+class="cmr-8">Crown area (CA) [</span><a
+href="#x1-23009r7"><span
+class="cmr-8">7</span><!--tex4ht:ref: eq:crown_area --></a><span
+class="cmr-8">]</span></div>                                                                 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-11-2"
 class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"></div>                                                                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-11-3"
-class="td11">                                                                               </td>
+class="td11">                                                                                                  </td>
 </tr><tr
 class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-12-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-12-1"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;">Patch</div>                                                                           </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-12-2"
+style="vertical-align:baseline;" id="TBL-1-12-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-12-1"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><!--tex4ht:inline--><div class="tabular"> <table id="TBL-1" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-6-1g"><col
+id="TBL-6-1"></colgroup><tr
+style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-1"
+class="td11"><span
+class="cmr-8">Gross primary          </span></td></tr><tr
+style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-1"
+class="td11"><span
+class="cmr-8">production (GPP) [</span><a
+href="#x1-23027r21"><span
+class="cmr-8">21</span><!--tex4ht:ref: eq:GPP_t --></a><span
+class="cmr-8">]</span></td></tr></table>                                                                                                                  </div></div></td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-12-2"
 class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"></div>                                                                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-12-3"
-class="td11">                                                                               </td>
+class="td11">                                                                                                  </td>
 </tr><tr
 class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-13-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-13-1"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;">Plant functional type (PFT)</div>                                                        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-13-2"
+style="vertical-align:baseline;" id="TBL-1-13-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-13-1"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><!--tex4ht:inline--><div class="tabular"> <table id="TBL-1" class="tabular"
+cellspacing="0" cellpadding="0"
+><colgroup id="TBL-6-1g"><col
+id="TBL-6-1"></colgroup><tr
+style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-1"
+class="td11"><span
+class="cmr-8">Carbon emission               </span></td></tr><tr
+style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-1"
+class="td11"><span
+class="cmr-8">through respiration (Cr) [</span><a
+href="#x1-23035r28"><span
+class="cmr-8">28</span><!--tex4ht:ref: eq:Rm --></a><span
+class="cmr-8">]</span></td></tr></table>                                                                                                          </div></div></td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-13-2"
 class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"></div>                                                                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-13-3"
-class="td11">                                                                               </td>
+class="td11">                                                                                                  </td>
 </tr><tr
 class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-14-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-14-1"
-class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;">Position</div>                                                                         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-14-2"
+style="vertical-align:baseline;" id="TBL-1-14-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-14-1"
+class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"><span
+class="cmr-8">Above ground biomass (B) [</span><a
+href="#x1-23040r31"><span
+class="cmr-8">31</span><!--tex4ht:ref: eq:Biomass_from_dbh --></a><span
+class="cmr-8">]</span></div>                                                         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-14-2"
 class="td11"><div class="multicolumn"  style="white-space:nowrap; text-align:left;"></div>                                                                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-14-3"
-class="td11">                                                                               </td>
+class="td11">                                                                                                  </td>
 </tr><tr
 class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr
- style="vertical-align:baseline;" id="TBL-1-15-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-15-1"
-class="td11">                                                                               </td></tr></table>
+style="vertical-align:baseline;" id="TBL-1-15-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-15-1"
+class="td11">                                                                                                  </td></tr></table>
 </div><br />
 
 
-   </div><hr class="endfloat" />
-   </div>
-   <h5 class="subsubsectionHead"><span class="titlemark">2.1.3   </span> <a
- id="x1-170002.1.3"></a>Process overview and scheduling</h5>
-<!--l. 194--><p class="noindent" >Within each time-step (1 month) the model proceeds in the following order: re-calculation of light
-availability within the forest, growth and update of geometrical characteristics. Mortality and
-recruitment events occur once a year (every 12 time-steps), while logging events are executed as
-scheduled (the default is every 25 years).
-<!--l. 197--><p class="indent" >   Within each patch, all trees compete for light and space following a gap model. Light availability is
-assumed to be the main driver of tree growth and forest succession. For each patch, the light
-availability is calculated according to an extinction law that depends on the vertical distribution of the
-leaf area. Light availability is then determined for each tree.The same equation is used to calculate the
-light incidence at the soil level (submodel III). Annual growth is calculated based on the physiological
-processes of photosynthesis (submodels IV and V) and respiration (submodel VI). Growth is expressed
-as the the monthly increment in Aboveground Biomass (submodel VII). Biomass acquisition
-is translated into DBH increment, which is used to update height, crown area and other
-geometrical attributes through allometric equations (submodel VIII). Tree mortality can occur
-either through self-thinning in dense patches, stochastic mortality, gap creation by large
-falling trees or logging (submodel II). Recruitment (submodel I) occurs when the light
-intensity at forest floor exceeds a PFT-specific threshold (parameter <span
-class="cmmi-10">I</span><sub><span
-class="cmmi-7">seed</span></sub>; see table <a
-href="#x1-25002r3">3<!--tex4ht:ref: table:PFT_parameters --></a>). At the
-beginning of each year, a PFT-specific number of seeds (defined by parameter <span
-class="cmmi-10">N</span><sub><span
-class="cmmi-7">seed</span></sub>) is
-randomly distributed across all the patches. The effective recruitment rates for each PFT
-describes the number of seeds which met the minimum light and space criteria to grow
-over the DBH of 1 cm in each year. At the end of each year mortality events are executed
-sequentially. If logging operations are scheduled for that year, they occur after natural mortality
-events. Section 3.1.7 describe each of the submodels and figure <a
-href="#x1-21054r2">2<!--tex4ht:ref: fig:tree_model_overview --></a> illustrates their order of
-execution.
-<!--l. 200--><p class="noindent" >
-   <h5 class="subsubsectionHead"><span class="titlemark">2.1.4   </span> <a
- id="x1-180002.1.4"></a>Design concepts</h5>
-     <ul class="itemize1">
+  </div><hr class="endfloat" />
+  </div>
+  <div class="table">
 
 
-     <li class="itemize"><span
-class="cmti-10">Emergence</span>:Patch level state variables such as light availability at the ground level and
-     vertical layers, as well as landscape level variables such as carbon stocks and net carbon
-     exchange, depend on abundance and spatial distribution of individual trees.
-     </li>
-     <li class="itemize"><span
-class="cmti-10">Sensing</span>:Individuals sense their size (biomass), which affects growth.
-     </li>
-     <li class="itemize"><span
-class="cmti-10">Interactions</span>: Trees in the same patch compete for light and space (self-thinning). Trees in
-     different patches may interact when tall trees fall and damage smaller ones.
-     </li>
-     <li class="itemize"><span
-class="cmti-10">Stochasticity</span>: All mortality processes are described as probabilities. Non-zoochoric seed
-     dispersal follows a random distribution (uniform or pareto, according to the dispersal
-     mode).
-     </li>
-     <li class="itemize"><span
-class="cmti-10">Collectives</span>: Cohorts are collectives of trees with the same age and Functional Type which
-     are located in the same patch. Trees in the same cohort have the same size.
-     </li>
-     <li class="itemize"><span
-class="cmti-10">Observation</span>: Observations can be made at the individual (Biomass, Leaf Area and any
-     other  individual  attribute),  population  (Abundance,  totals  and  summary  statistics  for
-     any individual attribute) or community levels (Abundance per PFT,totals and summary
-     statistics for any individual attribute, Net Carbon Exchange per year and total carbon
-     stocks  in  soils,  deadwood  and  living  aboveground  biomass).  Outputs  can  be  recorded
-     hierarchically in a HDF5 database. Some plotting functions are also available for the most
-     commonly used data.</li></ul>
-<!--l. 220--><p class="noindent" >
-   <h5 class="subsubsectionHead"><span class="titlemark">2.1.5   </span> <a
- id="x1-190002.1.5"></a>Initialization</h5>
-<!--l. 221--><p class="noindent" >A simulation can be started with a treeless area, in which case a seed bank is generated by randomly
-distributing a predefined number of seeds (N<span
-class="cmr-7">seed</span>) across all patches. The total number of seeds is a
-PFT-specific parameter (N<span
-class="cmr-7">seed</span>) and a uniform distribution is used to determine the position of each
-seed in the grid. The model can also reconstruct an existing forest from a data file containing
-
-
-information about trees (position in space, id, age, DBH and the PFT to which they belong),
-the seed bank (how many seed of each PFT are available in the soil) and landscape level
-carbon stocks. This information can be generated by pausing and saving an ongoing. To
-test different scenarios on a mature forest, a combination of the two features can be used
-in order to reduce computation times. Starting from a clear area, the model runs for a
-long period (<span
-class="cmti-10">e.g: </span>300 years) and the resulting forest can be saved and used multiple times
-as the starting point of different scenarios that run for shorter periods of time (<span
-class="cmti-10">e.g: </span>50
-years).
-<!--l. 225--><p class="noindent" >
-   <h5 class="subsubsectionHead"><span class="titlemark">2.1.6   </span> <a
- id="x1-200002.1.6"></a>Input</h5>
-<!--l. 226--><p class="noindent" >No inputs are used. Site conditions are assumed to be homogeneous and there is no inter-annual
-variability of environmental conditions.
-<!--l. 228--><p class="noindent" >
-   <h5 class="subsubsectionHead"><span class="titlemark">2.1.7   </span> <a
- id="x1-210002.1.7"></a>Submodels</h5>
-<!--l. 229--><p class="noindent" >
-    <dl class="enumerate"><dt class="enumerate">
-  I. </dt><dd
-class="enumerate"><span
-class="cmti-10">Recruitment</span>
-    <!--l. 233--><p class="noindent" >Seed dispersal can be implemented by two methods. The first Randomly places seeds across
-    the entire landscape, using the <span
-class="cmmi-10">N</span><sub><span
-class="cmmi-7">s</span></sub><span
-class="cmmi-10">eed </span>parameter to determine the number for each PFT.
-    The second uses a power to disperse the seeds around each tree, based on the fruits available.
-    Each fruit is assumed to contain only one seed. The number of fruits for each tree is
-    calculated by:
-    <table
-class="equation"><tr><td><a
- id="x1-21002r1"></a>
-    <center class="math-display" >
-
-
-    <img
-src="_static/dissertation0x.png" alt="Nfruits = DBH &sdot;afruits,
-    " class="math-display" ></center></td><td class="equation-label">(1)</td></tr></table>
-    <!--l. 239--><p class="nopar" >
-    <!--l. 242--><p class="noindent" >Where <span
-class="cmmi-10">DBH </span>is the Diameter at Breast Height and <span
-class="cmmi-10">a</span><sub><span
-class="cmmi-7">fruits</span></sub> is a adjusting factor.
-    <!--l. 244--><p class="noindent" >The probability density distribution for the power function is given by:
-    <table
-class="equation"><tr><td><a
- id="x1-21003r2"></a>
-    <center class="math-display" >
-    <img
-src="_static/dissertation1x.png" alt="P (x;a) = ax(a&minus;1),
-    " class="math-display" ></center></td><td class="equation-label">(2)</td></tr></table>
-    <!--l. 249--><p class="nopar" >
-    <!--l. 253--><p class="noindent" >Each PFT has a light requirement for germination (<span
-class="cmti-10">I</span><span
-class="cmti-7">seed</span>). At the beginning of each timestep, light
-    incidence a the floor level is calculated (at a patch level). In each patch, all seeds have their
-    PFT-specific light requirement tested against the light incidence. If <span
-class="cmti-10">I</span><span
-class="cmti-7">floor</span> <span
-class="cmmi-10">&#x003E; </span><span
-class="cmti-10">I</span><span
-class="cmti-7">seed</span>, then the vertical
-    layer closest to the soil (<span
-class="cmti-10">i.e: </span>the one that the seedling will occupy if it is established) is checked for
-    space. If that layer is not yet fully occupied by seedlings, the current seed is then converted into a
-    small tree with DBH=1cm.
-    </dd><dt class="enumerate">
- II. </dt><dd
-class="enumerate"><span
-class="cmti-10">Update of geometric attributes</span>
-    <!--l. 263--><p class="noindent" >A series of allometric equations is used to define the attributes of a tree. Trees are represented as
-
-
-    two cylinders (one for the stem and another for the crown) and are addressed by the index <span
-class="cmmi-10">i </span>when
-    applicable. See figure <a
-href="#x1-21005r1">1<!--tex4ht:ref: fig:vertical_layers --></a> (a) for an illustration.
-    <!--l. 267--><p class="noindent" ><hr class="figure"><div class="figure"
-><a
- id="x1-21005r1"></a>
-
-<!--l. 270--><p class="noindent" ><img
-src="_static/vertical_layers.png" alt="PIC"
->
-<br /> <div class="caption"
-><span class="id">Figure&#x00A0;1: </span><span
-class="content">Geometrical representation and vertical stratification</span></div><!--tex4ht:label?: x1-21005r1 -->
-    <!--l. 273--><p class="noindent" ></div><hr class="endfigure">
-    <!--l. 277--><p class="noindent" >When an individual grows (submodel VIII), the biomass gain is translated into DBH increment
-    by the following equation:
-    <table
-class="equation"><tr><td><a
- id="x1-21006r3"></a>
-    <center class="math-display" >
-    <img
-src="_static/dissertation2x.png" alt="       &#x2218; -----------
-         ----B-----
-DBH  =    &pi;&sdot;H &sdot;f &sdot; &rho;,
-          4       &sigma;
-    " class="math-display" ></center></td><td class="equation-label">(3)</td></tr></table>
-    <!--l. 283--><p class="nopar" >
-    <!--l. 286--><p class="noindent" >where <span
-class="cmmi-10">H </span>is the height of the tree, <span
-class="cmmi-10">f </span>the form factor that for the idealized cylindrical shape
-    assumed for the stem, <span
-class="cmmi-10">&rho; </span>the wood density and <span
-class="cmmi-10">&sigma; </span>the fraction of stem wood biomass from total tree
-    biomass.
-    <!--l. 288--><p class="noindent" >All the other geometrical characteristics are updated based on the new DBH.
-    <!--l. 290--><p class="noindent" >Height(H) is determined by:
-    <table
-class="equation"><tr><td><a
- id="x1-21007r4"></a>
-
-
-    <center class="math-display" >
-    <img
-src="_static/dissertation3x.png" alt="     DBH
-H = -1-+--1,
-     h0  h0
-    " class="math-display" ></center></td><td class="equation-label">(4)</td></tr></table>
-    <!--l. 296--><p class="nopar" >
-    <!--l. 299--><p class="noindent" >Where <span
-class="cmmi-10">h</span>0 and <span
-class="cmmi-10">h</span><sub><span
-class="cmr-7">1</span></sub> are type specific parameters.
-    <!--l. 301--><p class="noindent" >Crown length (<span
-class="cmmi-10">CL</span>) is a function of height:
-    <table
-class="equation"><tr><td><a
- id="x1-21008r5"></a>
-    <center class="math-display" >
-    <img
-src="_static/dissertation4x.png" alt="CL  = c&sdot;H
-    " class="math-display" ></center></td><td class="equation-label">(5)</td></tr></table>
-    <!--l. 307--><p class="nopar" >
-     Crown diameter is proportional to stem diameter,
-    <table
-class="equation"><tr><td><a
- id="x1-21009r6"></a>
-    <center class="math-display" >
-
-
-    <img
-src="_static/dissertation5x.png" alt="CD = cd &sdot;DBH,
-    " class="math-display" ></center></td><td class="equation-label">(6)</td></tr></table>
-    <!--l. 315--><p class="nopar" >
-    <!--l. 318--><p class="noindent" >Since the crown is represented as a cylinder, Crown area (CA) is
-    <table
-class="equation"><tr><td><a
- id="x1-21010r7"></a>
-    <center class="math-display" >
-    <img
-src="_static/dissertation6x.png" alt="CA  = &pi;-&sdot;CD2.
-      4
-    " class="math-display" ></center></td><td class="equation-label">(7)</td></tr></table>
-    <!--l. 323--><p class="nopar" >
-    <!--l. 326--><p class="noindent" >The leaf area index of a tree (LAI) represents the total amount of leaf area per unit of crown
-    projection area, which relates to the photosynthetic capacity. It is calculated as a function of
-    DBH:
-    <table
-class="equation"><tr><td><a
- id="x1-21011r8"></a>
-    <center class="math-display" >
-    <img
-src="_static/dissertation7x.png" alt="LAI = l0 &sdot;DBHl1,
-    " class="math-display" ></center></td><td class="equation-label">(8)</td></tr></table>
-    <!--l. 330--><p class="nopar" >
-    <!--l. 332--><p class="noindent" >whereby <span
-class="cmmi-10">l</span><sub><span
-class="cmr-7">0</span></sub> and <span
-class="cmmi-10">l</span><sub><span
-class="cmr-7">1</span></sub> are PFT-specific parameters.
-    </dd><dt class="enumerate">
- III. </dt><dd
-class="enumerate"><span
-class="cmti-10">Tree mortality</span>
-    <!--l. 337--><p class="noindent" >(1) Background mortality: each tree has a base mortality (<span
-class="cmmi-10">m</span>
-<table
-class="equation"><tr><td><a
- id="x1-21013r9"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation8x.png" alt="     (|                                                 )|
-     {  mmax &minus; mmax &sdot; DDBBHHmort + mbase, if DBH &#x003C;DBHmort }
-mB = |(                                                 |)
-        mbase,                                      else
-" class="math-display" ></center></td><td class="equation-label">(9)</td></tr></table>
-<!--l. 347--><p class="nopar" >
-<!--l. 349--><p class="noindent" >where <span
-class="cmmi-10">m</span><sub><span
-class="cmmi-7">max</span></sub> is the maximum size-dependent mortality of small trees and <span
-class="cmmi-10">DBH</span><sub><span
-class="cmmi-7">max</span></sub> is the DBH up to
-which tree mortality is increased.
-<!--l. 361--><p class="noindent" >(2) Self-thinning: Mortality is increased for trees in dense patches due to competition for
-space.
-<table
-class="equation"><tr><td><a
- id="x1-21014r10"></a>
-
-
-<center class="math-display" >
-<img
-src="_static/dissertation9x.png" alt="mC = 1 &minus; 1CCAmax-
-" class="math-display" ></center></td><td class="equation-label">(10)</td></tr></table>
-<!--l. 366--><p class="nopar" >
-<!--l. 369--><p class="noindent" >where <span
-class="cmmi-10">m</span><sub><span
-class="cmmi-7">C</span></sub> is the crowding mortality and <span
-class="cmmi-10">CCA</span><sub><span
-class="cmmi-7">max</span></sub> is the maximum Cumulative Crown Area (which
-sums the crown areas of all trees with the crowns in that height layer).
-<!--l. 373--><p class="noindent" >(3) Damage mortality
-<!--l. 375--><p class="noindent" >When a large tree dies, it might fall and inflict its neighbors. Large trees are those with DBH above the
-size threshold defined by the parameter <span
-class="cmmi-10">DBH</span><sub><span
-class="cmmi-7">f</span></sub><span
-class="cmmi-10">all</span>. Damage is inflicted on the small trees
-(<span
-class="cmmi-10">DBH &#x003C; </span>50 cm) at least 1 m shorter than the falling tree if they are located on the area
-where the crowns is going to land. Damage is expressed as the ratio between the crown
-projection area of the falling tree (see submodel VIII for details on the calculation of CA)
-and the patch area (parameter a). The direction of the fall is chosen randomly with equal
-probability.
-<table
-class="equation"><tr><td><a
- id="x1-21015r11"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation10x.png" alt="      CA
-mD  = -a-
-" class="math-display" ></center></td><td class="equation-label">(11)</td></tr></table>
-
-
-<!--l. 380--><p class="nopar" >
-<!--l. 385--><p class="noindent" >The tree mortality processes are executed sequentially for each tree. A random number between 0 and
-1 is drawn from a uniform distribution and the tree dies if the number is lower than <span
-class="cmmi-10">m</span><sub><span
-class="cmmi-7">B</span></sub>, otherwise
-the process is repeated for <span
-class="cmmi-10">m</span><sub><span
-class="cmmi-7">C</span></sub> and <span
-class="cmmi-10">m</span><sub><span
-class="cmmi-7">D</span></sub>. When a tree dies, its carbon content (44% of the
-biomass, according to <a
-href="#XCh1:01">Fischer et&#x00A0;al.</a>&#x00A0;(<a
-href="#XCh1:01">2014</a>)) is transferred to a temporary stock <span
-class="cmmi-10">S</span><sub><span
-class="cmmi-7">mort</span></sub>,
-which is subsequently used to update the dead wood stock <span
-class="cmmi-10">S</span><sub><span
-class="cmmi-7">dead</span></sub> as described in equation
-<a
-href="#x1-21046r35">35<!--tex4ht:ref: eq:Sdead --></a>.
-</dd><dt class="enumerate">
-IV.</dt><dd
-class="enumerate"><span
-class="cmti-10">Competition for light</span>
-<!--l. 392--><p class="noindent" >Each patch is vertically divided in small layers of width &Delta;<span
-class="cmmi-10">h</span>. Light availability is calculated for the
-individuals within each patch taking into consideration the canopy layers they occupy. If a patch has
-only one tree, all the light will be available to that individual.Due to self-shadding, higher
-portions of the crown intercept more light, reducing the availability for the layers below
-Similarly, with the addition of other trees to the same patch, the tallest ones shade the
-smallest.
-<!--l. 394--><p class="noindent" >For each patch and height layer, the leaf area accumulated by all individuals is calculated. Each tree
-contributes parts of its crown leaf area to those height layers which are occupied by its crown. The
-bottom and top layers are defined by:
-<table
-class="equation"><tr><td><a
- id="x1-21017r12"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation11x.png" alt="      H
-ltop = &Delta;h-
-" class="math-display" ></center></td><td class="equation-label">(12)</td></tr></table>
-<!--l. 399--><p class="nopar" >
-
-
-<table
-class="equation"><tr><td><a
- id="x1-21018r13"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation12x.png" alt="        H &minus; CL
-lbottom = -------,
-          &Delta;h
-" class="math-display" ></center></td><td class="equation-label">(13)</td></tr></table>
-<!--l. 405--><p class="nopar" >
-<!--l. 408--><p class="noindent" >where <span
-class="cmmi-10">H </span>is the tree&#8217;s height and <span
-class="cmmi-10">CL </span>its crown length.
-<!--l. 410--><p class="noindent" >A tree&#8217;s leaf area index (<span
-class="cmmi-10">LAI</span>) contributes equally to each of the patch layers between <span
-class="cmmi-10">l</span><sub><span
-class="cmmi-7">bottom</span></sub> and
-<span
-class="cmmi-10">l</span><sub><span
-class="cmmi-7">top</span></sub>:
-<table
-class="equation"><tr><td><a
- id="x1-21019r14"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation13x.png" alt="LAl = -LAI-&sdot;CA---,
-      ltop &minus; lbottom
-" class="math-display" ></center></td><td class="equation-label">(14)</td></tr></table>
-<!--l. 415--><p class="nopar" >
-<!--l. 418--><p class="noindent" >whereby <span
-class="cmmi-10">LA</span><sub><span
-class="cmmi-7">l</span></sub> is the tree&#8217;s contribution to the leaf area of vertical layer <span
-class="cmmi-10">l </span>of that patch and <span
-class="cmmi-10">CA </span>is
-its crown area. The multiplication of <span
-class="cmmi-10">LAI </span>by <span
-class="cmmi-10">CA </span>gives the leaf area of a single tree in
-m<sup class="textsuperscript"><span
-class="cmr-9">2</span></sup>.
-
-
-<!--l. 420--><p class="noindent" >To calculate the leaf are per layer (<span
-class="cmmi-10">l</span>) at the patch level <span
-class="cmmi-10">LAP</span><sub><span
-class="cmmi-7">l</span></sub>, the contribution of each tree&#8217;s leaf area
-per layer (<span
-class="cmmi-10">LA</span><sub><span
-class="cmmi-7">l</span></sub>) relative to the patch area (<span
-class="cmmi-10">a</span>) is summed:
-<table
-class="equation"><tr><td><a
- id="x1-21020r15"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation14x.png" alt="            &sum;
-LAPl = 1-         LAl
-       aall individuals
-         w/ crown in l
-" class="math-display" ></center></td><td class="equation-label">(15)</td></tr></table>
-<!--l. 425--><p class="nopar" >
-.
-<!--l. 428--><p class="noindent" >With this information it is possible to calculate the radiation that each tree is able to intercept at the
-top of its crown (<span
-class="cmmi-10">I</span><sub><span
-class="cmmi-7">top</span></sub>):
-<table
-class="equation"><tr><td><a
- id="x1-21021r16"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation15x.png" alt="              (              )
-                    &sum;
-Itop = Imax &sdot;exp( &minus; k &sdot;  LAPl ) ,
-                    l&#x003E;ltop
-" class="math-display" ></center></td><td class="equation-label">(16)</td></tr></table>
-<!--l. 435--><p class="nopar" >
-<!--l. 438--><p class="noindent" >where I<span
-class="cmr-7">max</span> is the irradiance above the forest canopy and <span
-class="cmmi-10">k </span>the light extinction coefficient. Note that
-only those layers above <span
-class="cmmi-10">l</span><sub><span
-class="cmmi-7">top</span></sub> are used.
-
-
-</dd><dt class="enumerate">
-V.</dt><dd
-class="enumerate"><span
-class="cmti-10">Photosynthesis</span>
-<!--l. 443--><p class="noindent" >Photosynthesis is based on the incoming irradiance at the top of each tree (<span
-class="cmmi-10">I</span><sub><span
-class="cmmi-7">top</span></sub>). Following the
-approach described by <a
-href="#XCh1:14">Thornley and Johnson</a>&#x00A0;(<a
-href="#XCh1:14">1990</a>), the cylindrical crown is considered as a stack of
-thin disks. The photosynthesis of each disk is modelled by a Michaelis-Menten function describing the
-relationship between the radiation available at the top of each disk <span
-class="cmmi-10">I</span>(<span
-class="cmmi-10">L</span>) and its photosynthetic rate
-<span
-class="cmmi-10">P</span>(<span
-class="cmmi-10">I</span>(<span
-class="cmmi-10">L</span>)):
-<table
-class="equation"><tr><td><a
- id="x1-21023r17"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation16x.png" alt="P (I) =-&alpha;&sdot;I(L)&sdot;pmax-,
-       &alpha; &sdot;I(L )+ pmax
-" class="math-display" ></center></td><td class="equation-label">(17)</td></tr></table>
-<!--l. 451--><p class="nopar" >
-<!--l. 454--><p class="noindent" >where <span
-class="cmmi-10">&alpha; </span>is the initial slope of the light response curve and <span
-class="cmmi-10">p</span><sub><span
-class="cmmi-7">max</span></sub> is the maximum rate of photosynthesis.
-The incident irradiance on the surface of a leaf is:
-<table
-class="equation"><tr><td><a
- id="x1-21024r18"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation17x.png" alt="       --k--       &minus;k&sdot;L
-I(L) = 1&minus; m &sdot;Itop &sdot;e   ,
-
-
-" class="math-display" ></center></td><td class="equation-label">(18)</td></tr></table>
-<!--l. 460--><p class="nopar" >
-<!--l. 463--><p class="noindent" >where <span
-class="cmmi-10">I</span><sub><span
-class="cmmi-7">top</span></sub> is the irradiance incident on the tree crown, <span
-class="cmmi-10">k </span>the light extinction coefficient and <span
-class="cmmi-10">m </span>the light
-transmission coefficient of leaves. Since all leaves are assumed to be distributed homogeneously within
-the crown, the higher ones will shade the ones below. Thereby, <span
-class="cmmi-10">L </span>= 0 represents the top of
-the individual and <span
-class="cmmi-10">L </span>= <span
-class="cmmi-10">LAI </span>represents the bottom, with <span
-class="cmmi-10">LAI </span>being the leaf area index
-<a
-href="#x1-21011r8">8<!--tex4ht:ref: eq:leaf_area_index --></a>.
-<!--l. 465--><p class="noindent" >The photosynthetic rate per individual (<span
-class="cmmi-10">P</span><sub><span
-class="cmmi-7">i</span></sub>) is obtained by integrating <a
-href="#x1-21023r17">17<!--tex4ht:ref: eq:photo_disk --></a> over the individual&#8217;s <span
-class="cmmi-10">LAI</span>:
-<table
-class="equation"><tr><td><a
- id="x1-21025r19"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation18x.png" alt="    &int; LAIi
-Pi =      P(I(L))dL.
-     0
-" class="math-display" ></center></td><td class="equation-label">(19)</td></tr></table>
-<!--l. 470--><p class="nopar" >
-<!--l. 473--><p class="noindent" >The integration results in:
-<table
-class="equation"><tr><td><a
- id="x1-21026r20"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation19x.png" alt="     p          &alpha; &sdot;k &sdot;I  + p   (1&minus; m )
-Pi = -max&sdot;ln---------&minus;topk&sdot;LAImiax----------.
-      k     &alpha; &sdot;k&sdot;Itope       + pmax(1&minus; m )
-" class="math-display" ></center></td><td class="equation-label">(20)</td></tr></table>
-<!--l. 481--><p class="nopar" >
-</dd><dt class="enumerate">
-VI.</dt><dd
-class="enumerate"><span
-class="cmti-10">Gross production</span>
-<!--l. 488--><p class="noindent" >Equation <a
-href="#x1-21026r20">20<!--tex4ht:ref: eq:photo_tree --></a> gives the photosynthetic rate in <span
-class="cmmi-10">&mu;mol</span><sub><span
-class="cmmi-7">CO</span><sub><span
-class="cmr-5">2</span></sub></sub><span
-class="cmmi-10">&#x2215;m</span><sup><span
-class="cmr-7">2</span></sup><span
-class="cmmi-10">s</span>. The Gross Primary Production (GPP) per
-tree per year is calculated by multiplying <span
-class="cmmi-10">P</span><sub><span
-class="cmmi-7">i</span></sub> by the crown area (CA) and a conversion
-coefficient (<span
-class="cmmi-10">codm</span>) that transforms absorbed CO<span
-class="cmr-7">2</span> to organic dry mass per year (<span
-class="cmmi-10">t</span><sub><span
-class="cmmi-7">ODM</span></sub><span
-class="cmmi-10">&#x2215;y</span>)
-:
-<table
-class="equation"><tr><td><a
- id="x1-21028r21"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation20x.png" alt="GP Pi = Pi &sdot;CA &sdot;codm.
-" class="math-display" ></center></td><td class="equation-label">(21)</td></tr></table>
-<!--l. 494--><p class="nopar" >
-<!--l. 497--><p class="noindent" >In the conversion factor, 3600 accounts for the conversion from seconds to hours and l<span
-class="cmr-7">day</span> represents the
-average day length. The parameter <span
-class="cmmi-10">&#x03D5;</span><span
-class="cmr-7">act</span> gives the number of days in which there is photosynthetic
-activity within a time step. For tropical environments, trees are assumed to do photosynthesis every
-day of the year. The final components 0<span
-class="cmmi-10">.</span>63 <span
-class="cmsy-10">&sdot; </span>44 <span
-class="cmsy-10">&sdot; </span>10<sup><span
-class="cmsy-7">&minus;</span><span
-class="cmr-7">12</span></sup> include the molar mass of CO<span
-class="cmr-7">2</span>, the conversion
-from grams of CO<span
-class="cmr-7">2</span> to grams Organic Dry Matter (44%) and the conversion from <span
-class="cmti-10">grams </span>to
-<span
-class="cmti-10">tonnes</span>:
-
-
-<table
-class="equation"><tr><td><a
- id="x1-21029r22"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation21x.png" alt="codm = 3600&sdot;lday &sdot;&#x03D5;act &sdot;0.63&#x00D7; 44 &#x00D7;10&minus; 12.
-" class="math-display" ></center></td><td class="equation-label">(22)</td></tr></table>
-<!--l. 503--><p class="nopar" >
-</dd><dt class="enumerate">
-VII.</dt><dd
-class="enumerate"><span
-class="cmti-10">Respiration</span>
-<!--l. 510--><p class="noindent" >Respiration is divided into two components: growth and maintenance. Growth respiration is assumed
-to be a constant fraction of the GPP that is used during the build up of new biomass and is defined by
-the parameter R<span
-class="cmr-7">g</span>.
-<!--l. 513--><p class="noindent" >Maintenance respiration (R<span
-class="cmr-7">m</span>) is calculated based on the estimated diameter growth.:
-<table
-class="equation"><tr><td><a
- id="x1-21031r23"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation22x.png" alt="     (        Bi,est &minus; Bi)
-Rm =   GP P &minus; -1-&minus;-Rg--  ,
-" class="math-display" ></center></td><td class="equation-label">(23)</td></tr></table>
-<!--l. 517--><p class="nopar" >
-
-
-<!--l. 520--><p class="noindent" >Where <span
-class="cmmi-10">B</span><sub><span
-class="cmmi-7">i</span></sub> is the current biomass of tree <span
-class="cmmi-10">i </span>(see equation <a
-href="#x1-21041r31">31<!--tex4ht:ref: eq:Biomass_from_dbh --></a>) and <span
-class="cmmi-10">B</span><sub><span
-class="cmmi-7">i,est</span></sub> is the estimated biomass of the
-same tree after taking into consideration the diameter growth. The last is calculated using the same
-equation <a
-href="#x1-21041r31">31<!--tex4ht:ref: eq:Biomass_from_dbh --></a>, however the DBH used as input corresponds to the current dimater plus the increment
-estimated by equation <a
-href="#x1-21033r25">25<!--tex4ht:ref: eq:growth --></a>:
-<table
-class="equation"><tr><td><a
- id="x1-21032r24"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation23x.png" alt="B    = B(DBH   + g(DBH   ))
- i,est         i        i
-" class="math-display" ></center></td><td class="equation-label">(24)</td></tr></table>
-<!--l. 525--><p class="nopar" >
-<!--l. 527--><p class="noindent" >The growth function used in the equation above is designed to match empirical measurements ( see
-equation 48 on <a
-href="#XCh1:01">Fischer et&#x00A0;al.</a>&#x00A0;(<a
-href="#XCh1:01">2014</a>) for more details):
-<table
-class="equation"><tr><td><a
- id="x1-21033r25"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation24x.png" alt="                    (         )
-                        -DBH--    &minus;&alpha;1&sdot;DBH
-g(DBH ) = &alpha;0&sdot;DBH   &sdot; 1&minus; Dmax    &sdot;e
-" class="math-display" ></center></td><td class="equation-label">(25)</td></tr></table>
-<!--l. 532--><p class="nopar" >
-
-
-<table
-class="equation"><tr><td><a
- id="x1-21034r26"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation25x.png" alt="       eDmDamxa&minus;x&minus;2&sdot;((DD&Delta;&Delta;DDmmaaxx&sdot;&sdot;DDmmaaxx))&sdot;Dmax  &sdot;&Delta;Dmax
-&alpha;0 = ---------------------------------------
-     (Dmax  &minus; &Delta;Dmax   &sdot;Dmax  )&sdot;D &Delta;Dmax &sdot;Dmax
-" class="math-display" ></center></td><td class="equation-label">(26)</td></tr></table>
-<!--l. 538--><p class="nopar" >
-<table
-class="equation"><tr><td><a
- id="x1-21035r27"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation26x.png" alt="&alpha;1 = -------Dmax--&minus;-2&sdot;&Delta;Dmax--&sdot;Dmax----------
-     Dmax &sdot;D &Delta;Dmax &sdot;Dmax  &sdot;(D &Delta;Dmax &sdot;Dmax  )2
-" class="math-display" ></center></td><td class="equation-label">(27)</td></tr></table>
-<!--l. 544--><p class="nopar" >
-<!--l. 547--><p class="noindent" >Where Dmax is the maximum diameter a tree can reach, &Delta; Dmax is the maximum increment and
-D<span
-class="cmr-7">&Delta;Dmax</span> is the stem diameter which reaches &Delta;Dmax. See  for more information on how these
-parameters can be estimated from field measurements.
-<!--l. 550--><p class="noindent" >The equivalent maintenance respiration in <span
-class="cmti-10">t</span>s of organic dry mass is then calculated using the same
-conversion coefficient used for GPP:
-<table
-class="equation"><tr><td><a
- id="x1-21036r28"></a>
-
-
-<center class="math-display" >
-<img
-src="_static/dissertation27x.png" alt="Rm  = rm &sdot;Bi &sdot;codm.
-" class="math-display" ></center></td><td class="equation-label">(28)</td></tr></table>
-<!--l. 556--><p class="nopar" >
-</dd><dt class="enumerate">
-VIII.</dt><dd
-class="enumerate"><span
-class="cmti-10">Biomass increment</span>
-<!--l. 562--><p class="noindent" >The biomass increment can be then calculated by subtracting the yearly respiration value from
-GPP.
-<table
-class="equation"><tr><td><a
- id="x1-21038r29"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation28x.png" alt="Binc = (1&minus; Rg)(GP P &minus; Rm ),
-" class="math-display" ></center></td><td class="equation-label">(29)</td></tr></table>
-<!--l. 568--><p class="nopar" >
-<!--l. 572--><p class="noindent" >The new biomass of a tree is then determined by
-<table
-class="equation"><tr><td><a
- id="x1-21039r30"></a>
-
-
-<center class="math-display" >
-<img
-src="_static/dissertation29x.png" alt="Bnew = Bold + Binc,
-" class="math-display" ></center></td><td class="equation-label">(30)</td></tr></table>
-<!--l. 578--><p class="nopar" >
-</dd><dt class="enumerate">
-IX.</dt><dd
-class="enumerate"><span
-class="cmti-10">Growth</span>
-<!--l. 585--><p class="noindent" >The biomass is updated based on the DBH increment. By rearranging equation <a
-href="#x1-21006r3">3<!--tex4ht:ref: eq:dbh --></a>, the following
-equation is obtained:
-<table
-class="equation"><tr><td><a
- id="x1-21041r31"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation30x.png" alt="B  = &pi;-&sdot;DBH2  &sdot;H &sdot;f &sdot; &rho;,
-     4               &sigma;
-" class="math-display" ></center></td><td class="equation-label">(31)</td></tr></table>
-<!--l. 591--><p class="nopar" >
-<!--l. 595--><p class="noindent" >where <span
-class="cmmi-10">H </span>is the height of the tree, <span
-class="cmmi-10">f </span>a form factor that compensates for the idealized cylindrical shape
-used to represent the stem, <span
-class="cmmi-10">&rho; </span>the wood density and <span
-class="cmmi-10">&sigma; </span>the fraction of stem wood biomass from total tree
-biomass.
-
-
-</dd><dt class="enumerate">
-X.</dt><dd
-class="enumerate"><span
-class="cmti-10">Carbon balance  </span>Carbon is stored in four different stocks:
-         <ul class="itemize1">
-         <li class="itemize"><span
-class="cmmi-10">AGB</span><sub><span
-class="cmmi-7">total</span></sub> Living trees, which is the sum of the carbon in each living tree
-         </li>
-         <li class="itemize"><span
-class="cmmi-10">S</span><sub><span
-class="cmmi-7">dead</span></sub> Deadwood, which equals to the total carbon in dead trees
-         </li>
-         <li class="itemize"><span
-class="cmmi-10">S</span><sub><span
-class="cmmi-7">fast</span></sub> Fast decomposing soil stock, which equals to the amount of carbon resulting
-         from quick decomposition of dead trees
-         </li>
-         <li class="itemize"><span
-class="cmmi-10">S</span><sub><span
-class="cmmi-7">slow</span></sub> Slow decomposing soil stock, which equals to the amount of carbon resulting
-         from slow decomposition of dead trees</li></ul>
-<!--l. 610--><p class="noindent" >The dynamics of the <span
-class="cmmi-10">AGB</span><sub><span
-class="cmmi-7">total</span></sub> stock is determined by the difference between the total carbon captured
-(see sub model IV-Growth above) as Gross Primary Production ( <span
-class="cmmi-10">C</span><sub><span
-class="cmmi-7">GPP</span></sub>) and total carbon emissions
-from tree respiration (<span
-class="cmmi-10">C</span><sub><span
-class="cmmi-7">R</span></sub>):
-<table
-class="equation"><tr><td><a
- id="x1-21043r32"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation31x.png" alt="             N&sum;t
-CGP P = 0.44 &sdot;   GP Pi
-             i=1
-" class="math-display" ></center></td><td class="equation-label">(32)</td></tr></table>
-<!--l. 618--><p class="nopar" >
-<table
-class="equation"><tr><td><a
- id="x1-21044r33"></a>
-
-
-<center class="math-display" >
-<img
-src="_static/dissertation32x.png" alt="          N&sum;t
-CR = 0.44 &sdot;  (Rm,i + Rg,i &sdot;(GP Pi &minus; Rm,i))
-          i=1
-" class="math-display" ></center></td><td class="equation-label">(33)</td></tr></table>
-<!--l. 623--><p class="nopar" >
-<table
-class="equation"><tr><td><a
- id="x1-21045r34"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation33x.png" alt="AGBtotal = CGPP &minus; CR
-" class="math-display" ></center></td><td class="equation-label">(34)</td></tr></table>
-<!--l. 627--><p class="nopar" >
-<!--l. 629--><p class="noindent" >The following equations calculate the amount of carbon for each of the remaining stocks:
-<table
-class="equation"><tr><td><a
- id="x1-21046r35"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation34x.png" alt="Sdead = Smort &minus; (tSdead&minus;A +tSdead&minus;Sslow +tSdead&minus;Sfast)&sdot;Sdead
-" class="math-display" ></center></td><td class="equation-label">(35)</td></tr></table>
-<!--l. 635--><p class="nopar" >
-<table
-class="equation"><tr><td><a
- id="x1-21047r36"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation35x.png" alt="Sfast = tSdead&minus; Sfast &sdot;Sdead &minus; tSfast&minus;A &sdot;Sfast
-" class="math-display" ></center></td><td class="equation-label">(36)</td></tr></table>
-<!--l. 640--><p class="nopar" >
-<table
-class="equation"><tr><td><a
- id="x1-21048r37"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation36x.png" alt="S    = t         &sdot;S    &minus; t      &sdot;S
- slow   Sdead&minus;Sslow   dead   Sslow&minus;A   slow
-" class="math-display" ></center></td><td class="equation-label">(37)</td></tr></table>
-<!--l. 645--><p class="nopar" >
-
-
-<!--l. 648--><p class="noindent" >Where <span
-class="cmmi-10">S</span><sub><span
-class="cmmi-7">mort</span></sub> is the total carbon from trees that died in the past time step. The transition rates depend
-on how quickly dead wood is decomposed, which is represented by the parameter <span
-class="cmmi-10">t</span><sub><span
-class="cmmi-7">S</span><sub><span
-class="cmmi-5">dead</span></sub></sub>. It is assumed
-that 70% of the dead wood emissions go directly to the atmosphere and the other 30% are distributed
-between the fast and slow decomposing soil stocks.
-<table
-class="equation"><tr><td><a
- id="x1-21049r38"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation37x.png" alt="t      = 0.7 &sdot;t
-Sdead&minus;A        Sdead
-" class="math-display" ></center></td><td class="equation-label">(38)</td></tr></table>
-<!--l. 653--><p class="nopar" >
-<table
-class="equation"><tr><td><a
- id="x1-21050r39"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation38x.png" alt="tSdead&minus;Sslow = 0.015&sdot;0.3&sdot;tSdead
-" class="math-display" ></center></td><td class="equation-label">(39)</td></tr></table>
-<!--l. 658--><p class="nopar" >
-<table
-class="equation"><tr><td><a
- id="x1-21051r40"></a>
-
-
-<center class="math-display" >
-<img
-src="_static/dissertation39x.png" alt="tSdead&minus;Sfast = 0.985&sdot;0.3&sdot;tSdead
-" class="math-display" ></center></td><td class="equation-label">(40)</td></tr></table>
-<!--l. 663--><p class="nopar" >
-<!--l. 666--><p class="noindent" >Net carbon exchange is calculated by subtracting emissions (living trees and stocks) from the total
-carbon absorption:
-<table
-class="equation"><tr><td><a
- id="x1-21052r41"></a>
-<center class="math-display" >
-<img
-src="_static/dissertation40x.png" alt="N CE = CGP P &minus; CR &minus; tSdead&minus;A &sdot;Sdead &minus; tSdead&minus;A &sdot;Sfast &minus; tSdead&minus;A &sdot;Sslow.
-" class="math-display" ></center></td><td class="equation-label">(41)</td></tr></table>
-<!--l. 670--><p class="nopar" >
-</dd><dt class="enumerate">
-XI.</dt><dd
-class="enumerate"><span
-class="cmti-10">Logging</span>
-<!--l. 675--><p class="noindent" >The model keeps track of harvestable trees that comply with defined criteria of the logging scenarios
-(e.g. commercial PFTs, minimum and maximum allowed DBH thresholds for harvesting).
-Logging events are scheduled according to the frequency determined for the scenario (<span
-class="cmti-10">e.g.:</span>
-every 25 years) Before the logging module is applied, it is evaluated whether the minimum
-criterion (i.e. minimum number of trees to be extracted per hectare) can be fulfilled taking
-
-
-potential logging damages into account. If the minimum criterion is met, a logging operation
-takes place; otherwise logging is omitted. Patches are visited randomly and the largest
-harvestable tree of the patch is logged, until all patches have been visited at least once or the
-harvest target has been met. Then, patches are visited randomly until the harvest target is
-met.</dd></dl>
-<!--l. 679--><p class="noindent" >The submodels are summarized in figure <a
-href="#x1-21054r2">2<!--tex4ht:ref: fig:tree_model_overview --></a>.
-<!--l. 681--><p class="indent" >   <hr class="figure"><div class="figure"
+<!--l. 849--><p class="indent" >   <a
+id="x1-33002r2"></a><hr class="float"><div class="float"
 >
 
 
-<a
- id="x1-21054r2"></a>
 
-
-<!--l. 683--><p class="noindent" >
-
-<!--l. 684--><p class="noindent" ><img
-src="_static/model_overview.png" alt="PIC"
->
-<br /> <div class="caption"
-><span class="id">Figure&#x00A0;2: </span><span
-class="content">Model overview</span></div><!--tex4ht:label?: x1-21054r2 -->
-<!--l. 685--><p class="noindent" >Roman numerals correspond to the submodels described on section 3.1.7. The execution orders is
-indicated by arabic numerals.
-
-
-<!--l. 687--><p class="indent" >   </div><hr class="endfigure">
-   <div class="table">
-
-
-<!--l. 692--><p class="indent" >   <a
- id="x1-21055r2"></a><hr class="float"><div class="float"
->
+<!--l. 710--><p class="noindent" >
 
 
  <div class="caption"
@@ -1444,5 +1624,391 @@ class="td11">                </td></tr></table></div>
    </div><hr class="endfloat" />
    </div>
 
-
+   <div class="caption"
+   ><span class="id">Table&#x00A0;2.3:  </span><span
+   class="content">Parameter  values  for  six  Plant  Functional  Types  (PFTs)  used  in
+   examples.</span></div><!--tex4ht:label?: x1-33003r3 -->
+   <div class="tabular">
+   <table id="TBL-8" class="tabular"
+   cellspacing="0" cellpadding="0"
+   ><colgroup id="TBL-8-1g"><col
+   id="TBL-8-1"><col
+   id="TBL-8-2"><col
+   id="TBL-8-3"><col
+   id="TBL-8-4"><col
+   id="TBL-8-5"><col
+   id="TBL-8-6"><col
+   id="TBL-8-7"></colgroup><tr
+   style="vertical-align:baseline;" id="TBL-8-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-1-1"
+   class="td01">        </td><td colspan="3" style="white-space:nowrap; text-align:left;" id="TBL-8-1-2"
+   class="td11"></td>          <div class="multicolumn"  style="white-space:nowrap; text-align:center;"><span
+   class="cmr-10x-x-109">Plant Functional Type</span></div>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-2-1"
+   class="td01"><span
+   class="cmr-10x-x-109">Parameter </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-2-2"
+   class="td11"><span
+   class="cmr-10x-x-109">PFT1</span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-2-3"
+   class="td11"><span
+   class="cmr-10x-x-109">PFT2</span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-2-4"
+   class="td11"><span
+   class="cmr-10x-x-109">PFT3</span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-2-5"
+   class="td11"><span
+   class="cmr-10x-x-109">PFT4</span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-2-6"
+   class="td11"><span
+   class="cmr-10x-x-109">PFT5</span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-2-7"
+   class="td10"><span
+   class="cmr-10x-x-109">PFT6</span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-3-1"
+   class="td01"><span
+   class="cmr-10x-x-109">D&#x02D9;max      </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-3-2"
+   class="td11"><span
+   class="cmr-10x-x-109">145   </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-3-3"
+   class="td11"><span
+   class="cmr-10x-x-109">120   </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-3-4"
+   class="td11"><span
+   class="cmr-10x-x-109">80     </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-3-5"
+   class="td11"><span
+   class="cmr-10x-x-109">80     </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-3-6"
+   class="td11"><span
+   class="cmr-10x-x-109">47     </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-3-7"
+   class="td10"><span
+   class="cmr-10x-x-109">16     </span></td></tr><tr
+   style="vertical-align:baseline;" id="TBL-8-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-4-1"
+   class="td01"><span
+   class="cmr-10x-x-109">h&#x02D9;0 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-4-2"
+   class="td11"><span
+   class="cmr-10x-x-109">3.28 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-4-3"
+   class="td11"><span
+   class="cmr-10x-x-109">4.64 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-4-4"
+   class="td11"><span
+   class="cmr-10x-x-109">4.82 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-4-5"
+   class="td11"><span
+   class="cmr-10x-x-109">4.27 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-4-6"
+   class="td11"><span
+   class="cmr-10x-x-109">4.35 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-4-7"
+   class="td10"><span
+   class="cmr-10x-x-109">3.0</span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-5-1"
+   class="td01"><span
+   class="cmr-10x-x-109">h&#x02D9;1          </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-5-2"
+   class="td11"><span
+   class="cmr-10x-x-109">0.57  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-5-3"
+   class="td11"><span
+   class="cmr-10x-x-109">0.41  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-5-4"
+   class="td11"><span
+   class="cmr-10x-x-109">0.44  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-5-5"
+   class="td11"><span
+   class="cmr-10x-x-109">0.43  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-5-6"
+   class="td11"><span
+   class="cmr-10x-x-109">0.34  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-5-7"
+   class="td10"><span
+   class="cmr-10x-x-109">0.60  </span></td></tr><tr
+   style="vertical-align:baseline;" id="TBL-8-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-6-1"
+   class="td01"><span
+   class="cmr-10x-x-109">cl&#x02D9;0 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-6-2"
+   class="td11"><span
+   class="cmr-10x-x-109">0.80 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-6-3"
+   class="td11"><span
+   class="cmr-10x-x-109">0.80 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-6-4"
+   class="td11"><span
+   class="cmr-10x-x-109">0.30 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-6-5"
+   class="td11"><span
+   class="cmr-10x-x-109">0.30 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-6-6"
+   class="td11"><span
+   class="cmr-10x-x-109">0.30 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-6-7"
+   class="td10"><span
+   class="cmr-10x-x-109">0.30</span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-7-1"
+   class="td01"><span
+   class="cmr-10x-x-109">cd&#x02D9;0         </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-7-2"
+   class="td11"><span
+   class="cmr-10x-x-109">0.60  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-7-3"
+   class="td11"><span
+   class="cmr-10x-x-109">0.60  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-7-4"
+   class="td11"><span
+   class="cmr-10x-x-109">0.60  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-7-5"
+   class="td11"><span
+   class="cmr-10x-x-109">0.60  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-7-6"
+   class="td11"><span
+   class="cmr-10x-x-109">0.60  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-7-7"
+   class="td10"><span
+   class="cmr-10x-x-109">0.60  </span></td></tr><tr
+   style="vertical-align:baseline;" id="TBL-8-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-8-1"
+   class="td01"><span
+   class="cmr-10x-x-109">cd&#x02D9;1 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-8-2"
+   class="td11"><span
+   class="cmr-10x-x-109">0.68 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-8-3"
+   class="td11"><span
+   class="cmr-10x-x-109">0.68 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-8-4"
+   class="td11"><span
+   class="cmr-10x-x-109">0.68 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-8-5"
+   class="td11"><span
+   class="cmr-10x-x-109">0.68 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-8-6"
+   class="td11"><span
+   class="cmr-10x-x-109">0.68 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-8-7"
+   class="td10"><span
+   class="cmr-10x-x-109">0.68</span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-9-1"
+   class="td01"><span
+   class="cmr-10x-x-109">cd&#x02D9;2         </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-9-2"
+   class="td11"><span
+   class="cmr-10x-x-109">0      </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-9-3"
+   class="td11"><span
+   class="cmr-10x-x-109">0      </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-9-4"
+   class="td11"><span
+   class="cmr-10x-x-109">0      </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-9-5"
+   class="td11"><span
+   class="cmr-10x-x-109">0      </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-9-6"
+   class="td11"><span
+   class="cmr-10x-x-109">0      </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-9-7"
+   class="td10"><span
+   class="cmr-10x-x-109">0      </span></td></tr><tr
+   style="vertical-align:baseline;" id="TBL-8-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-10-1"
+   class="td01"><span
+   class="cmmi-10x-x-109">&#x03C1; </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-10-2"
+   class="td11"><span
+   class="cmr-10x-x-109">0.55 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-10-3"
+   class="td11"><span
+   class="cmr-10x-x-109">0.54 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-10-4"
+   class="td11"><span
+   class="cmr-10x-x-109">0.41 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-10-5"
+   class="td11"><span
+   class="cmr-10x-x-109">0.40 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-10-6"
+   class="td11"><span
+   class="cmr-10x-x-109">0.52 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-10-7"
+   class="td10"><span
+   class="cmr-10x-x-109">0.47</span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-11-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-11-1"
+   class="td01"><span
+   class="cmmi-10x-x-109">&#x03C3;           </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-11-2"
+   class="td11"><span
+   class="cmr-10x-x-109">0.70  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-11-3"
+   class="td11"><span
+   class="cmr-10x-x-109">0.70  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-11-4"
+   class="td11"><span
+   class="cmr-10x-x-109">0.70  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-11-5"
+   class="td11"><span
+   class="cmr-10x-x-109">0.70  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-11-6"
+   class="td11"><span
+   class="cmr-10x-x-109">0.70  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-11-7"
+   class="td10"><span
+   class="cmr-10x-x-109">0.70  </span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-12-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-12-1"
+   class="td01"><span
+   class="cmr-10x-x-109">f&#x02D9;0           </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-12-2"
+   class="td11"><span
+   class="cmr-10x-x-109">0.77  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-12-3"
+   class="td11"><span
+   class="cmr-10x-x-109">0.77  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-12-4"
+   class="td11"><span
+   class="cmr-10x-x-109">0.77  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-12-5"
+   class="td11"><span
+   class="cmr-10x-x-109">0.77  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-12-6"
+   class="td11"><span
+   class="cmr-10x-x-109">0.77  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-12-7"
+   class="td10"><span
+   class="cmr-10x-x-109">0.77  </span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-13-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-13-1"
+   class="td01"><span
+   class="cmr-10x-x-109">f&#x02D9;1           </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-13-2"
+   class="td11"><span
+   class="cmr-10x-x-109">-0.18 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-13-3"
+   class="td11"><span
+   class="cmr-10x-x-109">-0.18 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-13-4"
+   class="td11"><span
+   class="cmr-10x-x-109">-0.18 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-13-5"
+   class="td11"><span
+   class="cmr-10x-x-109">-0.18 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-13-6"
+   class="td11"><span
+   class="cmr-10x-x-109">-0.18 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-13-7"
+   class="td10"><span
+   class="cmr-10x-x-109">-0.18 </span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-14-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-14-1"
+   class="td01"><span
+   class="cmr-10x-x-109">l&#x02D9;0           </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-14-2"
+   class="td11"><span
+   class="cmr-10x-x-109">2.0    </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-14-3"
+   class="td11"><span
+   class="cmr-10x-x-109">2.0    </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-14-4"
+   class="td11"><span
+   class="cmr-10x-x-109">2.0    </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-14-5"
+   class="td11"><span
+   class="cmr-10x-x-109">2.0    </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-14-6"
+   class="td11"><span
+   class="cmr-10x-x-109">2.0    </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-14-7"
+   class="td10"><span
+   class="cmr-10x-x-109">2.0    </span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-15-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-15-1"
+   class="td01"><span
+   class="cmr-10x-x-109">l&#x02D9;1           </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-15-2"
+   class="td11"><span
+   class="cmr-10x-x-109">0.10  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-15-3"
+   class="td11"><span
+   class="cmr-10x-x-109">0.10  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-15-4"
+   class="td11"><span
+   class="cmr-10x-x-109">0.10  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-15-5"
+   class="td11"><span
+   class="cmr-10x-x-109">0.10  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-15-6"
+   class="td11"><span
+   class="cmr-10x-x-109">0.10  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-15-7"
+   class="td10"><span
+   class="cmr-10x-x-109">0.10  </span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-16-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-16-1"
+   class="td01"><span
+   class="cmr-10x-x-109">I&#x02D9;seed       </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-16-2"
+   class="td11"><span
+   class="cmr-10x-x-109">0.03  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-16-3"
+   class="td11"><span
+   class="cmr-10x-x-109">0.01  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-16-4"
+   class="td11"><span
+   class="cmr-10x-x-109">0.05  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-16-5"
+   class="td11"><span
+   class="cmr-10x-x-109">0.02  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-16-6"
+   class="td11"><span
+   class="cmr-10x-x-109">0.03  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-16-7"
+   class="td10"><span
+   class="cmr-10x-x-109">0.02  </span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-17-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-17-1"
+   class="td01"><span
+   class="cmr-10x-x-109">N&#x02D9;seed      </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-17-2"
+   class="td11"><span
+   class="cmr-10x-x-109">30     </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-17-3"
+   class="td11"><span
+   class="cmr-10x-x-109">156   </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-17-4"
+   class="td11"><span
+   class="cmr-10x-x-109">21     </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-17-5"
+   class="td11"><span
+   class="cmr-10x-x-109">300   </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-17-6"
+   class="td11"><span
+   class="cmr-10x-x-109">2      </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-17-7"
+   class="td10"><span
+   class="cmr-10x-x-109">200   </span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-18-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-18-1"
+   class="td01"><span
+   class="cmr-10x-x-109">m            </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-18-2"
+   class="td11"><span
+   class="cmr-10x-x-109">0.5    </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-18-3"
+   class="td11"><span
+   class="cmr-10x-x-109">0.5    </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-18-4"
+   class="td11"><span
+   class="cmr-10x-x-109">0.5    </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-18-5"
+   class="td11"><span
+   class="cmr-10x-x-109">0.5    </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-18-6"
+   class="td11"><span
+   class="cmr-10x-x-109">0.5    </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-18-7"
+   class="td10"><span
+   class="cmr-10x-x-109">0.5    </span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-19-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-19-1"
+   class="td01"><span
+   class="cmr-10x-x-109">r&#x02D9;g           </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-19-2"
+   class="td11"><span
+   class="cmr-10x-x-109">0.25  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-19-3"
+   class="td11"><span
+   class="cmr-10x-x-109">0.25  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-19-4"
+   class="td11"><span
+   class="cmr-10x-x-109">0.25  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-19-5"
+   class="td11"><span
+   class="cmr-10x-x-109">0.25  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-19-6"
+   class="td11"><span
+   class="cmr-10x-x-109">0.25  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-19-7"
+   class="td10"><span
+   class="cmr-10x-x-109">0.25  </span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-20-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-20-1"
+   class="td01"><span
+   class="cmr-10x-x-109">M&#x02D9;b         </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-20-2"
+   class="td11"><span
+   class="cmr-10x-x-109">0.015 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-20-3"
+   class="td11"><span
+   class="cmr-10x-x-109">0.03  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-20-4"
+   class="td11"><span
+   class="cmr-10x-x-109">0.029 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-20-5"
+   class="td11"><span
+   class="cmr-10x-x-109">0.04  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-20-6"
+   class="td11"><span
+   class="cmr-10x-x-109">0.021 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-20-7"
+   class="td10"><span
+   class="cmr-10x-x-109">0.045 </span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-21-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-21-1"
+   class="td01"><span
+   class="cmr-10x-x-109">D&#x02D9;&#x0394;D&#x02D9;max</span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-21-2"
+   class="td11"><span
+   class="cmr-10x-x-109">0.41  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-21-3"
+   class="td11"><span
+   class="cmr-10x-x-109">0.41  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-21-4"
+   class="td11"><span
+   class="cmr-10x-x-109">0.28  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-21-5"
+   class="td11"><span
+   class="cmr-10x-x-109">0.28  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-21-6"
+   class="td11"><span
+   class="cmr-10x-x-109">0.37  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-21-7"
+   class="td10"><span
+   class="cmr-10x-x-109">0.28  </span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-22-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-22-1"
+   class="td01"><span
+   class="cmr-10x-x-109">&#x0394;D&#x02D9;max   </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-22-2"
+   class="td11"><span
+   class="cmr-10x-x-109">0.01  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-22-3"
+   class="td11"><span
+   class="cmr-10x-x-109">0.01  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-22-4"
+   class="td11"><span
+   class="cmr-10x-x-109">0.01  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-22-5"
+   class="td11"><span
+   class="cmr-10x-x-109">0.01  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-22-6"
+   class="td11"><span
+   class="cmr-10x-x-109">0.01  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-22-7"
+   class="td10"><span
+   class="cmr-10x-x-109">0.01  </span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-23-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-23-1"
+   class="td01"><span
+   class="cmr-10x-x-109">p&#x02D9;max      </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-23-2"
+   class="td11"><span
+   class="cmr-10x-x-109">2.0    </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-23-3"
+   class="td11"><span
+   class="cmr-10x-x-109">3.1    </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-23-4"
+   class="td11"><span
+   class="cmr-10x-x-109">6.8    </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-23-5"
+   class="td11"><span
+   class="cmr-10x-x-109">11     </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-23-6"
+   class="td11"><span
+   class="cmr-10x-x-109">7      </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-23-7"
+   class="td10"><span
+   class="cmr-10x-x-109">12     </span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-24-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-24-1"
+   class="td01"><span
+   class="cmmi-10x-x-109">&#x03B1;           </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-24-2"
+   class="td11"><span
+   class="cmr-10x-x-109">0.36  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-24-3"
+   class="td11"><span
+   class="cmr-10x-x-109">0.28  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-24-4"
+   class="td11"><span
+   class="cmr-10x-x-109">0.23  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-24-5"
+   class="td11"><span
+   class="cmr-10x-x-109">0.20  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-24-6"
+   class="td11"><span
+   class="cmr-10x-x-109">0.30  </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-24-7"
+   class="td10"><span
+   class="cmr-10x-x-109">0.20  </span></td>
+   </tr><tr
+   style="vertical-align:baseline;" id="TBL-8-25-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-25-1"
+   class="td01">         </td></tr></table></div>
+                                                      
 </body></html>

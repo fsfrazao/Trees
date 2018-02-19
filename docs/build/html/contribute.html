@@ -96,7 +96,12 @@
 <li class="toctree-l1"><a class="reference internal" href="model_description.html">Model Description</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">How to contribute</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to contribute</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-report-issues">How to Report Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#workflow-for-pull-requests">Workflow for Pull Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-tests">Running the tests</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -162,6 +167,57 @@
             
   <div class="section" id="how-to-contribute">
 <h1>How to contribute<a class="headerlink" href="#how-to-contribute" title="Permalink to this headline">¶</a></h1>
+<p><em>trees_ibm</em> isstill in it’s early stages of development and help is very much appreciated!</p>
+<p>You can contribute by:</p>
+<ul class="simple">
+<li>Adding features to the codebase</li>
+<li>Expanding the testing suit</li>
+<li>Improving the documentation</li>
+<li>Reporting/fixing bugs</li>
+<li>Suggesting  new features</li>
+<li>Giving your input on the biological meaning of the model assumption/formulation</li>
+</ul>
+<div class="section" id="how-to-report-issues">
+<h2>How to Report Issues<a class="headerlink" href="#how-to-report-issues" title="Permalink to this headline">¶</a></h2>
+<p>To report an issue, please use the
+<a class="reference external" href="https://github.com/fsfrazao/Trees/issues">GitHub issues tracker</a>. When
+reporting issues, please mention the following details:</p>
+<ul class="simple">
+<li>Which version you are using</li>
+<li>What was the source code that generated the problem (if applicable)</li>
+<li>Which platform are you running on</li>
+<li>How to reproduce the issue</li>
+<li>What was the result of the issue</li>
+<li>What the expected behaviour is</li>
+</ul>
+<p>Reducing the source code that caused the issue to a bare minimum is always
+very helpful and sometimes even clarifies a misunderstanding.</p>
+</div>
+<div class="section" id="workflow-for-pull-requests">
+<h2>Workflow for Pull Requests<a class="headerlink" href="#workflow-for-pull-requests" title="Permalink to this headline">¶</a></h2>
+<p>In order to contribute, please fork off of the <code class="docutils literal"><span class="pre">develop</span></code> branch and make your
+changes there. Your commit messages should detail <em>why</em> you made your change
+in addition to <em>what</em> you did (unless it is a tiny change).</p>
+<p>If you need to pull in any changes from <code class="docutils literal"><span class="pre">develop</span></code> after making your fork (for
+example, to resolve potential merge conflicts), please avoid using <code class="docutils literal"><span class="pre">git</span> <span class="pre">merge</span></code>
+and instead, <code class="docutils literal"><span class="pre">git</span> <span class="pre">rebase</span></code> your branch.</p>
+<p>Additionally, if you are writing a new feature, please ensure you write appropriate test cases and place them under <code class="docutils literal"><span class="pre">src/tests/</span></code>.</p>
+<p>Finally, please test your code and ensure that it runs locally before submitting a pull request.</p>
+<p>Thank you for your help!</p>
+</div>
+<div class="section" id="running-the-tests">
+<h2>Running the tests<a class="headerlink" href="#running-the-tests" title="Permalink to this headline">¶</a></h2>
+<p><em>trees-ibm</em> includes a battery of tests. They are included in the /src/tests/  directory. They require the pytest package.</p>
+<p>To run all tests go to the src directory and run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pytest</span>
+</pre></div>
+</div>
+<p>You can also specify on module:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pytest</span> <span class="n">test_world</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>To</p>
+</div>
 </div>
 
 

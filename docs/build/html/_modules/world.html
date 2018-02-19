@@ -161,9 +161,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for world</h1><div class="highlight"><pre>
-<span></span>
-
-<span class="kn">from</span> <span class="nn">py_ibm</span> <span class="k">import</span> <span class="o">*</span>
+<span></span><span class="kn">from</span> <span class="nn">py_ibm</span> <span class="k">import</span> <span class="o">*</span>
 <span class="c1"># from plot_trees import plot_tree_pos</span>
 <span class="kn">from</span> <span class="nn">trees_ibm.tree_agent</span> <span class="k">import</span> <span class="n">Tree</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
@@ -702,7 +700,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span></div>
+            <span class="c1"># seeds come as lists</span>
+            <span class="n">seedbank</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
+            <span class="c1"># turn the lists back to tuples</span>
+            <span class="n">seedbank</span> <span class="o">=</span> <span class="p">{</span><span class="n">ft</span><span class="p">:</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">seed_pos</span><span class="p">)</span> <span class="k">for</span> <span class="n">seed_pos</span> <span class="ow">in</span> <span class="n">list_of_pos</span><span class="p">]</span> <span class="k">for</span> <span class="n">ft</span><span class="p">,</span> <span class="n">list_of_pos</span> <span class="ow">in</span> <span class="n">seedbank</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span> <span class="o">=</span> <span class="n">seedbank</span></div>
 
 <div class="viewcode-block" id="Tree_World.seedbank_to_file"><a class="viewcode-back" href="../world.html#world.Tree_World.seedbank_to_file">[docs]</a>    <span class="k">def</span> <span class="nf">seedbank_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Writes seedbank to .json file.</span>
@@ -718,6 +720,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
             <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">seedbank</span><span class="p">,</span> <span class="n">json_file</span><span class="p">)</span></div>
+            <span class="c1"># tuples are turned into lists in .joson</span>
 
 <div class="viewcode-block" id="Tree_World.model_status_from_file"><a class="viewcode-back" href="../world.html#world.Tree_World.model_status_from_file">[docs]</a>    <span class="k">def</span> <span class="nf">model_status_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_file</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Recreates a model landscape at a saved stage.</span>
@@ -894,7 +897,7 @@
         <span class="k">return</span> <span class="n">external_seedbank</span></div>
 
 <div class="viewcode-block" id="Tree_World.germinate_suitable_seeds"><a class="viewcode-back" href="../world.html#world.Tree_World.germinate_suitable_seeds">[docs]</a>    <span class="k">def</span> <span class="nf">germinate_suitable_seeds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seedbank</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Creates new trees from seedbank.</span>
+        <span class="sd">&quot;&quot;&quot; Creates new trees from seedbank.external_seedbank</span>
 
 <span class="sd">            Args:</span>
 <span class="sd">                seedbank: dict</span>

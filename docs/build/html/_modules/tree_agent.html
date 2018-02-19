@@ -503,8 +503,8 @@ c light response curve.</span>
 <span class="sd">            Returns: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span></div>
-            <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">DBH</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
-<div class="viewcode-block" id="Tree.DisperseSeeds"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.DisperseSeeds">[docs]</a>                <span class="n">t</span><span class="o">.</span><span class="n">available_fruits</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">Nfruit</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">DBH</span><span class="o">&gt;</span><span class="mi">10</span><span class="p">:</span>
+<div class="viewcode-block" id="Tree.DisperseSeeds"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.DisperseSeeds">[docs]</a>                <span class="n">t</span><span class="o">.</span><span class="n">available_fruits</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">fruits_from_DBH</span><span class="p">()</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">DisperseSeeds</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
@@ -818,10 +818,17 @@ c light response curve.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">]</span></div>
         <span class="bp">self</span><span class="o">.</span><span class="n">Md</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">available_fruits</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;available_fruits&quot;</span><span class="p">]</span>
-        <span class="c1"># self.age+=1</span>
+<div class="viewcode-block" id="Tree.fruits_from_DBH"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.fruits_from_DBH">[docs]</a>        <span class="c1"># self.age+=1</span>
 
     <span class="k">def</span> <span class="nf">fruits_from_DBH</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<div class="viewcode-block" id="Tree.H_from_DBH"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.H_from_DBH">[docs]</a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nseed</span>
+        <span class="sd">&quot;&quot;&quot; Calculates the number of new fruits based on stem diameter</span>
+
+<span class="sd">            TODO:</span>
+<span class="sd">                *Make  &#39;adj&#39; a functional type level parameter (a class attribute)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="n">adj</span><span class="o">=</span><span class="mf">0.01</span>
+<div class="viewcode-block" id="Tree.H_from_DBH"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.H_from_DBH">[docs]</a>        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nfruit</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">DBH</span><span class="o">*</span><span class="n">adj</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">H_from_DBH</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate tree height calculated according to eq.1 in SI-Fisher et al.(2015).</span>

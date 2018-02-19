@@ -163,8 +163,271 @@
             
   <div class="section" id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
-<p>#Example 1</p>
-<p>#Example 2</p>
+<p>The code below simulates an area of 1 hectare. Starting from a treeless landscape, every year seeds on the seed bank have the change to germinate. The simulation goes on for 300 years</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">trees_ibm</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+
+<span class="c1">#################################################################</span>
+<span class="c1">#                          PFT CREATION                         #</span>
+<span class="c1">#################################################################</span>
+
+<span class="n">par_1</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">wood_density</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span>
+    <span class="n">max_agb</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+    <span class="n">max_dbh</span><span class="o">=</span><span class="mi">145</span><span class="p">,</span>
+    <span class="n">h0</span><span class="o">=</span><span class="mf">3.3</span><span class="p">,</span>
+    <span class="n">h1</span><span class="o">=</span><span class="mf">0.60</span><span class="p">,</span>
+    <span class="n">cl0</span><span class="o">=</span><span class="mf">0.80</span><span class="p">,</span>
+    <span class="n">cd0</span><span class="o">=</span><span class="mf">0.60</span><span class="p">,</span>
+    <span class="n">cd1</span><span class="o">=</span><span class="mf">0.68</span><span class="p">,</span>
+    <span class="n">cd2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">rho</span><span class="o">=</span><span class="mf">0.55</span><span class="p">,</span>
+    <span class="n">sigma</span><span class="o">=</span><span class="mf">0.70</span><span class="p">,</span>
+    <span class="n">f0</span><span class="o">=</span><span class="mf">0.77</span><span class="p">,</span>
+    <span class="n">f1</span><span class="o">=-</span><span class="mf">0.18</span><span class="p">,</span>
+    <span class="n">l0</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">l1</span><span class="o">=</span><span class="mf">0.10</span><span class="p">,</span>
+    <span class="n">Iseed</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>
+    <span class="n">Nseed</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">m</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">rg</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">Mb</span><span class="o">=</span><span class="mf">0.015</span><span class="p">,</span>
+    <span class="n">pmax</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.36</span><span class="p">,</span>
+    <span class="n">Dmort</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">Dfall</span><span class="o">=</span><span class="mf">0.45</span><span class="p">,</span>
+    <span class="n">pfall</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">DdeltaDmax</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span>
+    <span class="n">deltaDmax</span><span class="o">=</span><span class="mf">0.012</span><span class="p">,</span>
+    <span class="n">m_max</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span>
+    <span class="n">Fdisp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">Adisp</span><span class="o">=</span><span class="mf">0.118</span><span class="p">,</span>
+    <span class="n">Nfruit</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+
+<span class="n">par_2</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">wood_density</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span>
+    <span class="n">max_agb</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+    <span class="n">max_dbh</span><span class="o">=</span><span class="mi">58</span><span class="p">,</span>
+    <span class="n">h0</span><span class="o">=</span><span class="mf">4.6</span><span class="p">,</span>
+    <span class="n">h1</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+    <span class="n">cl0</span><span class="o">=</span><span class="mf">0.80</span><span class="p">,</span>
+    <span class="n">cd0</span><span class="o">=</span><span class="mf">0.60</span><span class="p">,</span>
+    <span class="n">cd1</span><span class="o">=</span><span class="mf">0.68</span><span class="p">,</span>
+    <span class="n">cd2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">rho</span><span class="o">=</span><span class="mf">0.55</span><span class="p">,</span>
+    <span class="n">sigma</span><span class="o">=</span><span class="mf">0.70</span><span class="p">,</span>
+    <span class="n">f0</span><span class="o">=</span><span class="mf">0.77</span><span class="p">,</span>
+    <span class="n">f1</span><span class="o">=-</span><span class="mf">0.18</span><span class="p">,</span>
+    <span class="n">l0</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">l1</span><span class="o">=</span><span class="mf">0.10</span><span class="p">,</span>
+    <span class="n">Iseed</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">Nseed</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">m</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">rg</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">Mb</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>
+    <span class="n">pmax</span><span class="o">=</span><span class="mf">3.1</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.28</span><span class="p">,</span>
+    <span class="n">Dmort</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">Dfall</span><span class="o">=</span><span class="mf">0.45</span><span class="p">,</span>
+    <span class="n">pfall</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">DdeltaDmax</span><span class="o">=</span><span class="mf">0.34</span><span class="p">,</span>
+    <span class="n">deltaDmax</span><span class="o">=</span><span class="mf">0.012</span><span class="p">,</span>
+    <span class="n">m_max</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span>
+    <span class="n">Fdisp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">Adisp</span><span class="o">=</span><span class="mf">0.118</span><span class="p">,</span>
+    <span class="n">Nfruit</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="n">par_3</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">wood_density</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span>
+    <span class="n">max_agb</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+    <span class="n">max_dbh</span><span class="o">=</span><span class="mi">58</span><span class="p">,</span>
+    <span class="n">h0</span><span class="o">=</span><span class="mf">4.8</span><span class="p">,</span>
+    <span class="n">h1</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+    <span class="n">cl0</span><span class="o">=</span><span class="mf">0.30</span><span class="p">,</span>
+    <span class="n">cd0</span><span class="o">=</span><span class="mf">0.60</span><span class="p">,</span>
+    <span class="n">cd1</span><span class="o">=</span><span class="mf">0.68</span><span class="p">,</span>
+    <span class="n">cd2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">rho</span><span class="o">=</span><span class="mf">0.41</span><span class="p">,</span>
+    <span class="n">sigma</span><span class="o">=</span><span class="mf">0.70</span><span class="p">,</span>
+    <span class="n">f0</span><span class="o">=</span><span class="mf">0.77</span><span class="p">,</span>
+    <span class="n">f1</span><span class="o">=-</span><span class="mf">0.18</span><span class="p">,</span>
+    <span class="n">l0</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">l1</span><span class="o">=</span><span class="mf">0.10</span><span class="p">,</span>
+    <span class="n">Iseed</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">Nseed</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span>
+    <span class="n">m</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">rg</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">Mb</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>
+    <span class="n">pmax</span><span class="o">=</span><span class="mf">6.8</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.23</span><span class="p">,</span>
+    <span class="n">Dmort</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">Dfall</span><span class="o">=</span><span class="mf">0.45</span><span class="p">,</span>
+    <span class="n">pfall</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">DdeltaDmax</span><span class="o">=</span><span class="mf">0.23</span><span class="p">,</span>
+    <span class="n">deltaDmax</span><span class="o">=</span><span class="mf">0.019</span><span class="p">,</span>
+    <span class="n">m_max</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span>
+    <span class="n">Fdisp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">Adisp</span><span class="o">=</span><span class="mf">0.118</span><span class="p">,</span>
+    <span class="n">Nfruit</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="n">par_4</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">wood_density</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span>
+    <span class="n">max_agb</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+    <span class="n">max_dbh</span><span class="o">=</span><span class="mi">44</span><span class="p">,</span>
+    <span class="n">h0</span><span class="o">=</span><span class="mf">4.3</span><span class="p">,</span>
+    <span class="n">h1</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+    <span class="n">cl0</span><span class="o">=</span><span class="mf">0.30</span><span class="p">,</span>
+    <span class="n">cd0</span><span class="o">=</span><span class="mf">0.60</span><span class="p">,</span>
+    <span class="n">cd1</span><span class="o">=</span><span class="mf">0.68</span><span class="p">,</span>
+    <span class="n">cd2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">rho</span><span class="o">=</span><span class="mf">0.40</span><span class="p">,</span>
+    <span class="n">sigma</span><span class="o">=</span><span class="mf">0.70</span><span class="p">,</span>
+    <span class="n">f0</span><span class="o">=</span><span class="mf">0.77</span><span class="p">,</span>
+    <span class="n">f1</span><span class="o">=-</span><span class="mf">0.18</span><span class="p">,</span>
+    <span class="n">l0</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">l1</span><span class="o">=</span><span class="mf">0.10</span><span class="p">,</span>
+    <span class="n">Iseed</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
+    <span class="n">Nseed</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">m</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">rg</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">Mb</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span>
+    <span class="n">pmax</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.20</span><span class="p">,</span>
+    <span class="n">Dmort</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">Dfall</span><span class="o">=</span><span class="mf">0.45</span><span class="p">,</span>
+    <span class="n">pfall</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">DdeltaDmax</span><span class="o">=</span><span class="mf">0.60</span><span class="p">,</span>
+    <span class="n">deltaDmax</span><span class="o">=</span><span class="mf">0.029</span><span class="p">,</span>
+    <span class="n">m_max</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span>
+    <span class="n">Fdisp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">Adisp</span><span class="o">=</span><span class="mf">0.118</span><span class="p">,</span>
+    <span class="n">Nfruit</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="n">par_5</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">wood_density</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span>
+    <span class="n">max_agb</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+    <span class="n">max_dbh</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+    <span class="n">h0</span><span class="o">=</span><span class="mf">4.3</span><span class="p">,</span>
+    <span class="n">h1</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">cl0</span><span class="o">=</span><span class="mf">0.30</span><span class="p">,</span>
+    <span class="n">cd0</span><span class="o">=</span><span class="mf">0.60</span><span class="p">,</span>
+    <span class="n">cd1</span><span class="o">=</span><span class="mf">0.68</span><span class="p">,</span>
+    <span class="n">cd2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">rho</span><span class="o">=</span><span class="mf">0.52</span><span class="p">,</span>
+    <span class="n">sigma</span><span class="o">=</span><span class="mf">0.70</span><span class="p">,</span>
+    <span class="n">f0</span><span class="o">=</span><span class="mf">0.77</span><span class="p">,</span>
+    <span class="n">f1</span><span class="o">=-</span><span class="mf">0.18</span><span class="p">,</span>
+    <span class="n">l0</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">l1</span><span class="o">=</span><span class="mf">0.10</span><span class="p">,</span>
+    <span class="n">Iseed</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>
+    <span class="n">Nseed</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">m</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">rg</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">Mb</span><span class="o">=</span><span class="mf">0.021</span><span class="p">,</span>
+    <span class="n">pmax</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.30</span><span class="p">,</span>
+    <span class="n">Dmort</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">Dfall</span><span class="o">=</span><span class="mf">0.45</span><span class="p">,</span>
+    <span class="n">pfall</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">DdeltaDmax</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span>
+    <span class="n">deltaDmax</span><span class="o">=</span><span class="mf">0.011</span><span class="p">,</span>
+    <span class="n">m_max</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span>
+    <span class="n">Fdisp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">Adisp</span><span class="o">=</span><span class="mf">0.118</span><span class="p">,</span>
+    <span class="n">Nfruit</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+
+<span class="n">par_6</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">wood_density</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span>
+    <span class="n">max_agb</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+    <span class="n">max_dbh</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+    <span class="n">h0</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span>
+    <span class="n">h1</span><span class="o">=</span><span class="mf">0.60</span><span class="p">,</span>
+    <span class="n">cl0</span><span class="o">=</span><span class="mf">0.30</span><span class="p">,</span>
+    <span class="n">cd0</span><span class="o">=</span><span class="mf">0.60</span><span class="p">,</span>
+    <span class="n">cd1</span><span class="o">=</span><span class="mf">0.68</span><span class="p">,</span>
+    <span class="n">cd2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">rho</span><span class="o">=</span><span class="mf">0.47</span><span class="p">,</span>
+    <span class="n">sigma</span><span class="o">=</span><span class="mf">0.70</span><span class="p">,</span>
+    <span class="n">f0</span><span class="o">=</span><span class="mf">0.77</span><span class="p">,</span>
+    <span class="n">f1</span><span class="o">=-</span><span class="mf">0.18</span><span class="p">,</span>
+    <span class="n">l0</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">l1</span><span class="o">=</span><span class="mf">0.10</span><span class="p">,</span>
+    <span class="n">Iseed</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
+    <span class="n">Nseed</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">m</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">rg</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">Mb</span><span class="o">=</span><span class="mf">0.045</span><span class="p">,</span>
+    <span class="n">pmax</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.20</span><span class="p">,</span>
+    <span class="n">Dmort</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">Dfall</span><span class="o">=</span><span class="mf">0.45</span><span class="p">,</span>
+    <span class="n">pfall</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">DdeltaDmax</span><span class="o">=</span><span class="mf">0.60</span><span class="p">,</span>
+    <span class="n">deltaDmax</span><span class="o">=</span><span class="mf">0.029</span><span class="p">,</span>
+    <span class="n">m_max</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span>
+    <span class="n">Fdisp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">Adisp</span><span class="o">=</span><span class="mf">0.118</span><span class="p">,</span>
+    <span class="n">Nfruit</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+
+
+<span class="n">FT1</span><span class="o">=</span><span class="n">trees_ibm</span><span class="o">.</span><span class="n">trees_ibm</span><span class="o">.</span><span class="n">Tree</span><span class="o">.</span><span class="n">TreeFactory</span><span class="p">(</span><span class="n">new_cls_name</span><span class="o">=</span><span class="s2">&quot;FT1&quot;</span><span class="p">,</span> <span class="n">new_parameters</span><span class="o">=</span><span class="n">par_1</span><span class="p">)</span>
+<span class="n">FT2</span><span class="o">=</span><span class="n">trees_ibm</span><span class="o">.</span><span class="n">trees_ibm</span><span class="o">.</span><span class="n">Tree</span><span class="o">.</span><span class="n">TreeFactory</span><span class="p">(</span><span class="n">new_cls_name</span><span class="o">=</span><span class="s2">&quot;FT2&quot;</span><span class="p">,</span> <span class="n">new_parameters</span><span class="o">=</span><span class="n">par_2</span><span class="p">)</span>
+<span class="n">FT3</span><span class="o">=</span><span class="n">trees_ibm</span><span class="o">.</span><span class="n">trees_ibm</span><span class="o">.</span><span class="n">Tree</span><span class="o">.</span><span class="n">TreeFactory</span><span class="p">(</span><span class="n">new_cls_name</span><span class="o">=</span><span class="s2">&quot;FT3&quot;</span><span class="p">,</span> <span class="n">new_parameters</span><span class="o">=</span><span class="n">par_3</span><span class="p">)</span>
+<span class="n">FT4</span><span class="o">=</span><span class="n">trees_ibm</span><span class="o">.</span><span class="n">trees_ibm</span><span class="o">.</span><span class="n">Tree</span><span class="o">.</span><span class="n">TreeFactory</span><span class="p">(</span><span class="n">new_cls_name</span><span class="o">=</span><span class="s2">&quot;FT4&quot;</span><span class="p">,</span> <span class="n">new_parameters</span><span class="o">=</span><span class="n">par_4</span><span class="p">)</span>
+<span class="n">FT5</span><span class="o">=</span><span class="n">trees_ibm</span><span class="o">.</span><span class="n">trees_ibm</span><span class="o">.</span><span class="n">Tree</span><span class="o">.</span><span class="n">TreeFactory</span><span class="p">(</span><span class="n">new_cls_name</span><span class="o">=</span><span class="s2">&quot;FT5&quot;</span><span class="p">,</span> <span class="n">new_parameters</span><span class="o">=</span><span class="n">par_5</span><span class="p">)</span>
+<span class="n">FT6</span><span class="o">=</span><span class="n">trees_ibm</span><span class="o">.</span><span class="n">trees_ibm</span><span class="o">.</span><span class="n">Tree</span><span class="o">.</span><span class="n">TreeFactory</span><span class="p">(</span><span class="n">new_cls_name</span><span class="o">=</span><span class="s2">&quot;FT6&quot;</span><span class="p">,</span> <span class="n">new_parameters</span><span class="o">=</span><span class="n">par_6</span><span class="p">)</span>
+
+<span class="c1">##################################################################</span>
+
+<span class="n">database_name</span><span class="o">=</span><span class="s2">&quot;example_1.h5&quot;</span>
+
+<span class="n">topology</span><span class="o">=</span><span class="n">trees_ibm</span><span class="o">.</span><span class="n">Tree_Grid</span><span class="p">(</span><span class="n">x_max</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">y_max</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">delta_h</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">patch_area</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span><span class="n">I0</span><span class="o">=</span><span class="mi">860</span><span class="p">,</span><span class="n">lday</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span><span class="n">phi_act</span><span class="o">=</span><span class="mi">365</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">world</span><span class="o">=</span><span class="n">trees_ibm</span><span class="o">.</span><span class="n">Tree_World</span><span class="p">(</span><span class="n">topology</span><span class="o">=</span><span class="n">topology</span><span class="p">)</span>
+
+<span class="n">world</span><span class="o">.</span><span class="n">create_HDF_database</span><span class="p">(</span><span class="n">database_name</span><span class="p">)</span>
+
+<span class="n">world</span><span class="o">.</span><span class="n">initial_update</span><span class="p">()</span>
+<span class="n">dispersal_settings</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;mode&#39;</span><span class="p">:</span><span class="s1">&#39;external&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;clear&#39;</span><span class="p">:</span><span class="kc">False</span><span class="p">}</span>
+
+<span class="n">world</span><span class="o">.</span><span class="n">run_simulation</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span><span class="n">dispersal_settings</span><span class="o">=</span><span class="n">dispersal_settings</span><span class="p">,</span><span class="n">h5file</span><span class="o">=</span><span class="n">database_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>All the data generated during the simulation is now stored in the HDF5 database. We can access this data to run analyses or simply visualize some aspects of our simulation.  The code below the Net Ecosystem Exchange and Carbon Stocks using one of the plotting functions available in the visualization module within trees_ibm.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">trees_ibm.visualization</span> <span class="k">import</span> <span class="n">plot_NEE</span><span class="p">,</span> <span class="n">plot_stocks</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">tables</span> <span class="k">import</span> <span class="n">open_file</span>
+<span class="n">database_name</span><span class="o">=</span><span class="s2">&quot;example_1.h5&quot;</span>
+
+
+<span class="n">h5file</span><span class="o">=</span><span class="n">open_file</span><span class="p">(</span><span class="n">database_name</span><span class="p">,</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+<span class="n">nee_table</span><span class="o">=</span><span class="n">h5file</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">sim_1</span><span class="o">.</span><span class="n">trees</span><span class="o">.</span><span class="n">sys_lvl</span><span class="o">.</span><span class="n">NEE</span>
+<span class="n">nee</span><span class="o">=</span><span class="n">nee_table</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;nee&quot;</span><span class="p">)</span>
+<span class="n">plot_NEE</span><span class="p">(</span><span class="n">nee</span><span class="p">)</span>
+<span class="n">fig_name</span><span class="o">=</span><span class="s2">&quot;NEE_&quot;</span><span class="o">+</span><span class="n">database_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;.png&quot;</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig_name</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">)</span>
+
+<span class="n">Stocks</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;AGB&quot;</span><span class="p">:[],</span><span class="s2">&quot;Dwood&quot;</span><span class="p">:[],</span><span class="s2">&quot;Sfast&quot;</span><span class="p">:[],</span><span class="s2">&quot;Sslow&quot;</span><span class="p">:[]}</span>
+<span class="n">stocks_table</span><span class="o">=</span><span class="n">h5file</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">sim_1</span><span class="o">.</span><span class="n">trees</span><span class="o">.</span><span class="n">sys_lvl</span><span class="o">.</span><span class="n">Stocks</span>
+<span class="n">Stocks</span><span class="p">[</span><span class="s2">&quot;AGB&quot;</span><span class="p">]</span><span class="o">=</span><span class="n">stocks_table</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;agb&quot;</span><span class="p">)</span>
+<span class="n">Stocks</span><span class="p">[</span><span class="s2">&quot;Dwood&quot;</span><span class="p">]</span><span class="o">=</span><span class="n">stocks_table</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;dead_wood&quot;</span><span class="p">)</span>
+<span class="n">Stocks</span><span class="p">[</span><span class="s2">&quot;Sfast&quot;</span><span class="p">]</span><span class="o">=</span><span class="n">stocks_table</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;soil_fast&quot;</span><span class="p">)</span>
+<span class="n">Stocks</span><span class="p">[</span><span class="s2">&quot;Sslow&quot;</span><span class="p">]</span><span class="o">=</span><span class="n">stocks_table</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;soil_slow&quot;</span><span class="p">)</span>
+<span class="n">plot_stocks</span><span class="p">(</span><span class="n">Stocks</span><span class="p">)</span>
+<span class="n">fig_name</span><span class="o">=</span><span class="s2">&quot;Stocks_&quot;</span><span class="o">+</span><span class="n">database_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;.png&quot;</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig_name</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">)</span>
+
+<span class="n">h5file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/NEE_example_1.png" src="_images/NEE_example_1.png" />
+<img alt="_images/Stocks_example_1.png" src="_images/Stocks_example_1.png" />
 </div>
 
 
