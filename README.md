@@ -2,5 +2,5 @@
 
 is a python package for developing individual-based models of forests.
 
-Find out more on : https://fsfrazao.github.io/Trees/
+Read the docs to learn more: https://fsfrazao.github.io/Trees/
 
