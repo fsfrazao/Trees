@@ -6,7 +6,7 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SPHINXPROJ    = trees_ibm
 SOURCEDIR     = source
-BUILDDIR      = build
+BUILDDIR      = ..#build
 
 # Put it first so that "make" without argument is like "make help".
 help:

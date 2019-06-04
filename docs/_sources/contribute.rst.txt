@@ -2,16 +2,16 @@
 How to contribute
 ==================
 
-*trees_ibm* isstill in it's early stages of development and help is very much appreciated!
+*trees_ibm* is still in it's early stages of development and help is very much appreciated!
 
 You can contribute by:
 
 * Adding features to the codebase
-* Expanding the testing suit
+* Expanding the testing suite
 * Improving the documentation
 * Reporting/fixing bugs
-* Suggesting  new features
-* Giving your input on the biological meaning of the model assumption/formulation
+* Suggesting new features
+* Giving your input on the biological meaning of the model assumptions/formulation
 
 
 
@@ -28,10 +28,10 @@ reporting issues, please mention the following details:
 * Which platform are you running on
 * How to reproduce the issue
 * What was the result of the issue
-* What the expected behaviour is
+* What were you expecting to get 
 
 Reducing the source code that caused the issue to a bare minimum is always
-very helpful and sometimes even clarifies a misunderstanding.
+very helpful.
 
 Workflow for Pull Requests
 ==========================
@@ -54,7 +54,7 @@ Thank you for your help!
 Running the tests
 ==========================
 
-*trees-ibm* includes a battery of tests. They are included in the /src/tests/  directory. They require the pytest package.
+*trees-ibm* includes a set of tests. They are included in the /src/tests/  directory. They require the pytest package.
 
 To run all tests go to the src directory and run: ::
 
@@ -65,5 +65,3 @@ You can also specify on module: ::
   python -m pytest test_world.py
 
 
-
-To
