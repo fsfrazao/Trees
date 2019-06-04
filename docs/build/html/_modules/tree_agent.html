@@ -17,41 +17,34 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="trees_ibm 0.2.2 documentation" href="../index.html"/>
-        <link rel="up" title="Module code" href="index.html"/> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -108,7 +101,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">trees_ibm</a>
@@ -116,9 +109,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -147,8 +141,6 @@
     
     
       <li class="wy-breadcrumbs-aside">
-        
-            
         
       </li>
     
@@ -342,7 +334,7 @@ c light response curve.</span>
 <div class="viewcode-block" id="Tree.TreeFactory"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.TreeFactory">[docs]</a>    <span class="n">DeadTrees</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">TreeFactory</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">new_cls_name</span><span class="p">,</span> <span class="n">new_parameters</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">TreeFactory</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_cls_name</span><span class="p">,</span> <span class="n">new_parameters</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Creates a Tree subclass to represent a Functional Type.</span>
 
 <span class="sd">            Args:</span>
@@ -387,7 +379,7 @@ c light response curve.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">DBH</span> <span class="o">=</span> <span class="n">dbh</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
 
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">patch</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span> <span class="nb">int</span><span class="p">(</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
@@ -463,19 +455,19 @@ c light response curve.</span>
                         <span class="s1">&#39;h1&#39;</span><span class="p">:</span> <span class="n">new_parameters</span><span class="p">[</span><span class="s1">&#39;h1&#39;</span><span class="p">],</span>
                         <span class="s1">&#39;__init__&#39;</span><span class="p">:</span> <span class="n">new_init</span><span class="p">}</span>
 
-        <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">new_cls_name</span><span class="p">,</span> <span class="p">(</span><span class="n">cls</span><span class="p">,),</span> <span class="n">new_attr_met</span><span class="p">)</span>
+        <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">new_cls_name</span><span class="p">,</span> <span class="p">(</span><span class="bp">cls</span><span class="p">,),</span> <span class="n">new_attr_met</span><span class="p">)</span>
 
-        <span class="n">cls</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="p">[</span><span class="n">new_cls_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_cls</span>
-        <span class="n">cls</span><span class="o">.</span><span class="n">DeadTrees</span><span class="p">[</span><span class="n">new_cls_name</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span></div>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">DERIVED_TREES</span><span class="p">[</span><span class="n">new_cls_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_cls</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">DeadTrees</span><span class="p">[</span><span class="n">new_cls_name</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span></div>
 
         <span class="k">return</span> <span class="n">new_cls</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">FTPopulation</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">ft</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">FTPopulation</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ft</span><span class="p">):</span>
 <div class="viewcode-block" id="Tree.CountFruits"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.CountFruits">[docs]</a>        <span class="k">pass</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">CountFruits</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">CountFruits</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Counts the total number of fruits in the landscape.</span>
 <span class="sd">            Fruits from all trees of all Functional Types are counted.</span>
 
@@ -483,36 +475,36 @@ c light response curve.</span>
 <span class="sd">                Number of fruits.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fruits</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span></div>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span></div>
             <span class="n">fruits</span> <span class="o">+=</span> <span class="n">t</span><span class="o">.</span><span class="n">available_fruits</span>
 <div class="viewcode-block" id="Tree.UpdateTrees"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.UpdateTrees">[docs]</a>        <span class="k">return</span> <span class="n">fruits</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">UpdateTrees</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">UpdateTrees</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Updates all living trees</span>
 
 <span class="sd">            Returns: None</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
 <div class="viewcode-block" id="Tree.ProduceFruits"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.ProduceFruits">[docs]</a>            <span class="n">t</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">ProduceFruits</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">ProduceFruits</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Makes all trees with diameter bigger than 10 cm produce fruits.</span>
 
 <span class="sd">            Returns: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span></div>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span></div>
             <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">DBH</span><span class="o">&gt;</span><span class="mi">10</span><span class="p">:</span>
 <div class="viewcode-block" id="Tree.DisperseSeeds"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.DisperseSeeds">[docs]</a>                <span class="n">t</span><span class="o">.</span><span class="n">available_fruits</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">fruits_from_DBH</span><span class="p">()</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">DisperseSeeds</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">DisperseSeeds</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Makes all trees with diameter bigger than 10 cm disperse their seeds.</span>
 
 <span class="sd">            Returns: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span></div>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">():</span></div>
             <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">DBH</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
 <div class="viewcode-block" id="Tree.TreesAboveDBH"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.TreesAboveDBH">[docs]</a>                <span class="n">t</span><span class="o">.</span><span class="n">disperse_seeds</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">Adisp</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">Fdisp</span><span class="p">)</span>
 
@@ -611,9 +603,9 @@ c light response curve.</span>
         <span class="n">trees</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">trees</span><span class="p">:</span></div>
             <span class="k">if</span> <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">stochastic_Dm</span><span class="p">():</span>
-                <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">remove_me</span><span class="p">()</span>
+<div class="viewcode-block" id="Tree.ActiveAgents"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.ActiveAgents">[docs]</a>                <span class="n">Tree</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">remove_me</span><span class="p">()</span>
 
-    <span class="nd">@classmethod</span>
+    <span class="nd">@classmethod</span></div>
     <span class="k">def</span> <span class="nf">ActiveAgents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <div class="viewcode-block" id="Tree.TreesPerPatch"><a class="viewcode-back" href="../tree_agent.html#tree_agent.Tree.TreesPerPatch">[docs]</a>        <span class="k">return</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">ag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Instances</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">ag</span><span class="o">.</span><span class="n">active</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span>
 
@@ -648,7 +640,7 @@ c light response curve.</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="n">dbh</span><span class="p">,</span> <span class="n">wood_density</span><span class="p">,</span> <span class="n">h0</span><span class="p">,</span> <span class="n">h1</span><span class="p">,</span> <span class="n">cl0</span><span class="p">,</span> <span class="n">cd0</span><span class="p">,</span> <span class="n">cd1</span><span class="p">,</span> <span class="n">cd2</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">f0</span><span class="p">,</span> <span class="n">f1</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">l1</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">pmax</span><span class="p">,</span> <span class="n">max_agb</span><span class="p">,</span> <span class="n">rg</span><span class="p">,</span> <span class="n">deltaDmax</span><span class="p">,</span> <span class="n">DdeltaDmax</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">Ftype</span><span class="p">,</span> <span class="n">Mb</span><span class="p">,</span> <span class="n">Dfall</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">pfall</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">m_max</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">Dmort</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_dbh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
         <span class="c1"># self.AddInstance(self.id)</span>
         <span class="c1">#Tree.Instances[Ftype+&#39; &#39;+str(self.id)]=self</span>
 
@@ -1249,9 +1241,7 @@ c light response curve.</span>
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -1260,11 +1250,11 @@ c light response curve.</span>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Fabio Frazao.
+        &copy; Copyright 2018, Fabio Frazao
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1277,37 +1267,15 @@ c light response curve.</span>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.2.2',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

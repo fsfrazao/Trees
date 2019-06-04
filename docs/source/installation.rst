@@ -9,4 +9,4 @@ Make sure you have pip installed and then run: ::
 
   pip install trees_ibm
 
-You will need installation rights.
+You will need installation permissions in your system.

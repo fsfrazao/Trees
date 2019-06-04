@@ -17,43 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="trees_ibm 0.2.2 documentation" href="index.html"/>
-        <link rel="up" title="Modules" href="modules.html"/>
-        <link rel="next" title="Topology Module" href="topology.html"/>
-        <link rel="prev" title="Modules" href="modules.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Topology Module" href="topology.html" />
+    <link rel="prev" title="Modules" href="modules.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -116,7 +109,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">trees_ibm</a>
@@ -124,9 +117,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -174,48 +168,45 @@
 <span id="world-module"></span><h1>World Module<a class="headerlink" href="#module-world" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="world.Tree_World">
-<em class="property">class </em><code class="descclassname">world.</code><code class="descname">Tree_World</code><span class="sig-paren">(</span><em>topology</em>, <em>AET=1300</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">world.</code><code class="sig-name descname">Tree_World</code><span class="sig-paren">(</span><em class="sig-param">topology</em>, <em class="sig-param">AET=1300</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide observer methods and control the schedule and execution of simulations.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>topology <span class="classifier-delimiter">:</span> <span class="classifier">Tree_Grid instance</span></dt>
-<dd>Grid object on which agents will live.</dd>
-<dt>AET <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Actual evapotranspiration in the previous year in mm.
-Assumed to be constant every year.</dd>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>topology<span class="classifier">Tree_Grid instance</span></dt><dd><p>Grid object on which agents will live.</p>
+</dd>
+<dt>AET<span class="classifier">int</span></dt><dd><p>Actual evapotranspiration in the previous year in mm.
+Assumed to be constant every year.</p>
+</dd>
 </dl>
 </dd>
-<dt>Attributes:</dt>
-<dd><dl class="first last docutils">
-<dt>Smort <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Carbon of all trees that died in one year [tC].</dd>
-<dt>Sdead :float)</dt>
-<dd>Dead wood carbon stock [tC].</dd>
-<dt>tsdead <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Anual decomposition rate.</dd>
-<dt>tsdead_A <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Proportion of decomposed dead wood that is released to the atmosphere.</dd>
-<dt>Sslow <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Slow decomposition portion of soil stock [tC].</dd>
-<dt>tsdead_Sslow :float</dt>
-<dd>Proportion of decomposed dead wood that is tranferred to the slow decomposition Soil stock.</dd>
-<dt>tsslow_A <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Proportion of slow decomposition soil stock that is released to the atmosphere.</dd>
-<dt>Sfast <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Fast decomposition portion of soil stock [tC].</dd>
-<dt>tsfast_A <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Proportion of fast decomposition soil stock that is released to the atmosphere.</dd>
-<dt>tsdead_Sfast <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Proportion of decomposed dead wood that is tranferred to the fast decomposition Soil stock.</dd>
-<dt>Cgpp <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Carbon captured in the gross primary productivity of the living forest.</dd>
-<dt>Cr <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Carbon released by the total respiration of the living forest (i.e. for maintenance and growth)</dd>
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>Smort<span class="classifier">float</span></dt><dd><p>Carbon of all trees that died in one year [tC].</p>
+</dd>
+<dt>Sdead :float)</dt><dd><p>Dead wood carbon stock [tC].</p>
+</dd>
+<dt>tsdead<span class="classifier">float</span></dt><dd><p>Anual decomposition rate.</p>
+</dd>
+<dt>tsdead_A<span class="classifier">float</span></dt><dd><p>Proportion of decomposed dead wood that is released to the atmosphere.</p>
+</dd>
+<dt>Sslow<span class="classifier">float</span></dt><dd><p>Slow decomposition portion of soil stock [tC].</p>
+</dd>
+<dt>tsdead_Sslow :float</dt><dd><p>Proportion of decomposed dead wood that is tranferred to the slow decomposition Soil stock.</p>
+</dd>
+<dt>tsslow_A<span class="classifier">float</span></dt><dd><p>Proportion of slow decomposition soil stock that is released to the atmosphere.</p>
+</dd>
+<dt>Sfast<span class="classifier">float</span></dt><dd><p>Fast decomposition portion of soil stock [tC].</p>
+</dd>
+<dt>tsfast_A<span class="classifier">float</span></dt><dd><p>Proportion of fast decomposition soil stock that is released to the atmosphere.</p>
+</dd>
+<dt>tsdead_Sfast<span class="classifier">float</span></dt><dd><p>Proportion of decomposed dead wood that is tranferred to the fast decomposition Soil stock.</p>
+</dd>
+<dt>Cgpp<span class="classifier">float</span></dt><dd><p>Carbon captured in the gross primary productivity of the living forest.</p>
+</dd>
+<dt>Cr<span class="classifier">float</span></dt><dd><p>Carbon released by the total respiration of the living forest (i.e. for maintenance and growth)</p>
+</dd>
 </dl>
 </dd>
-<dt>Usage:</dt>
-<dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">grid01</span><span class="o">=</span><span class="n">Tree_Grid</span><span class="p">(</span><span class="n">x_max</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">y_max</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">delta_h</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">patch_area</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span><span class="n">I0</span><span class="o">=</span><span class="mi">860</span><span class="p">,</span><span class="n">lday</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span><span class="n">phi_act</span><span class="o">=</span><span class="mi">360</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<dt>Usage:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">grid01</span><span class="o">=</span><span class="n">Tree_Grid</span><span class="p">(</span><span class="n">x_max</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">y_max</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">delta_h</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">patch_area</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span><span class="n">I0</span><span class="o">=</span><span class="mi">860</span><span class="p">,</span><span class="n">lday</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span><span class="n">phi_act</span><span class="o">=</span><span class="mi">360</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">world01</span><span class="o">=</span><span class="n">Tree_World</span><span class="p">(</span><span class="n">topology</span><span class="o">=</span><span class="n">grid01</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">world01</span><span class="p">)</span>
 <span class="go">World object</span>
@@ -225,35 +216,34 @@ Assumed to be constant every year.</dd>
 </dl>
 <dl class="method">
 <dt id="world.Tree_World.NEE_data_to_db">
-<code class="descname">NEE_data_to_db</code><span class="sig-paren">(</span><em>nee</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.NEE_data_to_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.NEE_data_to_db" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">NEE_data_to_db</code><span class="sig-paren">(</span><em class="sig-param">nee</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.NEE_data_to_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.NEE_data_to_db" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes the net ecosystem exchange data to the database.</p>
 <p>Adds one row corresponding to the current time step to the NEE table at /sim_#/trees/sys_lvl/NEE.</p>
 <p>The following collumns are filled:</p>
 <blockquote>
-<div><dl class="docutils">
-<dt>dead_wood:</dt>
-<dd>Amount of carbom emissions resulting from dead_wood decomposition.</dd>
-<dt>soil_slow:</dt>
-<dd>Amount of carbom emissions resulting from slow decompositions soil.</dd>
-<dt>soil_fast:</dt>
-<dd>Amount of carbom emissions resulting from fast decompositions soil.</dd>
-<dt>gpp:</dt>
-<dd>Gross primary production. Amount of carbon absorbed by all trees.</dd>
-<dt>living_trees:</dt>
-<dd>Amount of carbom emissions resulting from the respiration of living trees.</dd>
-<dt>smort:</dt>
-<dd>Amount of carbon contained in the trees that died during the past time step.</dd>
-<dt>t_deadwood_sslow:</dt>
-<dd>Amount of carbom tranferred from dead wood to the slow decomposition soil stock.</dd>
-<dt>t_sslow_sfast:</dt>
-<dd>Amount of carbom tranferred from dead wood to the fast decomposition soil stock.</dd>
+<div><dl class="simple">
+<dt>dead_wood:</dt><dd><p>Amount of carbom emissions resulting from dead_wood decomposition.</p>
+</dd>
+<dt>soil_slow:</dt><dd><p>Amount of carbom emissions resulting from slow decompositions soil.</p>
+</dd>
+<dt>soil_fast:</dt><dd><p>Amount of carbom emissions resulting from fast decompositions soil.</p>
+</dd>
+<dt>gpp:</dt><dd><p>Gross primary production. Amount of carbon absorbed by all trees.</p>
+</dd>
+<dt>living_trees:</dt><dd><p>Amount of carbom emissions resulting from the respiration of living trees.</p>
+</dd>
+<dt>smort:</dt><dd><p>Amount of carbon contained in the trees that died during the past time step.</p>
+</dd>
+<dt>t_deadwood_sslow:</dt><dd><p>Amount of carbom tranferred from dead wood to the slow decomposition soil stock.</p>
+</dd>
+<dt>t_sslow_sfast:</dt><dd><p>Amount of carbom tranferred from dead wood to the fast decomposition soil stock.</p>
+</dd>
 </dl>
 </div></blockquote>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>nee <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>The resulting net ecosystem exchange for the current time step.</dd>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>nee<span class="classifier">float</span></dt><dd><p>The resulting net ecosystem exchange for the current time step.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -262,7 +252,7 @@ Assumed to be constant every year.</dd>
 
 <dl class="method">
 <dt id="world.Tree_World.calculate_NEE">
-<code class="descname">calculate_NEE</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.calculate_NEE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.calculate_NEE" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">calculate_NEE</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.calculate_NEE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.calculate_NEE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the Net Ecosystem Exchange (NEE) for the previous timestep.</p>
 <p>This is all the carbon that was absorbed by living trees (Cgpp) minus
 what was emitted to the atmosphere by the living trees (Cr) and
@@ -273,7 +263,7 @@ the decomposition of the dead wood and soil stocks
 
 <dl class="method">
 <dt id="world.Tree_World.calculate_Sdead">
-<code class="descname">calculate_Sdead</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.calculate_Sdead"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.calculate_Sdead" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">calculate_Sdead</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.calculate_Sdead"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.calculate_Sdead" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the amount of carbon (tC) in the dead wood stock based
 on the trees that died in the previous year (Smort).</p>
 <p>Returns : None</p>
@@ -281,7 +271,7 @@ on the trees that died in the previous year (Smort).</p>
 
 <dl class="method">
 <dt id="world.Tree_World.calculate_Sfast">
-<code class="descname">calculate_Sfast</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.calculate_Sfast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.calculate_Sfast" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">calculate_Sfast</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.calculate_Sfast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.calculate_Sfast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the amount of carbon (tC) in the fast decomposition soil
 stock.</p>
 <p>Calculation is based on decomposition rates for the dead wood (tsdead_Sfast) and the rate with which carbon is transferred from this stock to the atmosphere (tsfast_A).</p>
@@ -290,7 +280,7 @@ stock.</p>
 
 <dl class="method">
 <dt id="world.Tree_World.calculate_Sslow">
-<code class="descname">calculate_Sslow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.calculate_Sslow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.calculate_Sslow" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">calculate_Sslow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.calculate_Sslow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.calculate_Sslow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the amount of carbon (tC) in the slow decomposition soil
 stock.</p>
 <p>Calculation is based on decomposition rates for the dead wood (tsdead_Sslow) and the rate with which carbon is transferred from this stock to the atmosphere (tsslow_A).</p>
@@ -299,43 +289,40 @@ stock.</p>
 
 <dl class="method">
 <dt id="world.Tree_World.clear_seedbank">
-<code class="descname">clear_seedbank</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.clear_seedbank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.clear_seedbank" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">clear_seedbank</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.clear_seedbank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.clear_seedbank" title="Permalink to this definition">¶</a></dt>
 <dd><p>Destroys all the seeds currently in the seedbank</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="world.Tree_World.create_HDF_database">
-<code class="descname">create_HDF_database</code><span class="sig-paren">(</span><em>database_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.create_HDF_database"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.create_HDF_database" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create_HDF_database</code><span class="sig-paren">(</span><em class="sig-param">database_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.create_HDF_database"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.create_HDF_database" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an HDF database to store simulation data.</p>
 <p>Structure:</p>
 <blockquote>
 <div><ul class="simple">
-<li>root/sim_# : group created using self.simulation number.</li>
-<li><dl class="first docutils">
-<dt>root/sim_x/sys_lvl: group that holds system level tables.</dt>
-<dd><ul class="first last">
-<li>root/sim_x/sys_lvl/NEE: table that holds net ecosystem exchange data.</li>
-<li>root/sim_x/sys_lvl/Stocks: table that holds carbon stocks data.</li>
-<li>root/sim_x/sys_lvl/Pop: table that holds population data.</li>
+<li><p>root/sim_# : group created using self.simulation number.</p></li>
+<li><dl class="simple">
+<dt>root/sim_x/sys_lvl: group that holds system level tables.</dt><dd><ul>
+<li><p>root/sim_x/sys_lvl/NEE: table that holds net ecosystem exchange data.</p></li>
+<li><p>root/sim_x/sys_lvl/Stocks: table that holds carbon stocks data.</p></li>
+<li><p>root/sim_x/sys_lvl/Pop: table that holds population data.</p></li>
 </ul>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>root/sim_x/ind_lvl: group that holds system individual level tables.</dt>
-<dd><ul class="first last">
-<li>root/sim_x/ind_lvl/Ind: table that holds individual trees data.</li>
+<li><dl class="simple">
+<dt>root/sim_x/ind_lvl: group that holds system individual level tables.</dt><dd><ul>
+<li><p>root/sim_x/ind_lvl/Ind: table that holds individual trees data.</p></li>
 </ul>
 </dd>
 </dl>
 </li>
 </ul>
 </div></blockquote>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>database_name: str</dt>
-<dd>File name (including ‘.h5’ extension) for the database.</dd>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>database_name: str</dt><dd><p>File name (including ‘.h5’ extension) for the database.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -344,31 +331,30 @@ stock.</p>
 
 <dl class="method">
 <dt id="world.Tree_World.create_agents">
-<code class="descname">create_agents</code><span class="sig-paren">(</span><em>FT</em>, <em>n</em>, <em>pos=None</em>, <em>ids=None</em>, <em>DBHs=None</em>, <em>ages=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.create_agents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.create_agents" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Creates ‘n’ trees of type ‘FT’. A list of positions, ids and DBHs</dt>
-<dd>can be provided (Useful to recreate trees from a previous model
-run, for example).</dd>
+<code class="sig-name descname">create_agents</code><span class="sig-paren">(</span><em class="sig-param">FT</em>, <em class="sig-param">n</em>, <em class="sig-param">pos=None</em>, <em class="sig-param">ids=None</em>, <em class="sig-param">DBHs=None</em>, <em class="sig-param">ages=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.create_agents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.create_agents" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Creates ‘n’ trees of type ‘FT’. A list of positions, ids and DBHs</dt><dd><p>can be provided (Useful to recreate trees from a previous model
+run, for example).</p>
+</dd>
 </dl>
 <p>Note: overwrites methods create_agents from class Agent.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>agent_type <span class="classifier-delimiter">:</span> <span class="classifier">class</span></dt>
-<dd>The type (class) of agents to be created</dd>
-<dt>n <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Number of agents to be created</dd>
-<dt>pos <span class="classifier-delimiter">:</span> <span class="classifier">list :None</span></dt>
-<dd>A list of ‘n’ tuples ‘(x,y)’ with the coordinates in which
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>agent_type<span class="classifier">class</span></dt><dd><p>The type (class) of agents to be created</p>
+</dd>
+<dt>n<span class="classifier">int</span></dt><dd><p>Number of agents to be created</p>
+</dd>
+<dt>pos<span class="classifier">list :None</span></dt><dd><p>A list of ‘n’ tuples ‘(x,y)’ with the coordinates in which
 agents will be created. If set to None, agents are created
-in random positions.</dd>
-<dt>ids <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>A list of ‘n’ ints to be used as tree ids.</dd>
-<dt>DBHs <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>A list of ‘n’ floats to be used as tree DBHs.</dd>
-<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs</dt>
-<dd>The arguments to be passed to the ‘agent_type’ class.
-All agents will be created with this same set of arguments.</dd>
+in random positions.</p>
+</dd>
+<dt>ids<span class="classifier">list</span></dt><dd><p>A list of ‘n’ ints to be used as tree ids.</p>
+</dd>
+<dt>DBHs<span class="classifier">list</span></dt><dd><p>A list of ‘n’ floats to be used as tree DBHs.</p>
+</dd>
+<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs</dt><dd><p>The arguments to be passed to the ‘agent_type’ class.
+All agents will be created with this same set of arguments.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -377,41 +363,39 @@ All agents will be created with this same set of arguments.</dd>
 
 <dl class="method">
 <dt id="world.Tree_World.define_seedbank">
-<code class="descname">define_seedbank</code><span class="sig-paren">(</span><em>Nseed</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.define_seedbank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.define_seedbank" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">define_seedbank</code><span class="sig-paren">(</span><em class="sig-param">Nseed</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.define_seedbank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.define_seedbank" title="Permalink to this definition">¶</a></dt>
 <dd><p>Randomly determines how many seed each patch will receive.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>Nseed :int</dt>
-<dd>The total number of seed to be distributed among all patches.</dd>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>Nseed :int</dt><dd><p>The total number of seed to be distributed among all patches.</p>
+</dd>
 </dl>
 </dd>
-<dt>Returns <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd>A dictionary in which keys are patches (‘(x,y)’) and values are
-the number of seeds.</dd>
+<dt>Returns<span class="classifier">dict</span></dt><dd><p>A dictionary in which keys are patches (‘(x,y)’) and values are
+the number of seeds.</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="world.Tree_World.external_seed_rain">
-<code class="descname">external_seed_rain</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.external_seed_rain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.external_seed_rain" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">external_seed_rain</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.external_seed_rain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.external_seed_rain" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a seedbank by randomly distibuting seeds across the whole landscape.</p>
 <p>Creates ‘Nseed’ seeds for each Functional Type.</p>
-<dl class="docutils">
-<dt>Returns: dict</dt>
-<dd>Seedbank as a dictionary with keys as Functional Types and values as a list of seed positions (as in [(x,y),(x,y),…,(x,y)])</dd>
+<dl class="simple">
+<dt>Returns: dict</dt><dd><p>Seedbank as a dictionary with keys as Functional Types and values as a list of seed positions (as in [(x,y),(x,y),…,(x,y)])</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="world.Tree_World.germinate_suitable_seeds">
-<code class="descname">germinate_suitable_seeds</code><span class="sig-paren">(</span><em>seedbank</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.germinate_suitable_seeds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.germinate_suitable_seeds" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">germinate_suitable_seeds</code><span class="sig-paren">(</span><em class="sig-param">seedbank</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.germinate_suitable_seeds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.germinate_suitable_seeds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates new trees from seedbank.external_seedbank</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>seedbank: dict</dt>
-<dd>dictionary with keys as Functional Types and values as a list of seed positions (as in [(x,y),(x,y),…,(x,y)])</dd>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>seedbank: dict</dt><dd><p>dictionary with keys as Functional Types and values as a list of seed positions (as in [(x,y),(x,y),…,(x,y)])</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -420,15 +404,14 @@ the number of seeds.</dd>
 
 <dl class="method">
 <dt id="world.Tree_World.incorporate_new_seedbank">
-<code class="descname">incorporate_new_seedbank</code><span class="sig-paren">(</span><em>new_seedbank</em>, <em>clear=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.incorporate_new_seedbank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.incorporate_new_seedbank" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">incorporate_new_seedbank</code><span class="sig-paren">(</span><em class="sig-param">new_seedbank</em>, <em class="sig-param">clear=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.incorporate_new_seedbank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.incorporate_new_seedbank" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds new seedbank data to the topology’s seedbank.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>new_seedbank: dict</dt>
-<dd>dictionary with keys as Functional Types and values as a list of seed positions (as in [(x,y),(x,y),…,(x,y)])</dd>
-<dt>clear: bool</dt>
-<dd>True if the current seedbank is to be cleared before the addition. False if the new_seedbank is to be appended to the current one.</dd>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>new_seedbank: dict</dt><dd><p>dictionary with keys as Functional Types and values as a list of seed positions (as in [(x,y),(x,y),…,(x,y)])</p>
+</dd>
+<dt>clear: bool</dt><dd><p>True if the current seedbank is to be cleared before the addition. False if the new_seedbank is to be appended to the current one.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -437,32 +420,32 @@ the number of seeds.</dd>
 
 <dl class="method">
 <dt id="world.Tree_World.ind_data_to_db">
-<code class="descname">ind_data_to_db</code><span class="sig-paren">(</span><em>step</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.ind_data_to_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.ind_data_to_db" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">ind_data_to_db</code><span class="sig-paren">(</span><em class="sig-param">step</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.ind_data_to_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.ind_data_to_db" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes the individual level tree data to the database.</p>
 <p>Adds one row for each tree that was alive during the last time step to the NEE table at /sim_#/trees/ind_lvl/Ind.</p>
 <p>The following collumns are filled:</p>
 <blockquote>
-<div><dl class="docutils">
-<dt>step:</dt>
-<dd>Time step.</dd>
-<dt>ind_id:</dt>
-<dd>Numerical identification.</dd>
-<dt>pos_x:</dt>
-<dd>The x coordinate.</dd>
-<dt>pos_y:</dt>
-<dd>The y coordinate.</dd>
-<dt>age:</dt>
-<dd>Age</dd>
-<dt>dbh:</dt>
-<dd>Stem dimater at Breast Height.</dd>
-<dt>agb:</dt>
-<dd>Aboveground biomass.</dd>
-<dt>height:</dt>
-<dd>Height.</dd>
-<dt>crown_area:</dt>
-<dd>Crown area.</dd>
-<dt>FT:</dt>
-<dd>Plant Functional Type name</dd>
+<div><dl class="simple">
+<dt>step:</dt><dd><p>Time step.</p>
+</dd>
+<dt>ind_id:</dt><dd><p>Numerical identification.</p>
+</dd>
+<dt>pos_x:</dt><dd><p>The x coordinate.</p>
+</dd>
+<dt>pos_y:</dt><dd><p>The y coordinate.</p>
+</dd>
+<dt>age:</dt><dd><p>Age</p>
+</dd>
+<dt>dbh:</dt><dd><p>Stem dimater at Breast Height.</p>
+</dd>
+<dt>agb:</dt><dd><p>Aboveground biomass.</p>
+</dd>
+<dt>height:</dt><dd><p>Height.</p>
+</dd>
+<dt>crown_area:</dt><dd><p>Crown area.</p>
+</dd>
+<dt>FT:</dt><dd><p>Plant Functional Type name</p>
+</dd>
 </dl>
 </div></blockquote>
 <p>Returns: None</p>
@@ -470,7 +453,7 @@ the number of seeds.</dd>
 
 <dl class="method">
 <dt id="world.Tree_World.initial_update">
-<code class="descname">initial_update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.initial_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.initial_update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">initial_update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.initial_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.initial_update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates the topology and tree attributes.
 To be executed after the first trees are created.</p>
 <p>Returns:  None</p>
@@ -478,16 +461,15 @@ To be executed after the first trees are created.</p>
 
 <dl class="method">
 <dt id="world.Tree_World.log_trees">
-<code class="descname">log_trees</code><span class="sig-paren">(</span><em>suitable_trees</em>, <em>total_vol</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.log_trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.log_trees" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">log_trees</code><span class="sig-paren">(</span><em class="sig-param">suitable_trees</em>, <em class="sig-param">total_vol</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.log_trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.log_trees" title="Permalink to this definition">¶</a></dt>
 <dd><p>Randomly log ‘suitable_trees’ until the ‘total_vol’ is reached.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>suitable_trees <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd>A dictionary with patches as keys ((x,y)) and lists of
-suitable tree ids as values (resulting from suitable_trees())</dd>
-<dt>total_vol: float</dt>
-<dd>The total vol of timber to be logged</dd>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>suitable_trees<span class="classifier">dict</span></dt><dd><p>A dictionary with patches as keys ((x,y)) and lists of
+suitable tree ids as values (resulting from suitable_trees())</p>
+</dd>
+<dt>total_vol: float</dt><dd><p>The total vol of timber to be logged</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -496,13 +478,12 @@ suitable tree ids as values (resulting from suitable_trees())</dd>
 
 <dl class="method">
 <dt id="world.Tree_World.model_status_from_file">
-<code class="descname">model_status_from_file</code><span class="sig-paren">(</span><em>input_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.model_status_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.model_status_from_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">model_status_from_file</code><span class="sig-paren">(</span><em class="sig-param">input_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.model_status_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.model_status_from_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recreates a model landscape at a saved stage.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>input_file: str</dt>
-<dd>.json file cataining model data. Usually generated by the model_status_to_file method.</dd>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>input_file: str</dt><dd><p>.json file cataining model data. Usually generated by the model_status_to_file method.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -511,15 +492,14 @@ suitable tree ids as values (resulting from suitable_trees())</dd>
 
 <dl class="method">
 <dt id="world.Tree_World.model_status_to_file">
-<code class="descname">model_status_to_file</code><span class="sig-paren">(</span><em>output_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.model_status_to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.model_status_to_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">model_status_to_file</code><span class="sig-paren">(</span><em class="sig-param">output_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.model_status_to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.model_status_to_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes seedbank to .json file.</p>
 <p>If the output file already exists it will be overwritten.
 The format is {Functional type : {tree id, tree position, tree diameter, tree age}}</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>output_file: str</dt>
-<dd>.json file data will contain the data.</dd>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>output_file: str</dt><dd><p>.json file data will contain the data.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -528,7 +508,7 @@ The format is {Functional type : {tree id, tree position, tree diameter, tree ag
 
 <dl class="method">
 <dt id="world.Tree_World.pop_data_to_db">
-<code class="descname">pop_data_to_db</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.pop_data_to_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.pop_data_to_db" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">pop_data_to_db</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.pop_data_to_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.pop_data_to_db" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes the population data for each Plant Functional Type to the database .</p>
 <p>Adds one row corresponding to the current time step to the NEE table at /sim_#/trees/sys_lvl/Pop. Each column corresponds to one PFT.</p>
 <p>Returns: None</p>
@@ -536,50 +516,48 @@ The format is {Functional type : {tree id, tree position, tree diameter, tree ag
 
 <dl class="method">
 <dt id="world.Tree_World.run_schedule">
-<code class="descname">run_schedule</code><span class="sig-paren">(</span><em>step</em>, <em>n</em>, <em>h5_database=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.run_schedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.run_schedule" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_schedule</code><span class="sig-paren">(</span><em class="sig-param">step</em>, <em class="sig-param">n</em>, <em class="sig-param">h5_database=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.run_schedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.run_schedule" title="Permalink to this definition">¶</a></dt>
 <dd><p>Schedule of actions to be run in every time step</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>step <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>The current step. Received from run_simulation().</dd>
-<dt>h5_database <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd>Path to the HDF5 file in which model outputs will be saved.</dd>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>step<span class="classifier">int</span></dt><dd><p>The current step. Received from run_simulation().</p>
+</dd>
+<dt>h5_database<span class="classifier">str</span></dt><dd><p>Path to the HDF5 file in which model outputs will be saved.</p>
+</dd>
 </dl>
 </dd>
-<dt>Returns:</dt>
-<dd>(float) the Net Ecosystem Exchange (as calculated by  ‘calculate_NEE’) for thar step.</dd>
+<dt>Returns:</dt><dd><p>(float) the Net Ecosystem Exchange (as calculated by  ‘calculate_NEE’) for thar step.</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="world.Tree_World.run_simulation">
-<code class="descname">run_simulation</code><span class="sig-paren">(</span><em>n</em>, <em>logging_settings=None</em>, <em>dispersal_settings={'clear': True</em>, <em>'mode': 'external'}</em>, <em>produce_fruits=True</em>, <em>increment_time=True</em>, <em>h5file=None</em>, <em>plot_func=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.run_simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.run_simulation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_simulation</code><span class="sig-paren">(</span><em class="sig-param">n</em>, <em class="sig-param">logging_settings=None</em>, <em class="sig-param">dispersal_settings={'clear': True</em>, <em class="sig-param">'mode': 'external'}</em>, <em class="sig-param">produce_fruits=True</em>, <em class="sig-param">increment_time=True</em>, <em class="sig-param">h5file=None</em>, <em class="sig-param">plot_func=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.run_simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.run_simulation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run the code in ‘run_schedule’ ‘n’ times.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>n <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Number of simulations to be run.</dd>
-<dt>logging_years <span class="classifier-delimiter">:</span> <span class="classifier">range</span></dt>
-<dd>The years in which selective logging occurs.</dd>
-<dt>min_dbh <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Minimum dbh for a tree to be considered suitable for logging.</dd>
-<dt>max_dbh <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Maximum dbh for a tree to be considered suitable for logging.</dd>
-<dt>vol <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Total volume of timber to be extracted by logging event.</dd>
-<dt>h5file <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd>Path to the HDF5 file in which model outputs will be saved</dd>
-<dt>plot_func <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
-<dd>A function that will be run every step.
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>n<span class="classifier">int</span></dt><dd><p>Number of simulations to be run.</p>
+</dd>
+<dt>logging_years<span class="classifier">range</span></dt><dd><p>The years in which selective logging occurs.</p>
+</dd>
+<dt>min_dbh<span class="classifier">float</span></dt><dd><p>Minimum dbh for a tree to be considered suitable for logging.</p>
+</dd>
+<dt>max_dbh<span class="classifier">float</span></dt><dd><p>Maximum dbh for a tree to be considered suitable for logging.</p>
+</dd>
+<dt>vol<span class="classifier">float</span></dt><dd><p>Total volume of timber to be extracted by logging event.</p>
+</dd>
+<dt>h5file<span class="classifier">str</span></dt><dd><p>Path to the HDF5 file in which model outputs will be saved</p>
+</dd>
+<dt>plot_func<span class="classifier">function</span></dt><dd><p>A function that will be run every step.
 Usually a plotting function that saves a image file
 to the disk.Must accept a ‘step’ argument,which will
 receive the step number and can be used to generate the file
-name.</dd>
-<dt><a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs</dt>
-<dd>List of keyword arguments to be passed to plot_func in
-addition to ‘step’.</dd>
+name.</p>
+</dd>
+<dt><a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs</dt><dd><p>List of keyword arguments to be passed to plot_func in
+addition to ‘step’.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -588,13 +566,12 @@ addition to ‘step’.</dd>
 
 <dl class="method">
 <dt id="world.Tree_World.seedbank_from_file">
-<code class="descname">seedbank_from_file</code><span class="sig-paren">(</span><em>input_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.seedbank_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.seedbank_from_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">seedbank_from_file</code><span class="sig-paren">(</span><em class="sig-param">input_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.seedbank_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.seedbank_from_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads seedbank from json file into the topology’s seedbank attribute..</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>input_file: str</dt>
-<dd>.json file cataining seedbank data. Usually generated by the seedbank_to_file method.</dd>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>input_file: str</dt><dd><p>.json file cataining seedbank data. Usually generated by the seedbank_to_file method.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -603,15 +580,14 @@ addition to ‘step’.</dd>
 
 <dl class="method">
 <dt id="world.Tree_World.seedbank_to_file">
-<code class="descname">seedbank_to_file</code><span class="sig-paren">(</span><em>output_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.seedbank_to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.seedbank_to_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">seedbank_to_file</code><span class="sig-paren">(</span><em class="sig-param">output_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.seedbank_to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.seedbank_to_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes seedbank to .json file.</p>
 <p>If the output file already exists it will be overwritten.
 The format is {patch number:{Functional type : number of seeds}}</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>output_file: str</dt>
-<dd>.json file data will contain the data.</dd>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>output_file: str</dt><dd><p>.json file data will contain the data.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -620,24 +596,23 @@ The format is {patch number:{Functional type : number of seeds}}</p>
 
 <dl class="method">
 <dt id="world.Tree_World.seeds_pos">
-<code class="descname">seeds_pos</code><span class="sig-paren">(</span><em>est_seeds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.seeds_pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.seeds_pos" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">seeds_pos</code><span class="sig-paren">(</span><em class="sig-param">est_seeds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.seeds_pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.seeds_pos" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set a random position within the patch for each seed in est_seeds.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>est_seed <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd>A dictionary with patches as keys (‘(x,y)’) and the number
-of established seeds as values.</dd>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>est_seed<span class="classifier">dict</span></dt><dd><p>A dictionary with patches as keys (‘(x,y)’) and the number
+of established seeds as values.</p>
+</dd>
 </dl>
 </dd>
-<dt>Returns <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>A list of seed positions within patches.</dd>
+<dt>Returns<span class="classifier">list</span></dt><dd><p>A list of seed positions within patches.</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="world.Tree_World.stablish_new_trees">
-<code class="descname">stablish_new_trees</code><span class="sig-paren">(</span><em>clear=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.stablish_new_trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.stablish_new_trees" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">stablish_new_trees</code><span class="sig-paren">(</span><em class="sig-param">clear=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.stablish_new_trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.stablish_new_trees" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create new tree individuals.
 Uses ‘define_seedbank()’, ‘topology.seed_establishment’ and ‘seeds_pos’.</p>
 <p>Note: This method can be substitued by an equivalent in order to incorporate more realistic representations of seed dispersal.</p>
@@ -646,20 +621,20 @@ Uses ‘define_seedbank()’, ‘topology.seed_establishment’ and ‘seeds_pos
 
 <dl class="method">
 <dt id="world.Tree_World.stocks_data_to_db">
-<code class="descname">stocks_data_to_db</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.stocks_data_to_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.stocks_data_to_db" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">stocks_data_to_db</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.stocks_data_to_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.stocks_data_to_db" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes the stock data to the database.</p>
 <p>Adds one row corresponding to the current time step to the NEE table at /sim_#/trees/sys_lvl/Stocks.</p>
 <p>The following collumns are filled:</p>
 <blockquote>
-<div><dl class="docutils">
-<dt>agb:</dt>
-<dd>Above ground biomass (the biomass of all trees alive durint the past time step.)</dd>
-<dt>dead_wood:</dt>
-<dd>Amount of carbom stored in the dead wood.</dd>
-<dt>soil_slow:</dt>
-<dd>Amount of carbom stored in the slow-decomposition soil.</dd>
-<dt>soil_fast:</dt>
-<dd>Amount of carbom stored in the fast-decomposition soil.</dd>
+<div><dl class="simple">
+<dt>agb:</dt><dd><p>Above ground biomass (the biomass of all trees alive durint the past time step.)</p>
+</dd>
+<dt>dead_wood:</dt><dd><p>Amount of carbom stored in the dead wood.</p>
+</dd>
+<dt>soil_slow:</dt><dd><p>Amount of carbom stored in the slow-decomposition soil.</p>
+</dd>
+<dt>soil_fast:</dt><dd><p>Amount of carbom stored in the fast-decomposition soil.</p>
+</dd>
 </dl>
 </div></blockquote>
 <p>Returns: None</p>
@@ -667,24 +642,23 @@ Uses ‘define_seedbank()’, ‘topology.seed_establishment’ and ‘seeds_pos
 
 <dl class="method">
 <dt id="world.Tree_World.suitable_trees">
-<code class="descname">suitable_trees</code><span class="sig-paren">(</span><em>patches</em>, <em>min_dbh</em>, <em>max_dbh</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.suitable_trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.suitable_trees" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">suitable_trees</code><span class="sig-paren">(</span><em class="sig-param">patches</em>, <em class="sig-param">min_dbh</em>, <em class="sig-param">max_dbh</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/world.html#Tree_World.suitable_trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#world.Tree_World.suitable_trees" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search for suitable trees for logging in the given patches.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>patches <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>A list of patches (tuples in the format (x,y)).</dd>
-<dt>min_dbh <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Minimum dbh (Diameter at Breast Height) for a tree to be
-considered suitable for logging.</dd>
-<dt>max_dbh :float</dt>
-<dd>Maximum dbh (Diameter at Breast Height) for a tree to be
-considered suitable for logging.</dd>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>patches<span class="classifier">list</span></dt><dd><p>A list of patches (tuples in the format (x,y)).</p>
+</dd>
+<dt>min_dbh<span class="classifier">float</span></dt><dd><p>Minimum dbh (Diameter at Breast Height) for a tree to be
+considered suitable for logging.</p>
+</dd>
+<dt>max_dbh :float</dt><dd><p>Maximum dbh (Diameter at Breast Height) for a tree to be
+considered suitable for logging.</p>
+</dd>
 </dl>
 </dd>
-<dt>Returns <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd>A dictionary with patches as keys ((x,y)) and lists of
-suitable tree ids as values.</dd>
+<dt>Returns<span class="classifier">dict</span></dt><dd><p>A dictionary with patches as keys ((x,y)) and lists of
+suitable tree ids as values.</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -694,9 +668,7 @@ suitable tree ids as values.</dd>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -705,7 +677,7 @@ suitable tree ids as values.</dd>
         <a href="topology.html" class="btn btn-neutral float-right" title="Topology Module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="modules.html" class="btn btn-neutral" title="Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="modules.html" class="btn btn-neutral float-left" title="Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -714,11 +686,11 @@ suitable tree ids as values.</dd>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Fabio Frazao.
+        &copy; Copyright 2018, Fabio Frazao
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -731,37 +703,15 @@ suitable tree ids as values.</dd>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.2.2',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>
